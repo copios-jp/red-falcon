@@ -44,7 +44,7 @@
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.1.0",
     "npm-run-all": "^4.0.1",
-    "nyc": "^13.1.0",
+    "nyc": "^10.0.0",
     "prettier": "^1.13.7",
     "rimraf": "^2.5.4",
     "semantic-release": "^15.12.0"
@@ -63,5 +63,20 @@
     "private:compile": "rimraf dist && babel app/ --copy-files --out-dir build",
     "private:clean": "rimraf build",
     "private:format": "prettier \"babel.config.js\" \"scripts/*.js\" \"app/**/*.js\" \"test/**/*.js\""
+  },
+  "nyc": {
+    "exclude": [
+      "**/*.spec.js*",
+      "test/**"
+    ],
+    "require": [
+      "@babel/register"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "sourceMap": false,
+    "instrument": false
   }
 }
