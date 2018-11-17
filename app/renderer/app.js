@@ -1,23 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import SensorsView from './components/SensorsView';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+import { MuiThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 
-const rootElement = document.querySelector(document.currentScript.getAttribute('data-container'));
+import SensorsView from './components/SensorsView'
+import theme from './theme'
 
-const theme = createMuiTheme({
-  palette: {
-    primary: { main: '#ff8f00'},
-    // primary: { main: '#0277bd'},
-    // secondary: { main: '#90caf9' },
-    type: 'dark'
-  },
-  typography: {
-    useNextVariants: true,
-  },
-})
-
+const container = document.currentScript.getAttribute('data-container')
+const rootElement = document.querySelector(container)
 
 ReactDOM.render(
   <React.Fragment>
@@ -27,4 +18,5 @@ ReactDOM.render(
     </MuiThemeProvider>
   </React.Fragment>,
   rootElement,
-);
+)
+
