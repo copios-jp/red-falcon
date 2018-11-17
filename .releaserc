@@ -4,12 +4,14 @@
   '@semantic-release/release-notes-generator',
   ['@semantic-release/github': {
     assets: [
-    { path: 'dist/*.dmg' },
-    { path: 'dist/latest-mac.yml' },
-    { path: 'dist/*.dmg.blockmap' },
-    { path: 'dist/*.yaml' }
+    { path: 'dist/*.dmg', label: 'OSX DMG' },
+    { path: 'dist/latest-mac.yml' ,label: 'electron-updater latest version'},
+    { path: 'dist/*.dmg.blockmap', label: 'blockmap for partial updates'},
+    { path: 'dist/*.yaml', 'electron-updater build reference'}
     ]
   }],
   ],
+  local: true,
+  dryRun: false,
   debug: true
 }
