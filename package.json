@@ -10,7 +10,6 @@
   "repository": "https://github.com/copios-jp/red-falcon",
   "license": "NONE",
   "dependencies": {
-    "@babel/register": "^7.0.0",
     "@material-ui/core": "^3.4.0",
     "@material-ui/icons": "^3.0.1",
     "ant-plus": "0.0.19",
@@ -31,6 +30,7 @@
     "@babel/plugin-proposal-decorators": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.0.0",
     "@semantic-release/exec": "^3.3.0",
     "@semantic-release/git": "^7.0.5",
     "babel-eslint": "^10.0.1",
@@ -43,8 +43,8 @@
     "eslint": "^5.1.0",
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.1.0",
+    "isparta": "^4.1.0",
     "npm-run-all": "^4.0.1",
-    "nyc": "^10.0.0",
     "prettier": "^1.13.7",
     "rimraf": "^2.5.4",
     "semantic-release": "^15.12.0"
@@ -63,20 +63,5 @@
     "private:compile": "rimraf dist && babel app/ --copy-files --out-dir build",
     "private:clean": "rimraf build",
     "private:format": "prettier \"babel.config.js\" \"scripts/*.js\" \"app/**/*.js\" \"test/**/*.js\""
-  },
-  "nyc": {
-    "exclude": [
-      "**/*.spec.js*",
-      "test/**"
-    ],
-    "require": [
-      "@babel/register"
-    ],
-    "reporter": [
-      "lcov",
-      "text-summary"
-    ],
-    "sourceMap": false,
-    "instrument": false
   }
 }
