@@ -73,33 +73,36 @@ class Sensor extends Component {
     this.setState({...this.state, isEditing: false})
   }
 
+  heartRate() {
+    return this.state.channel.data.ComputedHeartRate
+  }
+
+  channelId() {
+    return this.state.channel.channelId
+  }
+
+  zoneClass() {
+    const zone = getZoneFor(this.state.channel.data)
+    return `rate_${zone}`
+  }
 
   render() {
-    const { data, channelId } = this.state.channel
-    const { ComputedHeartRate } = data
     const { classes, sensorClass } = this.props
-
-    const zoneClass = `rate_${getZoneFor(data)}`
-    const title = `受信機番号:${channelId}`
-    const edit = this.edit.bind(this)
-    const finishEdit = this.finishEdit.bind(this)
     return (
       <Paper
         className={
-          classNames(
-            classes.gridListItem, classes.sensor, classes[sensorClass]
-          )
+          classNames(classes.gridListItem, classes.sensor, classes[sensorClass])
         } >
         { this.state.isEditing &&
-          <EditSensor classes={classes} channel={this.state.channel} done={finishEdit}/>
+          <EditSensor classes={classes} channel={this.state.channel} done={this.finishEdit.bind(this)}/>
         }
-        <GridListTile onClick={edit}>
+        <GridListTile onClick={this.edit.bind(this)}>
           <GridListTileBar
             className={classes.gridTileBar}
-            title={title}
+            title={`受信機番号:${this.channelId()}`}
           />
-          <div className={classes[sensorClass], classes[zoneClass]}>
-          { ComputedHeartRate }
+          <div className={classNames(classes[sensorClass], classes[this.zoneClass()])}>
+          { this.heartRate() }
           </div>
         </GridListTile>
       </Paper>
