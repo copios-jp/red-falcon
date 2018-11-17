@@ -28,6 +28,8 @@ mac:
   target: dmg
   category: public.app-category.healthcare-fitness
 
+electronUpdaterCompatibility: '>= 4.0.4'
+
 publish:
   provider: github
   repo: red-falcon
