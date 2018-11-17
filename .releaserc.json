@@ -1,6 +1,6 @@
 {
   "branch": "master",
-  "repositoryUrl": "https://github.com/copios-jp/red-falcon.git",
+  "repositoryUrl": "https://copios-deploy@github.com/copios-jp/red-falcon.git",
   "debug": true,
   "plugins": [
     "@semantic-release/commit-analyzer",
@@ -9,20 +9,16 @@
       {
         "assets": [
           {
-            "path": "dist/*.dmg",
-            "label": "OSX DMG"
+            "path": "dist/*.dmg"
           },
           {
-            "path": "dist/latest-mac.yml",
-            "label": "electron-updater latest version"
+            "path": "dist/latest-mac.yml"
           },
           { 
-            "path": "dist/*.dmg.blockmap",
-            "label": "blockmap for partial updates"
+            "path": "dist/*.dmg.blockmap"
           },
           {
-            "path": "dist/*.yaml",
-            "label": "electron-updater build reference"
+            "path": "dist/*.yml"
           }
         ]
       }
