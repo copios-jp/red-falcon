@@ -30,7 +30,8 @@ mac:
 
 publish: 
   provider: github
-  owner: copios-deploy
+  repo: https://copios-deploy@github.com/copios-jp/red-falcon
+  owner: copios-jp
   private: false
 
     
