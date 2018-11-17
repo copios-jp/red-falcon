@@ -9,10 +9,10 @@ export default (theme) => ({
   },
   content: {
     flexGrow: 1,
-    display:'flex',
+    display: 'flex',
   },
   gridList: {
-    display:'flex',
+    display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-evenly',
@@ -28,21 +28,22 @@ export default (theme) => ({
   },
 
   icon: {
-    color: 'white'
+    color: 'white',
   },
   gridTileBar: {
-    background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)'
+    background:
+      'linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
   },
 
   gridListItem: {
     margin: theme.spacing.unit,
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: theme.palette.background.paper,
   },
   copyright: {
     position: 'fixed',
     bottom: 0,
     backgroundColor: 'transparent',
-    paddingLeft: theme.spacing.unit
+    paddingLeft: theme.spacing.unit,
   },
   sensor: {
     color: 'white',
@@ -107,4 +108,3 @@ export default (theme) => ({
     backgroundColor: '#B71C1C',
   },
 })
-

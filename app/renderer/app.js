@@ -12,11 +12,10 @@ const rootElement = document.querySelector(container)
 
 ReactDOM.render(
   <React.Fragment>
-    <CssBaseline/>
+    <CssBaseline />
     <MuiThemeProvider theme={theme}>
-      <SensorsView/>
+      <SensorsView />
     </MuiThemeProvider>
   </React.Fragment>,
   rootElement,
 )
-
