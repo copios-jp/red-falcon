@@ -1,4 +1,4 @@
-<a href="https://travis-ci.org/semantic-release/semantic-release">
+<a href="https://travis-ci.org/copios-jp/red-falcon">
   <img alt="Travis" src="https://img.shields.io/travis/copios-jp/red-falcon/caribou.svg">
 </a>
 
