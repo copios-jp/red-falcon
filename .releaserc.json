@@ -6,7 +6,7 @@
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     ["@semantic-release/exec", {
-      "prepareCmd": "npm version ${nextRelease.version} --no-git-tag-version",
+      "prepareCmd": "npm version ${nextRelease.version} --no-git-tag-version && git commit -m 'chore(version): update package.json to ${nextRelease.version} && git push origin HEAD",
       "publishCmd": "npm run pack"
     }],
     ["@semantic-release/git", {
