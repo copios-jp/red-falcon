@@ -35,5 +35,5 @@ deploy:
   - provider: script
     skip_cleanup: true
     script:
-      - semantic-release
+      - semantic-release --dry-run --debug
      

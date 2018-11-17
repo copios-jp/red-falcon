@@ -28,13 +28,8 @@ mac:
   target: dmg
   category: public.app-category.healthcare-fitness
 
-publish: 
+publish:
   provider: github
   repo: red-falcon
   owner: copios-jp
   private: false
-
-    
-    
-    
-
