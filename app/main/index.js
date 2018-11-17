@@ -1,5 +1,11 @@
 import path from 'path'
 import { app, crashReporter, BrowserWindow, Menu } from 'electron'
+import log from 'electron-log'
+import { autoUpdater } from 'electron-updater'
+
+autoUpdater.logger = log
+autoUpdater.logger.transports.file.level = 'info'
+log.info('App starting...')
 
 const isDevelopment = process.env.NODE_ENV === 'development'
 
@@ -97,4 +103,8 @@ app.on('ready', async () => {
       ]).popup(mainWindow)
     })
   }
+})
+
+app.on('ready', () => {
+  autoUpdater.checkForUpdatesAndNotify()
 })

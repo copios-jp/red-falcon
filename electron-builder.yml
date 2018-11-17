@@ -1,6 +1,7 @@
 appId: jp.co.copios.red-falcon
-copyright: COPIOS
+copyright: Copyright @ 2018 ${author}
 productName: Heart Limit
+artifactName: ${productName}.${ext}
 
 asar: true
 
@@ -27,5 +28,13 @@ dmg:
 mac:
   target: dmg
   category: public.app-category.healthcare-fitness
-  publish: ['github']
+
+publish: 
+  provider: github
+  owner: COPIOS
+  private: false
+
+    
+    
+    
 
