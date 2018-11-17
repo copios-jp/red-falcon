@@ -25,43 +25,41 @@ class SensorsView extends Component {
     }
   }
 
-  activate() {
-    if(this.state.activated) {
-      return
+  makeSensors() {
+    const state = {...this.state}
+    state.maxChannels = this.stick.maxChannels
+    for(let id = 0; id < this.stick.maxChannels; id++) {
+      const sensor = new Ant.HeartRateSensor(this.stick)
+      sensor.once('hbData', (data) => {
+        const state = {...this.state}
+        const channel = state.channels[id]
+        channel.data = data
+        this.setState(state)
+      })
+      sensor.attach(id, 0)
+
+      state.channels[id] = {
+        sensor,
+        channelId: id,
+      }
     }
+    this.setState(state)
+  }
+
+  activate() {
+    if(this.state.activated) { return }
 
     usb.getDeviceList().forEach((device) => {
       const { deviceDescriptor } = device
       const { idVendor, idProduct } = deviceDescriptor
       if(idVendor === ID_VENDOR && idProduct === ID_PRODUCT) {
-        const stick = new Ant.GarminStick2()
-
-        stick.setMaxListeners(MAX_LISTENERS)
-        stick.once('startup', () => {
-          const state = {...this.state}
-          state.maxChannels = stick.maxChannels
-          for(let channelId = 0; channelId < stick.maxChannels; channelId++) {
-            const sensor = new Ant.HeartRateSensor(stick)
-            state.channels[channelId] = {
-              sensor,
-              channelId,
-            }
-            sensor.once('hbData', (data) => {
-              const state = {...this.state}
-              const channel = state.channels[channelId]
-              channel.data = data
-              this.setState(state)
-            })
-            sensor.attach(channelId, 0)
-          }
-          this.setState(state)
-        })
-
-        if(!stick.open()) {
+        this.stick = new Ant.GarminStick2()
+        this.stick.setMaxListeners(MAX_LISTENERS)
+        this.stick.once('startup',  this.makeSensors.bind(this))
+        if(!this.stick.open()) {
           console.log('oh shit')
           return
         }
-        this.stick = stick
       }
     })
     this.setState({...this.state, activated: true})
