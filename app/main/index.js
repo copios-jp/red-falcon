@@ -8,7 +8,7 @@ let forceQuit = false;
 
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
-  const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
+  const extensions = ['REACT_DEVELOPER_TOOLS'];
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
   for (const name of extensions) {
     try {
