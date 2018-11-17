@@ -25,13 +25,12 @@ dmg:
       y: 150
 
 mac:
-  target: dmg
   category: public.app-category.healthcare-fitness
 
 electronUpdaterCompatibility: '>= 4.0.4'
 
 publish:
-  provider: github
-  repo: red-falcon
+  provider: generic
+  url: 'https://github.com/copios-jp/red-falcon/releases/download/'
   owner: copios-jp
   private: false
