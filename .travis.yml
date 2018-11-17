@@ -16,6 +16,10 @@ script:
 before_deploy:
   - npm run pack
 
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/
+
 deploy:
   - provider: script
     skip_cleanup: true
