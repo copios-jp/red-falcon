@@ -1,7 +1,6 @@
 appId: jp.co.copios.red-falcon
 copyright: Copyright @ 2018 ${author}
 productName: Heart Limit
-artifactName: ${productName}.${ext}
 
 asar: true
 
@@ -31,7 +30,7 @@ mac:
 
 publish: 
   provider: github
-  owner: COPIOS
+  owner: copios-deploy
   private: false
 
     
