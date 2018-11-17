@@ -27,6 +27,9 @@
           },
           {
             "path": "dist/*.yml"
+          },
+          {
+            "path": "dist/*.zip"
           }
         ]
       }

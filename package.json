@@ -60,7 +60,7 @@
     "private:build:mac": "electron-builder --mac",
     "private:watch": "npm run private:compile -- --source-maps true --watch --skip-initial-build",
     "private:serve": "babel-node scripts/serve.js",
-    "private:compile": "babel app/ --copy-files --out-dir build",
+    "private:compile": "rimraf dist && babel app/ --copy-files --out-dir build",
     "private:clean": "rimraf build",
     "private:format": "prettier \"babel.config.js\" \"scripts/*.js\" \"app/**/*.js\" \"test/**/*.js\""
   }
