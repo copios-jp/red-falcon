@@ -18,28 +18,24 @@ function getZoneFor(sensor) {
   if(!sensor.age && sensor.SerialNumber) {
     sensor.age = ages[sensor.SerialNumber]
   }
+
   const rate = sensor.ComputedHeartRate
   const max = 220 - sensor.age || 44
-  const lazy = max * 0.6
-  const recovery = max * 0.7
-  const aerobic = max * 0.8
-  const anaerobic = max * 0.9
 
-  if(rate < lazy) {
-    return 'rest'
-  }
-  if(rate < recovery) {
-    return 'recovery'
-  }
-  if(rate < aerobic) {
-    return 'aerobic'
-  }
-  if(rate < anaerobic) {
-    return 'anaerobic'
+  let index = 0
+  let zone = 'rest'
+
+  const labels = ['recovery', 'aerobic', 'anaerobic', 'max']
+  const zones =[max * 0.6, max * 0.7, max * 0.8, max * 0.9]
+
+  while(rate > zones[index]) {
+    zone = labels[index]
+    index++
   }
 
-  return 'max'
+  return zone
 }
+
 class Sensor extends Component {
 
   constructor(props) {
@@ -96,6 +92,7 @@ class Sensor extends Component {
         { this.state.isEditing &&
           <EditSensor classes={classes} channel={this.state.channel} done={this.finishEdit.bind(this)}/>
         }
+
         <GridListTile onClick={this.edit.bind(this)}>
           <GridListTileBar
             className={classes.gridTileBar}
@@ -105,6 +102,7 @@ class Sensor extends Component {
           { this.heartRate() }
           </div>
         </GridListTile>
+
       </Paper>
     )
   }
