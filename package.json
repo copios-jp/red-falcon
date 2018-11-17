@@ -7,7 +7,7 @@
     "name": "Randy Morgan",
     "email": "copios.js@gmail.com"
   },
-  "repository": "https://github.com/copios.js/beats",
+  "repository": "https://github.com/copios-jp/red-falcon",
   "license": "NONE",
   "dependencies": {
     "@babel/register": "^7.0.0",
