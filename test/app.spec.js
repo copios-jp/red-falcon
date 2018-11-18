@@ -1,16 +1,14 @@
-import React from "react";
-import { mount } from "enzyme";
+import React from 'react'
+import { mount } from 'enzyme'
 
 import SensorsView from '../app/renderer/components/SensorsView'
 
 describe('App', () => {
- let props
+  let props
   let mountedComponent
   const sensorsView = () => {
     if (!mountedComponent) {
-      mountedComponent = mount(
-        <SensorsView {...props} />
-      )
+      mountedComponent = mount(<SensorsView {...props} />)
     }
     return mountedComponent
   }

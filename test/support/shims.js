@@ -1,8 +1,7 @@
 window.require = (lib) => {
-  switch(lib) {
+  switch (lib) {
     case 'usb':
-      return {
-    }
+      return {}
     case 'ant-plus':
       return {}
     default:
@@ -13,7 +12,7 @@ window.require = (lib) => {
 import { expect } from 'chai'
 global.expect = expect
 
-import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { configure } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
 
-configure({ adapter: new Adapter() });
+configure({ adapter: new Adapter() })

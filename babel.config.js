@@ -12,9 +12,7 @@ module.exports = {
   ],
   env: {
     test: {
-      plugins:[
-        'istanbul',
-      ],
+      plugins: ['istanbul'],
     },
   },
   plugins: [
