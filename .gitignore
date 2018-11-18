@@ -5,3 +5,5 @@ build
 *.log
 .tokens
 .nyc_output
+cov/
+coverage/

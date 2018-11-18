@@ -17,8 +17,8 @@ import styles from '../styles/'
 const TopBar = (props) => {
   const { activated, toggle, add, classes, full } = props
   return(
-    <AppBar position="static">
-      <Toolbar>
+    <AppBar position="static" style={{WebkitAppRegion: 'drag'}}>
+      <Toolbar variant='dense'>
         <Typography variant="h6" className={classes.appTitle}></Typography>
         <IconButton aria-label="Menu" onClick={toggle}>
           <PowerSettingsNew color={activated ? 'secondary' : 'inherit'} />

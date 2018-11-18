@@ -1,4 +1,8 @@
 --require @babel/register
-# --require jsdom-global/register
-# --require test/setup.js
-app/**/*.spec.js*
+--require jsdom-global/register
+--require test/support/require
+--require test/support/preload.js
+--require test/support/shims.js
+--require-main test/support/requireMain
+
+test/**/*.spec.js*

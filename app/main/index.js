@@ -51,6 +51,7 @@ app.on('ready', async () => {
     minWidth: 640,
     minHeight: 480,
     show: false,
+    titleBarStyle: 'hiddenInset',
   })
 
   mainWindow.loadFile(path.resolve(path.join(__dirname, '../renderer/index.html')))
