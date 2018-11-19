@@ -3,6 +3,7 @@ import { mount } from 'enzyme'
 
 import TopBar from '../../app/renderer/components/TopBar'
 
+// comment to create fix release bump
 describe('TopBar', () => {
   let props
   let mountedComponent
