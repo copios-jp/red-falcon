@@ -17,17 +17,7 @@ script:
 - yarn run check-format
 - yarn run lint
 - NODE_ENV=test nyc mocha
-- export APPLICATION_CERT=Applciation.p12
-- echo $CERT_OSX_DEVELOPER_ID_APPLICATION | base64 - --decode > $APPLICATION_CERT
-- export INSTALLER_CERT=Installer.p12
-- echo $CERT_OSX_DEVELOPER_ID_INSTALLER | base64 - --decode > $INSTALLER_CERT
-- export KEYCHAIN=build.keychain
-- security create-keychain -p $CERT_PASS $KEYCHAIN;
-- security default-keychain -s $KEYCHAIN;
-- security unlock-keychain -p $CERT_PASS $KEYCHAIN;
-- security import $APPLICATION_CERT -k $KEYCHAIN -P $CERT_PASS -T /usr/bin/codesign;
-- security find-identity -v
-- security import $INSTALLER_CERT -k $KEYCHAIN -P $CERT_PASS -T /usr/bin/codesign;
+- scripts/keychain.sh
 - security find-identity -v
 
 branches:
