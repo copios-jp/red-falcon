@@ -22,7 +22,7 @@ echo $CERT_OSX_DEVELOPER_ID_INSTALLER | base64 - --decode > $INSTALLER_CERT
 
 # Add certificates to keychain and allow codesign to access them
 echo "Add certificate to keychain"
-security import $APPLICATION_CERT -k $KEY_CHAIN -P $CERT_PASS -T /usr/bin/codesign
+# security import $APPLICATION_CERT -k $KEY_CHAIN -P $CERT_PASS -T /usr/bin/codesign
 security import $INSTALLER_CERT -k $KEY_CHAIN -P $CERT_PASS -T /usr/bin/codesign
 
 echo "Add keychain to keychain-list"
