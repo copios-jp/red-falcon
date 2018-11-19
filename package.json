@@ -1,6 +1,6 @@
 {
   "name": "HeartLimit",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Heart rate based personal training",
   "main": "init.js",
   "author": {
