@@ -22,7 +22,7 @@
           {
             "path": "dist/latest-mac.yml"
           },
-          { 
+          {
             "path": "dist/*.dmg.blockmap"
           },
           {

@@ -17,8 +17,6 @@ script:
 - yarn run check-format
 - yarn run lint
 - NODE_ENV=test nyc mocha
-- scripts/keychain.sh
-- security find-identity -v
 
 branches:
   except:
@@ -27,8 +25,12 @@ branches:
 after_script:
   - ./cc-test-reporter after-build -t lcov --debug --exit-code $TRAVIS_TEST_RESULT
 
+
+before_deploy:
+  - scripts/keychain.sh
+
 deploy:
   - provider: script
     skip_cleanup: true
     script:
-      - semantic-release --debug
+      - semantic-release
