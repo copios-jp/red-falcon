@@ -72,6 +72,13 @@
     "private:format": "prettier \"babel.config.js\" \"scripts/*.js\" \"app/**/*.js\" \"test/**/*.js\""
   },
   "nyc": {
+    "extension": [
+      ".jsx",
+      ".js"
+    ],
+    "include": [
+      "app/**"
+    ],
     "require": [
       "@babel/register"
     ],

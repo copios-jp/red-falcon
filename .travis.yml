@@ -8,10 +8,15 @@ os: osx
 install:
   - npm install
 
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
 script:
 - npm run check-format
 - npm run lint
-- npm test
+- NODE_ENV=test npm nyc mocha
 
   # TODO - we need to add this to our releaserc exec to sign the build
   # https://www.jviotti.com/2016/03/16/how-to-code-sign-os-x-electron-apps-in-travis-ci.html
@@ -29,9 +34,12 @@ branches:
   except:
     - /^v\d+\.\d+\.\d+$/
 
+after_script:
+  - ./cc-test-reporter after-build -t lcov --debug --exit-code $TRAVIS_TEST_RESULT
+
 deploy:
   - provider: script
     skip_cleanup: true
     script:
       - semantic-release --debug
-     
+
