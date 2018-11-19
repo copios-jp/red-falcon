@@ -16,7 +16,7 @@ before_script:
 script:
 - npm run check-format
 - npm run lint
-- NODE_ENV=test npm nyc mocha
+- NODE_ENV=test nyc mocha
 
   # TODO - we need to add this to our releaserc exec to sign the build
   # https://www.jviotti.com/2016/03/16/how-to-code-sign-os-x-electron-apps-in-travis-ci.html
