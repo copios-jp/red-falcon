@@ -32,4 +32,3 @@ deploy:
     skip_cleanup: true
     script:
       - semantic-release --debug
-
