@@ -1,0 +1,20 @@
+{
+  "require": [
+    "@babel/register"
+  ],
+  "include": [
+    "app/**/*.js*"
+  ],
+  "all": true,
+  "reporter": [
+    "lcov",
+  "text"
+  ],
+  "sourceMap": false,
+  "instrument": false,
+  "all": true,
+  "cache": true,
+  "extension": [
+    "jsx"
+  ]
+}

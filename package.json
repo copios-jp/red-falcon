@@ -70,20 +70,5 @@
     "private:compile": "rimraf dist && babel app/ --copy-files --out-dir build",
     "private:clean": "rimraf build",
     "private:format": "prettier \"babel.config.js\" \"scripts/*.js\" \"app/**/*.js\" \"test/**/*.js\""
-  },
-  "nyc": {
-    "require": [
-      "@babel/register"
-    ],
-    "include": [
-      "app/**/*.js*"
-    ],
-    "all": true,
-    "reporter": [
-      "lcov",
-      "text"
-    ],
-    "sourceMap": false,
-    "instrument": false
   }
 }
