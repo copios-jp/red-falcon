@@ -17,18 +17,16 @@ script:
 - npm run check-format
 - npm run lint
 - NODE_ENV=test nyc mocha
-
-  # TODO - we need to add this to our releaserc exec to sign the build
-  # https://www.jviotti.com/2016/03/16/how-to-code-sign-os-x-electron-apps-in-travis-ci.html
-  # export CERTIFICATE_P12=Certificate.p12;
-  # echo $CERTIFICATE_OSX_P12 | base64 — decode > $CERTIFICATE_P12;
-  # export KEYCHAIN=build.keychain;
-  # security create-keychain -p mysecretpassword $KEYCHAIN;
-  # security default-keychain -s $KEYCHAIN;
-  # security unlock-keychain -p mysecretpassword $KEYCHAIN;
-  # security import $CERTIFICATE_P12 -k $KEYCHAIN -P $CERTIFICATE_PASSWORD -T /usr/bin/codesign;
-
-
+- echo $CERT_OSX_DEVELOPER_ID_APPLICATION | base64 -- decode > $APPLICATION_CERT
+- echo $CERT_OSX_DEVELOPER_ID_INSTALLER | base64 -- decoe > $INSTALLER_CERT
+- export KEYCHAIN = build.keychain
+- security create-keychain -p $CERT_PASS $KEYCHAIN;
+- security default-keychain -s $KEYCHAIN;
+- security unlock-keychain -p $CERT_PASS $KEYCHAIN;
+- security import $APPLICATION_CERT -k $KEYCHAIN -P $CERT_PASS -T /usr/bin/codesign;
+- security find-identity -v
+- security import $INSTALLER_CERT -k $KEYCHAIN -P $CERT_PASS -T /usr/bin/codesign;
+- security find-identity -v
 
 branches:
   except:
