@@ -6,7 +6,7 @@ node_js:
 os: osx
 
 install:
-  - npm install
+  - yarn install
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-darwin-amd64 > ./cc-test-reporter
@@ -14,8 +14,8 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-- npm run check-format
-- npm run lint
+- yarn run check-format
+- yarn run lint
 - NODE_ENV=test nyc mocha
 - export APPLICATION_CERT=Applciation.p12
 - echo $CERT_OSX_DEVELOPER_ID_APPLICATION | base64 - --decode > $APPLICATION_CERT
@@ -41,5 +41,5 @@ deploy:
   - provider: script
     skip_cleanup: true
     script:
-      - travis_wait 30 semantic-release --debug
+      - semantic-release --debug
 
