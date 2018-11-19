@@ -19,7 +19,6 @@ script:
 - NODE_ENV=test nyc mocha
 - export APPLICATION_CERT=Applciation.p12
 - echo $CERT_OSX_DEVELOPER_ID_APPLICATION | base64 - --decode > $APPLICATION_CERT
-
 - export INSTALLER_CERT=Installer.p12
 - echo $CERT_OSX_DEVELOPER_ID_INSTALLER | base64 - --decode > $INSTALLER_CERT
 - export KEYCHAIN=build.keychain
@@ -42,5 +41,5 @@ deploy:
   - provider: script
     skip_cleanup: true
     script:
-      - semantic-release --debug
+      - travis_wait 30 semantic-release --debug
 
