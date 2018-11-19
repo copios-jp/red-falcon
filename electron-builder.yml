@@ -30,7 +30,6 @@ mac:
 electronUpdaterCompatibility: '>= 4.0.4'
 
 publish:
-  provider: generic
-  url: 'https://github.com/copios-jp/red-falcon/releases/download/'
+  provider: github
   owner: copios-jp
   private: false
