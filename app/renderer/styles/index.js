@@ -115,6 +115,6 @@ export default (theme) => ({
 
   editTextField: {
     flexBasis: 200,
-    margin: theme.spacing.unit
-  }
+    margin: theme.spacing.unit,
+  },
 })
