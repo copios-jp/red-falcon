@@ -107,4 +107,14 @@ export default (theme) => ({
   rate_max: {
     backgroundColor: '#B71C1C',
   },
+
+  editRoot: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+
+  editTextField: {
+    flexBasis: 200,
+    margin: theme.spacing.unit
+  }
 })

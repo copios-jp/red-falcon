@@ -1,7 +1,6 @@
-import * as React from 'react';
+import * as React from 'react'
 import { Component } from 'react'
-
-import { Paper, Typography } from '@material-ui/core';
+import { Paper, Typography } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 
 import SensorList from './SensorList'
@@ -12,11 +11,10 @@ import styles from '../styles/'
 const usb = window['require']('usb')
 const Ant = window['require']('ant-plus')
 
-const ID_VENDOR = 0x0fcf;
-const ID_PRODUCT = 0x1008;
+const ID_VENDOR = 0x0fcf
+const ID_PRODUCT = 0x1008
 const MAX_LISTENERS = 16 // 8 channels with two reads each
-class SensorsView extends Component {
-
+export class SensorsView extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -26,12 +24,12 @@ class SensorsView extends Component {
   }
 
   makeSensors() {
-    const state = {...this.state}
+    const state = { ...this.state }
     state.maxChannels = this.stick.maxChannels
-    for(let id = 0; id < this.stick.maxChannels; id++) {
+    for (let id = 0; id < this.stick.maxChannels; id++) {
       const sensor = new Ant.HeartRateSensor(this.stick)
       sensor.once('hbData', (data) => {
-        const state = {...this.state}
+        const state = { ...this.state }
         const channel = state.channels[id]
         channel.data = data
         this.setState(state)
@@ -47,62 +45,39 @@ class SensorsView extends Component {
   }
 
   activate() {
-    if(this.state.activated) { return }
+    if (this.state.activated) {
+      return
+    }
+    const usbDevices = usb.getDeviceList()
 
-    usb.getDeviceList().forEach((device) => {
+    usbDevices.forEach((device) => {
       const { deviceDescriptor } = device
       const { idVendor, idProduct } = deviceDescriptor
-      if(idVendor === ID_VENDOR && idProduct === ID_PRODUCT) {
+      if (idVendor === ID_VENDOR && idProduct === ID_PRODUCT) {
         this.stick = new Ant.GarminStick2()
         this.stick.setMaxListeners(MAX_LISTENERS)
-        this.stick.once('startup',  this.makeSensors.bind(this))
-        if(!this.stick.open()) {
+        this.stick.once('startup', this.makeSensors.bind(this))
+        if (!this.stick.open()) {
           console.log('oh shit')
           return
         }
       }
     })
-    this.setState({...this.state, activated: true})
+    this.setState({ ...this.state, activated: true })
   }
 
   deactivate() {
-    if(!this.state.activated) {
+    if (!this.state.activated) {
       return false
     }
-    Object.values(this.state.channels).forEach(channel => this.remove(channel))
+    Object.values(this.state.channels).forEach((channel) => this.remove(channel))
   }
 
   toggleActivation() {
-    if(this.state.activated) {
+    if (this.state.activated) {
       this.deactivate()
     } else {
       this.activate()
-    }
-  }
-
-  addFakeSensor() {
-    const channel = Object.values(this.state.channels).find((channel) => {
-      return channel.data === undefined
-    })
-    if(channel === undefined) {
-      return
-    }
-    let beat = 80
-    const maxDelta = 5
-    let direction = 1
-    const interval =  window.setInterval(() => {
-      if(beat > 160 || beat < 80) {
-        direction = direction *  -1
-      }
-      channel.sensor.emit('hbData', {
-        ComputedHeartRate: beat+=direction * Math.floor(Math.random() * Math.floor(maxDelta)),
-      })
-    }, 500)
-
-    const detach = channel.sensor.detach
-    channel.sensor.detach = () => {
-      detach.call(channel.sensor)
-      window.clearInterval(interval)
     }
   }
 
@@ -112,16 +87,20 @@ class SensorsView extends Component {
     sensor.removeAllListeners()
     delete this.state.channels[sensor.channel]
 
-    if(Object.keys(this.state.channels).length === 0) {
+    if (Object.keys(this.state.channels).length === 0) {
       this.stick.close()
-      this.setState({...this.state, activated: false})
+      this.setState({ ...this.state, activated: false })
     } else {
       this.setState(this.state)
     }
   }
 
+  handleTopBarAddSensor = () => {
+    this.addFakeSensor()
+  }
+
   getActiveChannels() {
-    return Object.values(this.state.channels).filter(channel => channel.data)
+    return Object.values(this.state.channels).filter((channel) => channel.data)
   }
 
   isActivated() {
@@ -131,21 +110,23 @@ class SensorsView extends Component {
   isFull() {
     return this.state.maxChannels === this.getActiveChannels().length
   }
+
   render() {
     const { classes } = this.props
     const channels = this.getActiveChannels()
     const activated = this.isActivated()
 
     const toggle = this.toggleActivation.bind(this)
-    const add = this.addFakeSensor.bind(this)
     const full = this.isFull()
 
     return (
       <div className={classes.wrapper}>
-        <TopBar activated={activated} toggle={toggle} add={add} full={full}/>
-        <Paper className={classes.content} >
-          <SensorList channels={channels} activated={activated}/>
-          <Typography variant='caption' className={classes.copyright}>&copy; COPIOS</Typography>
+        <TopBar activated={activated} toggle={toggle} add={this.handleTopBarAddSensor} full={full} />
+        <Paper className={classes.content}>
+          <SensorList channels={channels} activated={activated} />
+          <Typography variant="caption" className={classes.copyright}>
+            &copy; COPIOS
+          </Typography>
         </Paper>
       </div>
     )
