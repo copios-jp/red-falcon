@@ -15,21 +15,26 @@ const addFakeChannel = function() {
   return channel
 }
 
-const addFakeSensor = function() {
-  let beat = 80
+const nextBeat = (beat) => {
   const maxDelta = 5
   let direction = 1
+  if (beat > 160 || beat < 80) {
+    direction = direction * -1
+  }
+  return beat + direction * Math.floor(Math.random() * Math.floor(maxDelta))
+}
+
+const addFakeSensor = function() {
+  let beat = nextBeat(80)
   const channel =
     Object.values(this.state.channels).find((channel) => {
       return channel.data === undefined
     }) || this.addFakeChannel()
 
   const interval = window.setInterval(() => {
-    if (beat > 160 || beat < 80) {
-      direction = direction * -1
-    }
+    beat = nextBeat(beat)
     channel.sensor.emit('hbData', {
-      ComputedHeartRate: (beat += direction * Math.floor(Math.random() * Math.floor(maxDelta))),
+      ComputedHeartRate: beat,
     })
   }, 500)
 
