@@ -23,19 +23,22 @@ export class SensorsView extends Component {
     }
   }
 
+  bindSensor(sensor, id) {
+    sensor.once('hbData', (data) => {
+      const state = { ...this.state }
+      const channel = state.channels[id]
+      channel.data = data
+      this.setState(state)
+    })
+  }
+
   makeSensors() {
     const state = { ...this.state }
     state.maxChannels = this.stick.maxChannels
     for (let id = 0; id < this.stick.maxChannels; id++) {
       const sensor = new Ant.HeartRateSensor(this.stick)
-      sensor.once('hbData', (data) => {
-        const state = { ...this.state }
-        const channel = state.channels[id]
-        channel.data = data
-        this.setState(state)
-      })
+      this.bindSensor(sensor)
       sensor.attach(id, 0)
-
       state.channels[id] = {
         sensor,
         channelId: id,

@@ -8,12 +8,7 @@ const addFakeChannel = function() {
     channelId: id,
     sensor: Object.assign(new EventEmitter(), { detach() {}, channel: id }),
   }
-  channel.sensor.once('hbData', (data) => {
-    const state = { ...this.state }
-    const channel = state.channels[id]
-    channel.data = data
-    this.setState(state)
-  })
+  this.bindSensor(channel.sensor, id)
   channels[id] = channel
   this.setState(this.state)
 
