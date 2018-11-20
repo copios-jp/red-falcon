@@ -1,4 +1,5 @@
 import * as React from 'react';
+import tooling from '../tooling/'
 import {
   AppBar,
   IconButton,
@@ -8,14 +9,13 @@ import {
 
 import {
   PowerSettingsNew,
-  Add
 } from '@material-ui/icons'
 
 import { withStyles } from '@material-ui/core/styles'
 import styles from '../styles/'
 
 const TopBar = (props) => {
-  const { activated, toggle, add, classes, full } = props
+  const { activated, toggle, add, classes } = props
   return(
     <AppBar position="static" style={{WebkitAppRegion: 'drag'}}>
       <Toolbar variant='dense'>
@@ -23,12 +23,7 @@ const TopBar = (props) => {
         <IconButton aria-label="Menu" onClick={toggle}>
           <PowerSettingsNew color={activated ? 'secondary' : 'inherit'} />
         </IconButton>
-        {
-          process.env.NODE_ENV === 'development' &&
-          <IconButton color="inherit" aria-label="Menu" disabled={!activated || full} onClick={add}>
-            <Add />
-          </IconButton>
-        }
+        { tooling.topBar(add) }
       </Toolbar>
     </AppBar>
   )

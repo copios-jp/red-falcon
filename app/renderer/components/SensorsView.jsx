@@ -74,9 +74,11 @@ export class SensorsView extends Component {
       return false
     }
     Object.values(this.state.channels).forEach((channel) => this.remove(channel))
+
+    this.setState({ ...this.state, activated: false })
   }
 
-  toggleActivation() {
+  toggleActivation = () => {
     if (this.state.activated) {
       this.deactivate()
     } else {
@@ -119,12 +121,11 @@ export class SensorsView extends Component {
     const channels = this.getActiveChannels()
     const activated = this.isActivated()
 
-    const toggle = this.toggleActivation.bind(this)
     const full = this.isFull()
 
     return (
       <div className={classes.wrapper}>
-        <TopBar activated={activated} toggle={toggle} add={this.handleTopBarAddSensor} full={full} />
+        <TopBar activated={activated} toggle={this.toggleActivation} add={this.handleTopBarAddSensor} full={full} />
         <Paper className={classes.content}>
           <SensorList channels={channels} activated={activated} />
           <Typography variant="caption" className={classes.copyright}>
