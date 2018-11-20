@@ -3,27 +3,13 @@ import { app, crashReporter, BrowserWindow, Menu } from 'electron'
 import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
 
+import menuTemplate from './menu_template'
+
 autoUpdater.logger = log
 autoUpdater.logger.transports.file.level = 'info'
-log.info('App starting...')
-
-const isDevelopment = process.env.NODE_ENV === 'development'
 
 let mainWindow = null
 let forceQuit = false
-
-const installExtensions = async () => {
-  const installer = require('electron-devtools-installer')
-  const extensions = ['REACT_DEVELOPER_TOOLS']
-  const forceDownload = !!process.env.UPGRADE_EXTENSIONS
-  for (const name of extensions) {
-    try {
-      await installer.default(installer[name], forceDownload)
-    } catch (e) {
-      console.log(`Error installing ${name} extension: ${e.message}`)
-    }
-  }
-}
 
 crashReporter.start({
   productName: 'Beats',
@@ -32,18 +18,9 @@ crashReporter.start({
   uploadToServer: false,
 })
 
-app.on('window-all-closed', () => {
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
-
 app.on('ready', async () => {
-  if (isDevelopment) {
-    await installExtensions()
-  }
+  const menu = Menu.buildFromTemplate(menuTemplate)
+  Menu.setApplicationMenu(menu)
 
   mainWindow = new BrowserWindow({
     width: 1000,
@@ -62,48 +39,32 @@ app.on('ready', async () => {
   })
 
   mainWindow.webContents.on('did-finish-load', () => {
-    // Handle window logic properly on macOS:
-    // 1. App should not terminate if window has been closed
-    // 2. Click on icon in dock should re-open the window
-    // 3. ⌘+Q should close the window and quit the app
-    if (process.platform === 'darwin') {
-      mainWindow.on('close', function(e) {
-        if (!forceQuit) {
-          e.preventDefault()
-          mainWindow.hide()
-        }
-      })
+    mainWindow.on('close', function(e) {
+      if (!forceQuit) {
+        e.preventDefault()
+        mainWindow.hide()
+      }
+    })
 
-      app.on('activate', () => {
-        mainWindow.show()
-      })
+    app.on('activate', () => {
+      mainWindow.show()
+    })
 
-      app.on('before-quit', () => {
-        forceQuit = true
-      })
-    } else {
-      mainWindow.on('closed', () => {
-        mainWindow = null
-      })
-    }
+    app.on('before-quit', () => {
+      forceQuit = true
+    })
   })
 
-  if (isDevelopment) {
-    // auto-open dev tools
-    mainWindow.webContents.openDevTools()
-
-    // add inspect element on right click menu
-    mainWindow.webContents.on('context-menu', (e, props) => {
-      Menu.buildFromTemplate([
-        {
-          label: 'Inspect element',
-          click() {
-            mainWindow.inspectElement(props.x, props.y)
-          },
+  mainWindow.webContents.on('context-menu', (e, props) => {
+    Menu.buildFromTemplate([
+      {
+        label: 'Inspect element',
+        click() {
+          mainWindow.inspectElement(props.x, props.y)
         },
-      ]).popup(mainWindow)
-    })
-  }
+      },
+    ]).popup(mainWindow)
+  })
 })
 
 app.on('ready', () => {
