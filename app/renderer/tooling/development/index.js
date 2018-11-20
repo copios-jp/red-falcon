@@ -19,9 +19,8 @@ const addFakeSensor = function() {
   let beat = 80
   const maxDelta = 5
   let direction = 1
-  const channels = this.state.channels
   const channel =
-    Object.values(channels).find((channel) => {
+    Object.values(this.state.channels).find((channel) => {
       return channel.data === undefined
     }) || this.addFakeChannel()
 
