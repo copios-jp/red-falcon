@@ -20,6 +20,6 @@ describe('TopBar', () => {
   })
 
   it('renders a div', () => {
-    expect(topBar().find('div').length).to.eql(1)
+    expect(topBar().find('div').length).to.eql(2)
   })
 })
