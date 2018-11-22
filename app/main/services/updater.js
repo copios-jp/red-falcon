@@ -43,6 +43,7 @@ autoUpdater.on('update-downloaded', () => {
 
 export default {
   checkForUpdates() {
+    autoUpdater.autoDownload = false
     autoUpdater.checkForUpdates()
   },
   install() {
