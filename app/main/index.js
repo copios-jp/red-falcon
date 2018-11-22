@@ -3,10 +3,13 @@ import { app, crashReporter, BrowserWindow, Menu } from 'electron'
 import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
 
+import tooling from './tooling/'
 import menuTemplate from './menu_template'
 
 autoUpdater.logger = log
 autoUpdater.logger.transports.file.level = 'info'
+
+tooling.apply()
 
 let mainWindow = null
 let forceQuit = false

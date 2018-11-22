@@ -1,15 +1,36 @@
 import { app } from 'electron'
+import updater from './services/updater'
+import * as Sentry from '@sentry/electron'
 
-const QUIT = {
+export const QUIT = {
   label: app.getName(),
   submenu: [
     {
-      role: 'quit',
+      label: 'Check for update',
+      click() {
+        updater.checkForUpdates()
+      },
     },
+    {
+      label: 'Install and restart',
+      click() {
+        updater.install()
+      },
+      visible: false,
+    },
+    { type: 'separator' },
+    {
+      label: 'Error',
+      click() {
+        Sentry.captureMessage('production test')
+      },
+    },
+    { type: 'separator' },
+    { role: 'quit' },
   ],
 }
 
-const WINDOW = {
+export const WINDOW = {
   role: 'windowMenu',
   submenu: [
     { role: 'minimize' },

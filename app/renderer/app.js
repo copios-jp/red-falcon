@@ -4,7 +4,6 @@ import tooling from './tooling/'
 
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
-
 import SensorsView from './components/SensorsView'
 import theme from './theme'
 
