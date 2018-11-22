@@ -73,7 +73,7 @@ app.on('ready', async () => {
 })
 
 app.on('ready', () => {
-  console.log('ARGV', process.argv)
+  log.info('ARGV', process.argv)
   const isRelaunch = process.argv.indexOf('--relaunch') === -1
   const isProduction = process.env.NODE_ENV === undefined
 

@@ -23,8 +23,8 @@ autoUpdater.on('update-available', () => {
 })
 
 const relaunch = () => {
-  app.relaunch('--relaunch')
-  app.quit()
+  app.relaunch({argv: '--relaunch'})
+  app.exit(0)
 }
 
 autoUpdater.on('update-downloaded', () => {
@@ -40,7 +40,7 @@ autoUpdater.on('update-downloaded', () => {
     },
     (buttonIndex) => {
       if (buttonIndex === 0) {
-        relaunch({ args: process.argv.slice(1).concat(['--relaunch']) })
+        relaunch()
       }
     },
   )
