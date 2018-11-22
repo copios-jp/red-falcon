@@ -6,6 +6,7 @@ autoUpdater.on('error', (error) => {
 })
 
 autoUpdater.on('update-available', () => {
+  console.log(autoUpdater)
   dialog.showMessageBox(
     {
       type: 'info',
@@ -39,7 +40,7 @@ autoUpdater.on('update-downloaded', () => {
     },
     (buttonIndex) => {
       if (buttonIndex === 0) {
-        relaunch()
+        relaunch({args: process.argv.slice(1).concat(['--relaunch'])})
       }
     },
   )

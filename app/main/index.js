@@ -4,7 +4,7 @@ import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
 import tooling from './tooling/'
 import menuTemplate from './menu_template'
-
+import updater from './services/updater'
 autoUpdater.logger = log
 autoUpdater.logger.transports.file.level = 'info'
 
@@ -70,5 +70,7 @@ app.on('ready', async () => {
 })
 
 app.on('ready', () => {
-  autoUpdater.checkForUpdates()
+  if(process.argv.indexOf('--relaunch') === -1 && process.env.NODE_ENV === undefined) {
+    updater.checkForUpdates()
+  }
 })
