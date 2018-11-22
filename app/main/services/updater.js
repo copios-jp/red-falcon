@@ -1,4 +1,4 @@
-import { dialog, Menu } from 'electron'
+import { dialog, Menu, app } from 'electron'
 import { autoUpdater } from 'electron-updater'
 
 autoUpdater.on('error', (error) => {
@@ -34,7 +34,8 @@ autoUpdater.on('update-downloaded', () => {
     },
     (buttonIndex) => {
       if (buttonIndex === 0) {
-        setImmediate(() => autoUpdater.quitAndInstall())
+        app.relaunch()
+        app.quit()
       }
     },
   )
@@ -48,6 +49,7 @@ export default {
     const menu = Menu.getApplicationMenu()
     menu.items[0].submenu.items[0].visible = false
     menu.items[0].submenu.items[1].visible = true
-    setImmediate(() => autoUpdater.quitAndInstall())
+    app.relaunch()
+    app.quit()
   },
 }
