@@ -29,7 +29,6 @@ const relaunch = () => {
    * app.relaunch({ argv: '--relaunch' })
   app.quit(0)
   */
-
 }
 
 autoUpdater.on('update-downloaded', () => {
