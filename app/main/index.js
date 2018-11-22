@@ -2,7 +2,6 @@ import path from 'path'
 import { app, crashReporter, BrowserWindow, Menu } from 'electron'
 import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
-
 import tooling from './tooling/'
 import menuTemplate from './menu_template'
 

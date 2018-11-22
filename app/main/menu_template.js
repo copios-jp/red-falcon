@@ -19,13 +19,6 @@ export const QUIT = {
       visible: false,
     },
     { type: 'separator' },
-    {
-      label: 'Error',
-      click() {
-        Sentry.captureMessage('production test')
-      },
-    },
-    { type: 'separator' },
     { role: 'quit', label: '終了' },
   ],
 }
