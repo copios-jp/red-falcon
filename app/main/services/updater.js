@@ -1,4 +1,5 @@
-import { dialog, Menu, app } from 'electron'
+import { dialog, Menu } from 'electron'
+// import { app } from 'electron'
 import { autoUpdater } from 'electron-updater'
 
 autoUpdater.on('error', (error) => {
@@ -28,6 +29,7 @@ const relaunch = () => {
    * app.relaunch({ argv: '--relaunch' })
   app.quit(0)
   */
+
 }
 
 autoUpdater.on('update-downloaded', () => {
