@@ -1,6 +1,5 @@
 import { dialog, Menu } from 'electron'
 import { autoUpdater } from 'electron-updater'
-import menuTemplate from '../menu_template'
 
 autoUpdater.on('error', (error) => {
   dialog.showErrorBox('Error: ', error == null ? 'unknown' : (error.stack || error).toString())
@@ -46,8 +45,8 @@ export default {
     autoUpdater.checkForUpdates()
   },
   install() {
-    menuTemplate[0].submenu[0].visible = true
-    menuTemplate[0].submenu[1].visible = false
-    autoUpdater.quitAndInstall()
+    menu.items[0].submenu.items[0].visible = false
+    menu.items[0].submenu.items[1].visible = true
+    setImmediate(() => autoUpdater.quitAndInstall())
   },
 }
