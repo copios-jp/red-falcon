@@ -70,7 +70,10 @@ app.on('ready', async () => {
 })
 
 app.on('ready', () => {
-  if (process.argv.indexOf('--relaunch') === -1 && process.env.NODE_ENV === undefined) {
+  const isRelaunch = process.argv.indexOf('--relaunch') === -1
+  const isProduction = process.env.NODE_ENV === undefined
+
+  if (isRelaunch && isProduction) {
     updater.checkForUpdates()
   }
 })
