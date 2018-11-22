@@ -70,5 +70,5 @@ app.on('ready', async () => {
 })
 
 app.on('ready', () => {
-  autoUpdater.checkForUpdatesAndNotify()
+  autoUpdater.checkForUpdates()
 })

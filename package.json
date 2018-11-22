@@ -70,6 +70,6 @@
     "private:serve": "babel-node scripts/serve.js",
     "private:compile": "rimraf dist && babel app/ --copy-files --out-dir build",
     "private:clean": "rimraf build",
-    "private:format": "prettier \"babel.config.js\" \"scripts/*.js\" \"app/**/*.js\" \"test/**/*.js\""
+    "private:format": "prettier \"babel.config.js\" \"scripts/*.js\" \"app/**/*.js*\" \"test/**/*.js\""
   }
 }

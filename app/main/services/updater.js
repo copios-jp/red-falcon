@@ -35,7 +35,7 @@ autoUpdater.on('update-downloaded', () => {
     },
     (buttonIndex) => {
       if (buttonIndex === 0) {
-        autoUpdater.quitAndInstall()
+        setImmediate(() => autoUpdater.quitAndInstall())
       }
     },
   )
