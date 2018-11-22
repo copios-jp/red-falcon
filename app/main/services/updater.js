@@ -40,7 +40,7 @@ autoUpdater.on('update-downloaded', () => {
     },
     (buttonIndex) => {
       if (buttonIndex === 0) {
-        relaunch({args: process.argv.slice(1).concat(['--relaunch'])})
+        relaunch({ args: process.argv.slice(1).concat(['--relaunch']) })
       }
     },
   )

@@ -70,7 +70,7 @@ app.on('ready', async () => {
 })
 
 app.on('ready', () => {
-  if(process.argv.indexOf('--relaunch') === -1 && process.env.NODE_ENV === undefined) {
+  if (process.argv.indexOf('--relaunch') === -1 && process.env.NODE_ENV === undefined) {
     updater.checkForUpdates()
   }
 })
