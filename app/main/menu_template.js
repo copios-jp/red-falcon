@@ -1,6 +1,5 @@
 import { app } from 'electron'
 import updater from './services/updater'
-import * as Sentry from '@sentry/electron'
 
 export const QUIT = {
   label: app.getName(),
@@ -26,10 +25,10 @@ export const QUIT = {
 export const WINDOW = {
   role: 'windowMenu',
   submenu: [
-    { role: 'minimize' },
-    { role: 'toggleFullScreen' },
+    { role: 'minimize', label: '最小化' },
+    { role: 'toggleFullScreen', label: '最大化' },
     { type: 'separator' },
-    { role: 'toggleDevTools', label: 'Dev Tools' },
+    { role: 'toggleDevTools', label: '開発ツール' },
   ],
 }
 
