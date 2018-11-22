@@ -6,13 +6,13 @@ export const QUIT = {
   label: app.getName(),
   submenu: [
     {
-      label: 'Check for update',
+      label: '更新を確認',
       click() {
         updater.checkForUpdates()
       },
     },
     {
-      label: 'Install and restart',
+      label: 'インストールして再起動',
       click() {
         updater.install()
       },
@@ -26,7 +26,7 @@ export const QUIT = {
       },
     },
     { type: 'separator' },
-    { role: 'quit' },
+    { role: 'quit', label: '終了' },
   ],
 }
 

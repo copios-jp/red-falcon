@@ -3,25 +3,22 @@ import { autoUpdater } from 'electron-updater'
 import menuTemplate from '../menu_template'
 
 autoUpdater.on('error', (error) => {
-  dialog.showErrorBox(
-    'Error: ',
-    error == null ? 'unknown' : (error.stack || error).toString(),
-  )
+  dialog.showErrorBox('Error: ', error == null ? 'unknown' : (error.stack || error).toString())
 })
 
 autoUpdater.on('update-available', () => {
   dialog.showMessageBox(
     {
-    type: 'info',
-    title: 'Found Updates',
-    message: 'Found updates, do you want update now?',
-    buttons: ['Sure', 'No'],
-  },
-  (buttonIndex) => {
-    if (buttonIndex === 0) {
-      autoUpdater.downloadUpdate()
-    }
-  },
+      type: 'info',
+      title: '新しいバージョン',
+      message: '新しいバージョンが利用可能です。 今すぐダウンロードしますか。',
+      buttons: ['はい', 'いいえ'],
+    },
+    (buttonIndex) => {
+      if (buttonIndex === 0) {
+        autoUpdater.downloadUpdate()
+      }
+    },
   )
 })
 
@@ -32,15 +29,15 @@ autoUpdater.on('update-downloaded', () => {
 
   dialog.showMessageBox(
     {
-    title: 'Install Updates',
-    message: 'Updates downloaded. do you want to install now?',
-    buttons: ['Sure', 'No'],
-  },
-  (buttonIndex) => {
-    if(buttonIndex === 0) {
-      autoUpdater.quitAndInstall()
-    }
-  },
+      title: 'インストール',
+      message: 'アップデートのダウンロードが完了しました。 今すぐインストールしますか。',
+      buttons: ['はい', 'いいえ'],
+    },
+    (buttonIndex) => {
+      if (buttonIndex === 0) {
+        autoUpdater.quitAndInstall()
+      }
+    },
   )
 })
 
@@ -52,6 +49,5 @@ export default {
     menuTemplate[0].submenu[0].visible = true
     menuTemplate[0].submenu[1].visible = false
     autoUpdater.quitAndInstall()
-  }
+  },
 }
-

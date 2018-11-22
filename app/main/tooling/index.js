@@ -15,4 +15,3 @@ export default {
     log.info('Apply tooling for:', env)
   },
 }
-
