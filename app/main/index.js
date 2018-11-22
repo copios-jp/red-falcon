@@ -4,7 +4,7 @@ import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
 import tooling from './tooling/'
 import menuTemplate from './menu_template'
-import updater from './services/updater'
+// import updater from './services/updater'
 
 // TODO - move this kind of setup out of index.js
 autoUpdater.logger = log
@@ -79,6 +79,7 @@ app.on('ready', () => {
   const isProduction = process.env.NODE_ENV === undefined
 
   if (isRelaunch && isProduction) {
-    updater.checkForUpdates()
+    autoUpdater.checkForUpdatesAndNotify()
+    // updater.checkForUpdates()
   }
 })

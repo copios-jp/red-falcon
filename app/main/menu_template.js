@@ -1,13 +1,16 @@
 import { app } from 'electron'
-import updater from './services/updater'
+// import updater from './services/updater'
 
 export const QUIT = {
   label: app.getName(),
   submenu: [
+    /*
     {
       label: '更新を確認',
       click() {
-        updater.checkForUpdates()
+       app.relaunch({argv: process.argv.slice(1).concat(['--relaunch'])})
+       app.exit(0)
+        // updater.checkForUpdates()
       },
     },
     {
@@ -18,6 +21,7 @@ export const QUIT = {
       visible: false,
     },
     { type: 'separator' },
+    */
     { role: 'quit', label: '終了' },
   ],
 }
