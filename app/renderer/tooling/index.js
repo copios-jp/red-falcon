@@ -1,5 +1,7 @@
 import development from './development/'
-const tooling = { development }
+import production from './production/'
+
+const tooling = { development, production }
 
 export default {
   tooling: {},

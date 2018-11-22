@@ -1,7 +1,7 @@
-import log from 'electron-log'
-
 import development from './development/'
-const tooling = { development }
+import production from './production/'
+
+const tooling = { development, production }
 
 export default {
   tooling: {},
@@ -12,6 +12,5 @@ export default {
       this.tooling = tooling[env]
       this.tooling.apply()
     }
-    log.info('Apply tooling for:', env)
   },
 }
