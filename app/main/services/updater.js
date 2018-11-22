@@ -45,6 +45,7 @@ export default {
     autoUpdater.checkForUpdates()
   },
   install() {
+    const menu = Menu.getApplicationMenu()
     menu.items[0].submenu.items[0].visible = false
     menu.items[0].submenu.items[1].visible = true
     setImmediate(() => autoUpdater.quitAndInstall())
