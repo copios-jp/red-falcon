@@ -23,8 +23,11 @@ autoUpdater.on('update-available', () => {
 })
 
 const relaunch = () => {
-  app.relaunch({ argv: '--relaunch' })
+  autoUpdater.quitAndInstall()
+  /*
+   * app.relaunch({ argv: '--relaunch' })
   app.quit(0)
+  */
 }
 
 autoUpdater.on('update-downloaded', () => {
