@@ -1,7 +1,7 @@
 // import * as PropTypes from 'prop-types'
 import * as React from 'react';
 import { Component } from 'react'
-import EditSensor from './EditSensor'
+import EditSensor from './edit_sensor/'
 import { withStyles } from '@material-ui/core/styles'
 import { GridListTile } from '@material-ui/core';
 import { GridListTileBar } from '@material-ui/core';

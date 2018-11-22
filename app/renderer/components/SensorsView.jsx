@@ -125,7 +125,12 @@ export class SensorsView extends Component {
 
     return (
       <div className={classes.wrapper}>
-        <TopBar activated={activated} toggle={this.toggleActivation} add={this.handleTopBarAddSensor} full={full} />
+        <TopBar
+          activated={activated}
+          toggle={this.toggleActivation}
+          add={this.handleTopBarAddSensor}
+          full={full}
+        />
         <Paper className={classes.content}>
           <SensorList channels={channels} activated={activated} />
           <Typography variant="caption" className={classes.copyright}>

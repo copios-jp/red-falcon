@@ -5,6 +5,9 @@
   "include": [
     "app/**/*.js*"
   ],
+  "exclude": [
+    "build/**/*.js*"
+  ],
   "all": true,
   "reporter": [
     "lcov",
