@@ -20,7 +20,6 @@ crashReporter.start({
   uploadToServer: false,
 })
 
-console.log('Starting', process.env.NODE_ENV)
 app.on('ready', async () => {
   const menu = Menu.buildFromTemplate(menuTemplate)
   Menu.setApplicationMenu(menu)

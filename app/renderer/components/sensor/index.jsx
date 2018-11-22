@@ -1,21 +1,21 @@
 // import * as PropTypes from 'prop-types'
-import * as React from 'react';
+import * as React from 'react'
 import { Component } from 'react'
-import EditSensor from './edit_sensor/'
+import Edit from './edit/'
 import { withStyles } from '@material-ui/core/styles'
-import { GridListTile } from '@material-ui/core';
-import { GridListTileBar } from '@material-ui/core';
-import { Paper } from '@material-ui/core';
+import { GridListTile } from '@material-ui/core'
+import { GridListTileBar } from '@material-ui/core'
+import { Paper } from '@material-ui/core'
 
-import classNames from 'classnames';
+import classNames from 'classnames'
 
 const ages = []
-import styles from '../styles/'
+import styles from '../../styles/'
 ages[5329145] = 37
 ages[5329182] = 44
 
 function getZoneFor(sensor) {
-  if(!sensor.age && sensor.SerialNumber) {
+  if (!sensor.age && sensor.SerialNumber) {
     sensor.age = ages[sensor.SerialNumber]
   }
 
@@ -26,9 +26,9 @@ function getZoneFor(sensor) {
   let zone = 'rest'
 
   const labels = ['recovery', 'aerobic', 'anaerobic', 'max']
-  const zones =[max * 0.6, max * 0.7, max * 0.8, max * 0.9]
+  const zones = [max * 0.6, max * 0.7, max * 0.8, max * 0.9]
 
-  while(rate > zones[index]) {
+  while (rate > zones[index]) {
     zone = labels[index]
     index++
   }
@@ -37,10 +37,9 @@ function getZoneFor(sensor) {
 }
 
 class Sensor extends Component {
-
   constructor(props) {
     super(props)
-    const { channel  } = props
+    const { channel } = props
     this.state = {
       channel,
       isEditing: false,
@@ -49,28 +48,23 @@ class Sensor extends Component {
 
   componentDidMount() {
     const sensor = this.state.channel.sensor
-    sensor.on('hbData', this.handleDataUpdate.bind(this))
+    sensor.on('hbData', this.handleDataUpdate)
   }
 
-  edit() {
-    this.setState({...this.state, isEditing: true})
+  edit = () => {
     this.state.channel.sensor.removeAllListeners('hbData')
+    this.setState({ ...this.state, isEditing: true })
   }
 
-  handleDataUpdate(data) {
+  handleDataUpdate = (data) => {
     const channel = this.state.channel
-    channel.data = {...channel.data, ...data}
+    channel.data = { ...channel.data, ...data }
     this.setState(this.state)
   }
 
-  finishEdit() {
-    const sensor = this.state.channel.sensor
-    sensor.on('hbData', this.handleDataUpdate.bind(this))
-    this.setState({...this.state, isEditing: false})
-  }
-
-  heartRate() {
-    return this.state.channel.data.ComputedHeartRate
+  finishEdit = () => {
+    this.setState({ ...this.state, isEditing: false })
+    this.state.channel.sensor.on('hbData', this.handleDataUpdate)
   }
 
   channelId() {
@@ -84,25 +78,25 @@ class Sensor extends Component {
 
   render() {
     const { classes, sensorClass } = this.props
-    return (
-      <Paper
-        className={
-          classNames(classes.gridListItem, classes.sensor, classes[sensorClass])
-        } >
-        { this.state.isEditing &&
-          <EditSensor classes={classes} channel={this.state.channel} done={this.finishEdit.bind(this)}/>
-        }
 
-        <GridListTile onClick={this.edit.bind(this)}>
+    return (
+      <Paper className={classNames(classes.gridListItem, classes.sensor, classes[sensorClass])}>
+        {this.state.isEditing && (
+          <Edit
+            channel={this.state.channel}
+            onClose={this.finishEdit}
+            isOpen={this.state.isEditing}
+          />
+        )}
+        <GridListTile onClick={this.edit}>
           <GridListTileBar
             className={classes.gridTileBar}
             title={`受信機番号:${this.channelId()}`}
           />
           <div className={classNames(classes[sensorClass], classes[this.zoneClass()])}>
-          { this.heartRate() }
+            {this.state.channel.data.ComputedHeartRate}
           </div>
         </GridListTile>
-
       </Paper>
     )
   }

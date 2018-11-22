@@ -1,11 +1,14 @@
 import * as React from 'react'
 import { DialogContent, DialogContentText, TextField, InputAdornment } from '@material-ui/core'
-
 import { withStyles } from '@material-ui/core/styles'
-import styles from '../../styles/'
+import styles from '../../../styles/'
 
 export default withStyles(styles)((props) => {
-  const { age, cacheAge, classes, id } = props
+  const { classes, id, data } = props
+  const cacheAge = (event) => {
+    data.age = parseInt(event.target.value) || undefined
+  }
+
   return (
     <DialogContent>
       <DialogContentText>
@@ -15,7 +18,7 @@ export default withStyles(styles)((props) => {
         onChange={cacheAge}
         className={classes.edtiTextField}
         variant="outlined"
-        value={age}
+        defaultValue={data.age}
         label="年齢"
         InputProps={{
           endAdornment: <InputAdornment position="start">才</InputAdornment>,

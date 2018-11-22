@@ -10,6 +10,10 @@ export default (theme) => ({
   content: {
     flexGrow: 1,
     display: 'flex',
+    backgroundImage: 'url("images/icon.png")',
+    backgroundSize: '75%',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
   },
   gridList: {
     display: 'flex',
