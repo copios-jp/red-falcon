@@ -23,7 +23,7 @@ autoUpdater.on('update-available', () => {
 })
 
 const relaunch = () => {
-  app.relaunch()
+  app.relaunch('--relaunch')
   app.quit()
 }
 
