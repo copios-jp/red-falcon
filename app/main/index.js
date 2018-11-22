@@ -9,7 +9,7 @@ import menuTemplate from './menu_template'
 autoUpdater.logger = log
 autoUpdater.logger.transports.file.level = 'info'
 
-tooling.apply()
+tooling.logger = log
 
 let mainWindow = null
 let forceQuit = false

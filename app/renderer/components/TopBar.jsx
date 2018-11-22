@@ -23,7 +23,7 @@ const TopBar = (props) => {
         <IconButton aria-label="Menu" onClick={toggle}>
           <PowerSettingsNew color={activated ? 'secondary' : 'inherit'} />
         </IconButton>
-        { tooling.topBar(add) }
+        { tooling.topBar && tooling.topBar(add) }
       </Toolbar>
     </AppBar>
   )

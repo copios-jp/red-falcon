@@ -10,7 +10,7 @@ import theme from './theme'
 const container = document.currentScript.getAttribute('data-container')
 const rootElement = document.querySelector(container)
 
-tooling.apply()
+tooling.logger = console.log
 
 ReactDOM.render(
   <React.Fragment>
