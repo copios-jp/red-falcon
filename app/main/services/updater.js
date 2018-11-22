@@ -21,6 +21,11 @@ autoUpdater.on('update-available', () => {
   )
 })
 
+const relaunch = () => {
+  app.relaunch()
+  app.quit()
+}
+
 autoUpdater.on('update-downloaded', () => {
   const menu = Menu.getApplicationMenu()
   menu.items[0].submenu.items[0].visible = false
@@ -34,8 +39,7 @@ autoUpdater.on('update-downloaded', () => {
     },
     (buttonIndex) => {
       if (buttonIndex === 0) {
-        app.relaunch()
-        app.quit()
+        relaunch()
       }
     },
   )
@@ -50,7 +54,6 @@ export default {
     const menu = Menu.getApplicationMenu()
     menu.items[0].submenu.items[0].visible = false
     menu.items[0].submenu.items[1].visible = true
-    app.relaunch()
-    app.quit()
+    relaunch()
   },
 }
