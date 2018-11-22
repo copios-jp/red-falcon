@@ -14,6 +14,7 @@ const Ant = window['require']('ant-plus')
 const ID_VENDOR = 0x0fcf
 const ID_PRODUCT = 0x1008
 const MAX_LISTENERS = 16 // 8 channels with two reads each
+
 export class SensorsView extends Component {
   constructor(props) {
     super(props)

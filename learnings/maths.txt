@@ -1,0 +1,79 @@
+Formulas for Determination of Calorie Burn if VO2max is Unknown
+Male: ((-55.0969 + (0.6309 x HR) + (0.1988 x W) + (0.2017 x A))/4.184) x 60 x T
+Female: ((-20.4022 + (0.4472 x HR) - (0.1263 x W) + (0.074 x A))/4.184) x 60 x T
+where
+
+HR = Heart rate (in beats/minute)
+
+W = Weight (in kilograms)
+
+A = Age (in years)
+
+T = Exercise duration time (in hours)
+
+Formulas for Determination of Calorie Burn if VO2max is Known
+Male: ((-95.7735 + (0.634 x HR) + (0.404 x VO2max) + (0.394 x W) + (0.271 x A))/4.184) x 60 x T
+Female: ((-59.3954 + (0.45 x HR) + (0.380 x VO2max) + (0.103 x W) + (0.274 x A))/4.184) x 60 x T
+where
+
+HR = Heart rate (in beats/minute)
+
+VO2max = Maximal oxygen consumption (in mL•kg-1•min-1)
+
+W = Weight (in kilograms)
+
+A = Age (in years)
+
+T = Exercise duration time (in hours)
+
+Formula for Determination of Maximum Heart Rate Based on Age
+Maximum Heart Rate (beats/minute) = 208 - (0.7 x Age)
+Formula for Exercise Intensity Conversion from %MHR to %VO2max
+%VO2max = 1.5472 x %MHR - 57.53
+where
+
+%MHR = Percentage of maximum heart rate
+
+%VO2max = Percentage of VO2max
+
+
+---------------------------------------------------------------------------------------------
+
+
+
+Formula for Determination of VO2max Based on Resting Heart Rate
+VO2max = 15.3 x (MHR/RHR)
+where
+
+MHR = Maximum heart rate (beats/minute) = 208 - (0.7 x Age)
+
+RHR = Resting heart rate (beats/minute) = 20 second heart rate x 3
+
+Formula for Determination of VO2max Based on One Mile Walk Test
+VO2max = 132.853 - 0.0769W - 0.3877A + 6.315G - 3.2649T - 0.1565H
+where
+
+W = Weight (in pounds)
+
+A = Age (in years)
+
+G = Gender factor (G = 0 for a female, G = 1 for a male)
+
+T = Test completion time (in minutes)
+
+H = Heart rate at test completion (beats/minute)
+
+Formulas for Determination of VO2max Based on Three Minute Step Test
+Males: VO2max = 111.33 - 0.42H
+Females: VO2max = 65.81 - 0.1847H
+where
+
+H = Heart rate (in beats/minute) after test completion
+
+Formula for Determination of VO2max Based on 1.5 Mile Run / Walk Test
+VO2max = 483/T + 3.5
+where
+
+T = Test completion time (in minutes)
+
+
