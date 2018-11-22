@@ -5,6 +5,8 @@ import { autoUpdater } from 'electron-updater'
 import tooling from './tooling/'
 import menuTemplate from './menu_template'
 import updater from './services/updater'
+
+// TODO - move this kind of setup out of index.js
 autoUpdater.logger = log
 autoUpdater.logger.transports.file.level = 'info'
 
