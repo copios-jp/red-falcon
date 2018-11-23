@@ -80,7 +80,7 @@ export class SensorsView extends Component {
   }
 
   toggleActivation = () => {
-    const action = this.isActivated() ?  this.deactivate : this.activate
+    const action = this.isActivated() ? this.deactivate : this.activate
     action()
   }
 
@@ -111,11 +111,7 @@ export class SensorsView extends Component {
 
     return (
       <div className={classes.wrapper}>
-        <TopBar
-          activated={activated}
-          toggle={this.toggleActivation}
-          add={add}
-        />
+        <TopBar activated={activated} toggle={this.toggleActivation} add={add} />
         <Paper className={classes.content}>
           <SensorList channels={channels} activated={activated} />
           <Typography variant="caption" className={classes.copyright}>
