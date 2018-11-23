@@ -8,7 +8,6 @@ import TopBar from './TopBar'
 
 import styles from '../styles/'
 
-
 const usb = window['require']('usb')
 const Ant = window['require']('ant-plus')
 
