@@ -1,5 +1,5 @@
 import { dialog, Menu } from 'electron'
-import { app } from 'electron'
+// import { app } from 'electron'
 import { autoUpdater } from 'electron-updater'
 
 const DOWNLOAD_DIALOG = {
@@ -28,8 +28,11 @@ const install = () => {
   items[1].visible = true
 
   autoUpdater.autoDownload = true
+  autoUpdater.quitAndInstall()
+  /*
   app.relaunch({ argv: '--relaunch' })
   app.exit(0)
+  */
 }
 
 autoUpdater.on('error', (error) => {
