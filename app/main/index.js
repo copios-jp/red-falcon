@@ -46,6 +46,7 @@ app.on('ready', async () => {
 
   mainWindow.webContents.on('did-finish-load', () => {
     /*
+     * This may be interferring with auto updates
     mainWindow.on('close', function(e) {
       if (!forceQuit) {
         e.preventDefault()
@@ -61,6 +62,9 @@ app.on('ready', async () => {
       forceQuit = true
     })
     */
+    app.on('activate', () => {
+      mainWindow.show()
+    })
   })
 
   mainWindow.webContents.on('context-menu', (e, props) => {
@@ -76,6 +80,8 @@ app.on('ready', async () => {
 })
 
 app.on('ready', () => {
+  autoUpdater.checkForUpdatesAndNotify()
+  /*
   log.info('whaaaat? ARGV')
   log.info(process.argv)
   const isRelaunch = process.argv.indexOf('--relaunch') === -1
@@ -85,4 +91,5 @@ app.on('ready', () => {
     autoUpdater.checkForUpdatesAndNotify()
     // updater.checkForUpdates()
   }
+  */
 })

@@ -1,9 +1,10 @@
 import { app } from 'electron'
-import updater from './services/updater'
+// import updater from './services/updater'
 
 export const QUIT = {
   label: app.getName(),
   submenu: [
+    /*
     {
       label: '更新を確認',
       click() {
@@ -18,6 +19,7 @@ export const QUIT = {
       visible: false,
     },
     { type: 'separator' },
+    */
     { role: 'quit', label: '終了' },
   ],
 }
