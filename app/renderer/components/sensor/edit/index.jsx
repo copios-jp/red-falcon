@@ -16,8 +16,8 @@ const EditSensor = (props) => {
   return (
     <div className={classes.editRoot}>
       <Dialog open={isOpen} onClose={onClose} aira-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">{`受信機編集(${channel.channelId})`}</DialogTitle>
-        <Form data={channel.data} id={channel.channelId} />
+        <DialogTitle id="form-dialog-title">{`受信機編集(${channel.id})`}</DialogTitle>
+        <Form data={channel.data} id={channel.id} />
         <DialogActions>
           <Button variant="contained" onClick={onCancel} color="secondary">
             キャンセル

@@ -68,7 +68,7 @@ class Sensor extends Component {
   }
 
   channelId() {
-    return this.state.channel.channelId
+    return this.state.channel.id
   }
 
   zoneClass() {
