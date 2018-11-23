@@ -14,6 +14,7 @@ tooling.logger = log
 log.info(app.getName(), app.getVersion())
 
 let mainWindow = null
+
 // let forceQuit = false
 
 crashReporter.start({
