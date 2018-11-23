@@ -29,7 +29,7 @@ const install = () => {
 
   autoUpdater.autoDownload = true
   app.relaunch({ argv: '--relaunch' })
-  app.quit()
+  app.exit(0)
 }
 
 autoUpdater.on('error', (error) => {
