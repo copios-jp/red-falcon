@@ -44,6 +44,7 @@ app.on('ready', async () => {
   })
 
   mainWindow.webContents.on('did-finish-load', () => {
+    /*
     mainWindow.on('close', function(e) {
       if (!forceQuit) {
         e.preventDefault()
@@ -58,6 +59,7 @@ app.on('ready', async () => {
     app.on('before-quit', () => {
       forceQuit = true
     })
+    */
   })
 
   mainWindow.webContents.on('context-menu', (e, props) => {
