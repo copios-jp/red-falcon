@@ -2,16 +2,12 @@ import EventEmitter from 'events'
 
 export const addFakeChannel = function() {
   const channels = this.state.channels
-  const id = Object.keys(channels).length++
-  const channel = {
-    channelId: id,
-    sensor: Object.assign(new EventEmitter(), { detach() {}, channel: id }),
-  }
-  this.bindSensor(channel.sensor, id)
-  channels[id] = channel
-  this.setState(this.state)
+  const id = Object.keys(channels).length
 
-  return channel
+  const sensor = Object.assign(new EventEmitter(), { detach() {}, channelId: id })
+  channels[id] = this.createChannelFor(sensor)
+
+  return channels[id]
 }
 
 const nextBeat = (beat) => {

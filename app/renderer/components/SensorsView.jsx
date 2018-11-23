@@ -19,37 +19,39 @@ export class SensorsView extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      activated: false,
       channels: {},
     }
   }
 
-  bindSensor(sensor, id) {
+  createChannelFor = (sensor) => {
+    const { channelId } = sensor
+    const channel = {
+      sensor,
+      id: channelId,
+    }
+
     sensor.once('hbData', (data) => {
-      const state = { ...this.state }
-      const channel = state.channels[id]
       channel.data = data
-      this.setState(state)
+      this.setState(this.state)
     })
+
+    return channel
   }
 
-  makeSensors() {
+  makeSensors = () => {
     const state = { ...this.state }
     state.maxChannels = this.stick.maxChannels
     for (let id = 0; id < this.stick.maxChannels; id++) {
       const sensor = new Ant.HeartRateSensor(this.stick)
-      this.bindSensor(sensor)
+      sensor.channelId = id
+      state.channels[id] = this.createChannelFor(sensor)
       sensor.attach(id, 0)
-      state.channels[id] = {
-        sensor,
-        channelId: id,
-      }
     }
     this.setState(state)
   }
 
-  activate() {
-    if (this.state.activated) {
+  activate = () => {
+    if (this.isActivated()) {
       return
     }
     const usbDevices = usb.getDeviceList()
@@ -60,57 +62,41 @@ export class SensorsView extends Component {
       if (idVendor === ID_VENDOR && idProduct === ID_PRODUCT) {
         this.stick = new Ant.GarminStick2()
         this.stick.setMaxListeners(MAX_LISTENERS)
-        this.stick.once('startup', this.makeSensors.bind(this))
+        this.stick.once('startup', this.makeSensors)
         if (!this.stick.open()) {
           console.log('oh shit')
           return
         }
       }
     })
-    this.setState({ ...this.state, activated: true })
   }
 
-  deactivate() {
-    if (!this.state.activated) {
-      return false
-    }
-    Object.values(this.state.channels).forEach((channel) => this.remove(channel))
+  deactivate = () => {
+    Object.values(this.state.channels).forEach(this.remove)
+  }
 
-    this.setState({ ...this.state, activated: false })
+  isActivated = () => {
+    return Object.keys(this.state.channels).length > 0
   }
 
   toggleActivation = () => {
-    if (this.state.activated) {
-      this.deactivate()
-    } else {
-      this.activate()
-    }
+    const action = this.isActivated() ?  this.deactivate : this.activate
+    action()
   }
 
-  remove(channel) {
+  remove = (channel) => {
     const sensor = channel.sensor
     sensor.detach()
     sensor.removeAllListeners()
-    delete this.state.channels[sensor.channel]
-
-    if (Object.keys(this.state.channels).length === 0) {
+    delete this.state.channels[channel.id]
+    if (!this.isActivated()) {
       this.stick.close()
-      this.setState({ ...this.state, activated: false })
-    } else {
-      this.setState(this.state)
     }
-  }
-
-  handleTopBarAddSensor = () => {
-    this.addFakeSensor()
+    this.setState(this.state)
   }
 
   getActiveChannels() {
     return Object.values(this.state.channels).filter((channel) => channel.data)
-  }
-
-  isActivated() {
-    return this.state.activated === true
   }
 
   isFull() {
@@ -121,16 +107,14 @@ export class SensorsView extends Component {
     const { classes } = this.props
     const channels = this.getActiveChannels()
     const activated = this.isActivated()
-
-    const full = this.isFull()
+    const add = this.addFakeSensor ? this.addFakeSensor.bind(this) : () => {}
 
     return (
       <div className={classes.wrapper}>
         <TopBar
           activated={activated}
           toggle={this.toggleActivation}
-          add={this.handleTopBarAddSensor}
-          full={full}
+          add={add}
         />
         <Paper className={classes.content}>
           <SensorList channels={channels} activated={activated} />
