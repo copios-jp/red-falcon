@@ -5,6 +5,4 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/a72f6b4c41c2778c6bdb/test_coverage)](https://codeclimate.com/github/copios-jp/red-falcon/test_coverage)
 <hr/>
 
-
-
 &copy; COPIOS
