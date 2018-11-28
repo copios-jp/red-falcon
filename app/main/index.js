@@ -4,7 +4,7 @@ import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
 import tooling from './tooling/'
 import menuTemplate from './menu_template'
-import PowerSaveBlocker from './services/powerSaveBlocker'
+import PowerSaveBlocker from './services/power_save_blocker/'
 
 // import updater from './services/updater'
 

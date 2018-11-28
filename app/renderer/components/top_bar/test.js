@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import TopBar from '../../app/renderer/components/TopBar'
+import TopBar from './'
 
 // comment to create fix release bump
 describe('TopBar', () => {

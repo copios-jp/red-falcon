@@ -26,9 +26,14 @@ dmg:
 
 mac:
   category: public.app-category.healthcare-fitness
-
+  files: [
+    "!**/test",
+    "!**/app/**/*/test.js",
+    "!**/app/**/*/*.test.js",
+    "!**/node_modues/**/*/*.test.js",
+    "!**/node_modues/**/*/test.js"
+   ]
 electronUpdaterCompatibility: '>= 4.0.4'
-
 publish:
   provider: github
   owner: copios-jp

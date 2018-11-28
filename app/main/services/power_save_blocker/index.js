@@ -4,7 +4,7 @@ export default {
   blockId: undefined,
 
   isStarted() {
-    return powerSaveBlocker.isStarted(this.blockId)
+    return this.blockId && powerSaveBlocker.isStarted(this.blockId)
   },
 
   activate() {

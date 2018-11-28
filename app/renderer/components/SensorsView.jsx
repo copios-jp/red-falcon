@@ -4,7 +4,7 @@ import { Paper, Typography } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 
 import SensorList from './SensorList'
-import TopBar from './TopBar'
+import TopBar from './top_bar/'
 
 import styles from '../styles/'
 
