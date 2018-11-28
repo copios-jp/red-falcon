@@ -6,7 +6,7 @@ node_js:
 os: osx
 
 install:
-  - yarn install --verbose
+  - yarn install --verbose --ignore-engines
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-darwin-amd64 > ./cc-test-reporter
