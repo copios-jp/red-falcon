@@ -1,13 +1,13 @@
 export const powerSaveBlocker = {
   id: undefined,
 
-  start: jest.fn(()=>{
+  start: jest.fn(() => {
     powerSaveBlocker.id = 1
     return powerSaveBlocker.id
   }),
 
   stop: jest.fn((id) => {
-    if(id === powerSaveBlocker.id) {
+    if (id === powerSaveBlocker.id) {
       powerSaveBlocker.id = undefined
     }
   }),
@@ -21,10 +21,9 @@ export const powerSaveBlocker = {
     this.stop.mockClear()
     this.isStarted.mockClear()
     delete this.id
-  }
+  },
 }
 
 export const app = {
-  fart: 'face'
+  fart: 'face',
 }
-

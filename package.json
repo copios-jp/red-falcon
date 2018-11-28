@@ -61,7 +61,7 @@
     "test": "jest",
     "test-ci": "jest --coverage",
     "test-old": "electron-mocha --renderer -R spec --require @babel/register test/**/*.spec.js",
-    "lint": "eslint --no-ignore scripts app test *.js",
+    "lint": "eslint --no-ignore scripts app module_mocks **/*.jsx||**/*.js",
     "format": "npm run private:format -- --write",
     "check-format": "npm run private:format -- --list-different",
     "pack": "run-s private:clean private:compile private:build:mac",
@@ -70,6 +70,6 @@
     "private:serve": "babel-node scripts/serve.js",
     "private:compile": "rimraf dist && babel app/ --copy-files --out-dir build",
     "private:clean": "rimraf build",
-    "private:format": "prettier \"babel.config.js\" \"scripts/*.js\" \"app/**/*.js*\" \"test/**/*.js\""
+    "private:format": "prettier \"scripts/**/*.js*\" \"app/**/*.js*\" \"module_mocks/**/*.js\""
   }
 }
