@@ -14,7 +14,14 @@ export const powerSaveBlocker = {
 
   isStarted: jest.fn((id) => {
     return id === powerSaveBlocker.id && id !== undefined
-  })
+  }),
+
+  mockClear() {
+    this.start.mockClear()
+    this.stop.mockClear()
+    this.isStarted.mockClear()
+    delete this.id
+  }
 }
 
 export const app = {

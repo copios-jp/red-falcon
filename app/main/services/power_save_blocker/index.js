@@ -1,23 +1,23 @@
 import { powerSaveBlocker } from 'electron'
 
 export default {
-  powerSaveId: undefined,
+  blockId: undefined,
 
   isStarted() {
-    return powerSaveBlocker.isStarted(this.powerSaveId)
+    return powerSaveBlocker.isStarted(this.blockId)
   },
 
   activate() {
     if (this.isStarted()) {
       return
     }
-    this.powerSaveId = powerSaveBlocker.start('prevent-display-sleep')
+    this.blockId = powerSaveBlocker.start('prevent-display-sleep')
   },
 
   deactivate() {
     if (this.isStarted() === false) {
       return
     }
-    powerSaveBlocker.stop(this.powerSaveId)
+    powerSaveBlocker.stop(this.blockId)
   },
 }
