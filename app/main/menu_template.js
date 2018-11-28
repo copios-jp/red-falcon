@@ -2,9 +2,7 @@ import { app } from 'electron'
 
 export const QUIT = {
   label: app.getName(),
-  submenu: [
-    { role: 'quit', label: '終了' },
-  ],
+  submenu: [{ role: 'quit', label: '終了' }],
 }
 
 export const WINDOW = {

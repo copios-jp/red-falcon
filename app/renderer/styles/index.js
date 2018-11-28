@@ -43,12 +43,6 @@ export default (theme) => ({
     margin: theme.spacing.unit,
     backgroundColor: theme.palette.background.paper,
   },
-  copyright: {
-    position: 'fixed',
-    bottom: 0,
-    backgroundColor: 'transparent',
-    paddingLeft: theme.spacing.unit,
-  },
   sensor: {
     color: 'white',
     textAlign: 'center',
@@ -120,5 +114,18 @@ export default (theme) => ({
   editTextField: {
     flexBasis: 200,
     margin: theme.spacing.unit,
+  },
+  bottomBar: {
+    flexDirection: 'row',
+    display: 'flex',
+    position: 'fixed',
+    bottom: 0,
+    width: '100%',
+    paddingRight: theme.spacing.unit,
+    backgroundColor: 'transparent',
+  },
+  copyright: {
+    paddingLeft: theme.spacing.unit,
+    flexGrow: 1,
   },
 })

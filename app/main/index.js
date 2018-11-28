@@ -1,12 +1,12 @@
 import path from 'path'
-import { app, crashReporter, BrowserWindow, Menu } from 'electron'
+import { app, crashReporter, BrowserWindow, Menu, ipcMain } from 'electron'
 import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
+
 import tooling from './tooling/'
 import menuTemplate from './menu_template'
 import PowerSaveBlocker from './services/power_save_blocker/'
-
-// import updater from './services/updater'
+import Bridge from './services/bridge/'
 
 // TODO - move this kind of setup out of index.js
 autoUpdater.logger = log
@@ -16,8 +16,6 @@ tooling.logger = log
 log.info(app.getName(), app.getVersion())
 
 let mainWindow = null
-
-// let forceQuit = false
 
 crashReporter.start({
   productName: 'Beats',
@@ -44,23 +42,11 @@ app.on('ready', async () => {
   // show window once on first load
   mainWindow.webContents.once('did-finish-load', () => {
     mainWindow.show()
+    autoUpdater.checkForUpdatesAndNotify()
+    PowerSaveBlocker.activate()
   })
 
   mainWindow.webContents.on('did-finish-load', () => {
-    /*
-     * This may be interferring with auto updates
-    mainWindow.on('close', function(e) {
-      if (!forceQuit) {
-        e.preventDefault()
-        mainWindow.hide()
-      }
-    })
-
-    app.on('activate', () => {
-      mainWindow.show()
-    })
-    */
-
     app.on('activate', () => {
       mainWindow.show()
     })
@@ -80,23 +66,13 @@ app.on('ready', async () => {
 
 app.on('before-quit', () => {
   PowerSaveBlocker.deactivate()
+  Bridge.deactivate()
 })
 
-app.on('ready', () => {
-  PowerSaveBlocker.activate()
+ipcMain.on('activate', () => {
+  Bridge.activate(mainWindow.webContents)
 })
 
-app.on('ready', () => {
-  autoUpdater.checkForUpdatesAndNotify()
-  /*
-  log.info('whaaaat? ARGV')
-  log.info(process.argv)
-  const isRelaunch = process.argv.indexOf('--relaunch') === -1
-  const isProduction = process.env.NODE_ENV === undefined
-
-  if (isRelaunch && isProduction) {
-    autoUpdater.checkForUpdatesAndNotify()
-    // updater.checkForUpdates()
-  }
-  */
+ipcMain.on('deactivate', () => {
+  Bridge.deactivate()
 })

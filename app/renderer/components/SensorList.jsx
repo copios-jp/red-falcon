@@ -1,9 +1,12 @@
 import * as React from 'react'
+import { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import { GridList } from '@material-ui/core'
 import styles from '../styles/'
 import Sensor from './sensor/'
 
+// TODO - make this a class and bind in state via ipcRenderer.on(transmitter)
+// which will give us an array of transmitters and the one being impacted
 const SensorList = (props) => {
   const { channels, classes } = props
 
