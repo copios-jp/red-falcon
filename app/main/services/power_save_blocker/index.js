@@ -16,10 +16,8 @@ export default {
 
   deactivate() {
     if (this.isStarted() === false) {
-      delete this.powerSaveId
       return
     }
     powerSaveBlocker.stop(this.powerSaveId)
-    delete this.powerSaveId
   },
 }
