@@ -31,27 +31,26 @@
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
+    "@jest-runner/electron": "^0.1.0",
     "@semantic-release/exec": "^3.3.0",
     "@semantic-release/git": "^7.0.5",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
-    "babel-plugin-istanbul": "^5.1.0",
+    "babel-jest": "^23.6.0",
     "browser-sync": "^2.23.6",
     "chai": "^4.1.0",
-    "coveralls": "^3.0.2",
     "electron": "^3.0.0",
     "electron-builder": "^20.0.7",
     "electron-devtools-installer": "^2.2.4",
-    "electron-mocha": "^6.0.1",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.7.0",
     "eslint": "^5.1.0",
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.1.0",
-    "isparta": "^4.1.0",
+    "jest": "^23.6.0",
     "jsdom": "13.0.0",
     "jsdom-global": "3.0.2",
     "npm-run-all": "^4.0.1",
-    "nyc": "^13.1.0",
     "prettier": "^1.13.7",
     "rimraf": "^2.5.4",
     "semantic-release": "^15.12.0"
@@ -59,7 +58,7 @@
   "scripts": {
     "postinstall": "cd node_modules/usb && HOME=~/.electron-gyp node-pre-gyp rebuild --target=3.0.9 --dist-url=https://atom.io/download/atom-shell && cd ../../ # electron-builder install-app-deps",
     "develop": "npm run private:compile -- --source-maps true && run-p -r private:watch private:serve",
-    "test": "NODE_ENV=test nyc mocha",
+    "test": "jest",
     "test-old": "electron-mocha --renderer -R spec --require @babel/register test/**/*.spec.js",
     "lint": "eslint --no-ignore scripts app test *.js",
     "format": "npm run private:format -- --write",
@@ -71,5 +70,10 @@
     "private:compile": "rimraf dist && babel app/ --copy-files --out-dir build",
     "private:clean": "rimraf build",
     "private:format": "prettier \"babel.config.js\" \"scripts/*.js\" \"app/**/*.js*\" \"test/**/*.js\""
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^electron$": "<rootDir>/module_mocks/electron.js"
+    }
   }
 }

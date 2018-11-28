@@ -1,9 +1,12 @@
 {
   "env": {
     "mocha": true,
-    "browser": true,
+      "browser": true,
   },
   "globals": {
     "expect": true,
+  },
+  "rules": {
+    "no-unused-expressions": false,
   }
 }

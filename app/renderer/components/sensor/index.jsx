@@ -59,6 +59,7 @@ class Sensor extends Component {
   handleDataUpdate = (data) => {
     const channel = this.state.channel
     channel.data = { ...channel.data, ...data }
+    console.log(channel.data)
     this.setState(this.state)
   }
 

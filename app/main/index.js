@@ -4,6 +4,8 @@ import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
 import tooling from './tooling/'
 import menuTemplate from './menu_template'
+import PowerSaveBlocker from './services/powerSaveBlocker'
+
 // import updater from './services/updater'
 
 // TODO - move this kind of setup out of index.js
@@ -57,11 +59,8 @@ app.on('ready', async () => {
     app.on('activate', () => {
       mainWindow.show()
     })
-
-    app.on('before-quit', () => {
-      forceQuit = true
-    })
     */
+
     app.on('activate', () => {
       mainWindow.show()
     })
@@ -77,6 +76,14 @@ app.on('ready', async () => {
       },
     ]).popup(mainWindow)
   })
+})
+
+app.on('before-quit', () => {
+  PowerSaveBlocker.deactivate()
+})
+
+app.on('ready', () => {
+  PowerSaveBlocker.activate()
 })
 
 app.on('ready', () => {
