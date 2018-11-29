@@ -16,7 +16,7 @@ class AntReceiver extends events.EventEmitter {
 
   add = (transmitter) => {
     transmitters.push(transmitter)
-    this.emit('transmitter', transmitter, transmitters)
+    this.emit('transmitter-added', transmitter, transmitters)
     transmitter.activate()
   }
 
@@ -24,7 +24,7 @@ class AntReceiver extends events.EventEmitter {
     const index = transmitters.indexOf(transmitter)
     transmitter.deactivate()
     transmitters.splice(index, 1)
-    this.emit('transmitter', transmitter, transmitters)
+    this.emit('transmitter-removed', transmitter, transmitters)
   }
 
   activate = () => {
@@ -39,7 +39,7 @@ class AntReceiver extends events.EventEmitter {
     if (!this.isActive) {
       return
     }
-    transmitters.forEach((transmitter) => {
+    ([...transmitters]).forEach((transmitter) => {
       this.remove(transmitter)
     })
     this.stick.removeAllListeners()

@@ -7,6 +7,8 @@ class AntTransmitter extends events.EventEmitter {
     this.channel = channel
   }
 
+  isActive = false
+
   activate = () => {
     if(this.isActive) {
       return
@@ -14,7 +16,7 @@ class AntTransmitter extends events.EventEmitter {
 
     this.sensor.on('hbData', (data) => {
       Object.assign(this, data)
-      this.emit('data-transmitted', this)
+      this.emit('transmitter-data', this)
     })
     this.isActive = true
   }

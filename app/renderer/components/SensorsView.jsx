@@ -10,20 +10,30 @@ import styles from '../styles/'
 import { ipcRenderer } from 'electron'
 
 export class SensorsView extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      receiverCount: 0,
-    }
+  state = {
+    receiverCount: 0,
+    transmitterCount: 0,
+    isActive: false,
+  }
+
+  componentDidMount() {
+    ipcRenderer.on('receiver-added', this.onReceiver)
+    ipcRenderer.on('receiver-removed', this.onReceiver)
+    ipcRenderer.on('transmitter-added', this.onTransmitter)
+    ipcRenderer.on('transmitter-removed', this.onTransmitter)
+    this.toggleActivation()
+  }
+
+  componentWillUnmount() {
+    ipcRenderer.off('receiver-added', this.onReceiver)
+    ipcRenderer.off('receiver-removed', this.onReceiver)
+    ipcRenderer.off('transmitter-added', this.onTransmitter)
+    ipcRenderer.off('transmitter-removed', this.onTransmitter)
+    ipcRenderer.send('deactivate')
   }
 
   activate = () => {
-    if(this.isActive) {
-      return
-    }
-    ipcRenderer.on('receiver', this.onReceiver)
     ipcRenderer.send('activate')
-    this.isActive = true
   }
 
   onReceiver = (event, receiver, receivers) => {
@@ -32,21 +42,26 @@ export class SensorsView extends Component {
     })
   }
 
+  onTransmitter = (event, transmitter, transmitters) => {
+    this.setState((state) => {
+      return { ...state, transmitterCount: transmitters.length }
+    })
+  }
+
   deactivate = () => {
-    if(!this.isActive) {
-      return
-    }
     ipcRenderer.send('deactivate')
-    this.isActive = false
   }
 
   toggleActivation = () => {
-    const action = this.isActive ? this.deactivate : this.activate
-    action()
+    const action = this.state.isActive ? 'deactivate' : 'activate'
+    this[action]()
+    this.setState((state) => {
+      return { ...state, isActive: !state.isActive }
+    })
   }
   render() {
     const { classes } = this.props
-    const activated = this.isActive
+    const activated = this.state.isActive
 
     const add = () => {}
     //  this.addFakeSensor ? this.addFakeSensor.bind(this) : () => {}
@@ -60,7 +75,8 @@ export class SensorsView extends Component {
             <Typography variant="caption" className={classes.copyright}>
               &copy; COPIOS
             </Typography>
-            <Typography variant="caption">受信機数{this.state.receiverCount}</Typography>
+            <Typography className={classes.bottomBarItem} variant="caption">受信機数:{this.state.receiverCount}</Typography>
+            <Typography className={classes.bottomBarItem} variant="caption">送信機数:{this.state.transmitterCount}</Typography>
           </div>
         </Paper>
       </div>

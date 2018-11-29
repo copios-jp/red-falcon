@@ -24,7 +24,7 @@ class Devices extends events.EventEmitter {
   add(receiver) {
     receivers.push(receiver)
     receiver.once('remove', this.remove)
-    this.emit('receiver', receiver, receivers)
+    this.emit('receiver-added', receiver, receivers)
     receiver.activate()
   }
 
@@ -32,7 +32,7 @@ class Devices extends events.EventEmitter {
     const index = receivers.indexOf(receiver)
     receiver.deactivate()
     receivers.splice(index, 1)
-    this.emit('receiver', receiver, receivers)
+    this.emit('receiver-removed', receiver, receivers)
   }
 
   activate() {
@@ -48,10 +48,13 @@ class Devices extends events.EventEmitter {
     if (!this.isActive) {
       return
     }
+
     clearInterval(this.intervalId)
-    receivers.forEach((receiver) => {
+
+    ([...receivers]).forEach((receiver) => {
       this.remove(receiver)
     })
+
     this.removeAllListeners()
     this.isActive = false
   }

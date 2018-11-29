@@ -43,6 +43,14 @@ export default (theme) => ({
     margin: theme.spacing.unit,
     backgroundColor: theme.palette.background.paper,
   },
+
+  dataIndicator: {
+    display: 'inline',
+    position: 'absolute',
+    margin: theme.spacing.unit * 3,
+    left: 0,
+  },
+
   sensor: {
     color: 'white',
     textAlign: 'center',
@@ -128,4 +136,10 @@ export default (theme) => ({
     paddingLeft: theme.spacing.unit,
     flexGrow: 1,
   },
+  bottomBarItem: {
+    paddingLeft: theme.spacing.unit,
+    '&:last': {
+      paddingRight: theme.spacing.unit
+    }
+  }
 })
