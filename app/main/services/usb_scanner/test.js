@@ -184,13 +184,10 @@ describe('USBScanner', () => {
     beforeEach(() => {})
     afterEach(teardown)
 
-    describe('remove missing receivers', () => {
-    })
+    describe('remove missing receivers', () => {})
 
-    describe('no new devices', () => {
-    })
+    describe('no new devices', () => {})
 
-    describe('new device', () => {
-    })
+    describe('new device', () => {})
   })
 })
