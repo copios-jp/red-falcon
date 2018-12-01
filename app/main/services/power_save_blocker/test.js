@@ -4,12 +4,11 @@ import Service from './'
 
 describe('PowerSaveBlocker', () => {
   describe('activate', () => {
-    beforeAll(() => {
+    beforeEach(() => {
       Service.activate()
     })
-    afterAll(() => {
+    afterEach(() => {
       Service.deactivate()
-      powerSaveBlocker.mockClear()
     })
 
     it('has activate member', () => {
@@ -28,14 +27,10 @@ describe('PowerSaveBlocker', () => {
   })
   describe('deactivate', () => {
     let id
-    beforeAll(() => {
+    beforeEach(() => {
       Service.activate()
       id = Service.blockId
       Service.deactivate()
-    })
-
-    afterAll(() => {
-      powerSaveBlocker.mockClear()
     })
     it('has deactivate member', () => {
       expect(Service.deactivate).toBeDefined()
