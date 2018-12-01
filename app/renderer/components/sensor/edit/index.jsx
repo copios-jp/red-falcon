@@ -1,12 +1,12 @@
 import * as React from 'react'
-import { Button, Dialog, DialogActions, DialogTitle } from '@material-ui/core'
+import { Button, Dialog, Divider, DialogActions, DialogTitle } from '@material-ui/core'
 
 import { withStyles } from '@material-ui/core/styles'
 import styles from '../../../styles/'
 import Form from './Form'
 
 const EditSensor = (props) => {
-  const { sensor, classes, onSave, onCancel, isOpen } = props
+  const { sensor, classes, onSave, onCancel, isOpen} = props
   const id = sensor.transmitter.channel
 
   const handleSave = () => {
@@ -16,7 +16,8 @@ const EditSensor = (props) => {
     <div className={classes.editRoot}>
       <Dialog open={isOpen} onClose={onCancel} aira-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">{`受信機編集(${id})`}</DialogTitle>
-        <Form sensor={sensor} id={id} />
+        <Form sensor={sensor}/>
+        <Divider/>
         <DialogActions>
           <Button variant="contained" onClick={onCancel} color="secondary">
             キャンセル

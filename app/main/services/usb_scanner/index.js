@@ -49,12 +49,12 @@ class Devices extends events.EventEmitter {
       return
     }
 
-    clearInterval(this.intervalId)
 
     ([...receivers]).forEach((receiver) => {
       this.remove(receiver)
     })
 
+    clearInterval(this.intervalId)
     this.removeAllListeners()
     this.isActive = false
   }

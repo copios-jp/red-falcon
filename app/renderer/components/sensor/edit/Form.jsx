@@ -1,29 +1,84 @@
 import * as React from 'react'
-import { DialogContent, DialogContentText, TextField, InputAdornment } from '@material-ui/core'
+import { Component } from 'react'
+import {
+  DialogContent,
+  Divider,
+  DialogContentText,
+  TextField,
+  InputAdornment,
+} from '@material-ui/core'
+import Coefficients from './Coefficients'
 import { withStyles } from '@material-ui/core/styles'
 import styles from '../../../styles/'
 
+/*
 export default withStyles(styles)((props) => {
-  const { classes, id, sensor } = props
+  const { classes, sensor } = props
   const changeAge = (event) => {
     sensor.age = parseInt(event.target.value) || undefined
   }
 
-  console.log(sensor.zoneCoefficients)
-
-  const changeCoefficients = (index, event) => {
-    const correctedIndex = Math.abs(index - (sensor.zoneCoefficients.length - 1))
-    sensor.zoneCoefficients[correctedIndex] = parseInt(event.target.value) / 100.0
-  }
-
   return (
     <DialogContent>
-      <DialogContentText>
-        {`御利用いただいている方の詳細を入力ください。`}
-      </DialogContentText>
-      <div>
+      <DialogContentText>{`御利用いただいている方の詳細を入力ください。`}</DialogContentText>
+      <TextField
+        onChange={changeAge}
+        className={classes.editTextField}
+        variant="outlined"
+        defaultValue={sensor.age}
+        label="年齢"
+        InputProps={{
+          endAdornment: <InputAdornment position="start">才</InputAdornment>,
+        }}
+      />
+      <Divider />
+      <div>心拍ゾーン</div>
+      <Coefficients coefficients={sensor.zoneCoefficients} age={sensor.age} />
+    </DialogContent>
+  )
+})
+*/
+
+class Form extends Component {
+  state = {
+    sensor: this.props.sensor,
+  }
+
+  handleAgeChange = (event) => {
+    const { sensor } = this.state
+    const age = parseInt(event.target.value) || 0
+    sensor.age = age
+    this.props.sensor.age = age
+    this.setState((state) => {
+      return { ...state, sensor }
+    })
+  }
+
+  handleNameChange = (event) => {
+    const name = event.target.value || ''
+    this.props.sensor.name = name
+  }
+
+  render() {
+    const { classes } = this.props
+    const { sensor } = this.state
+
+    return (
+      <DialogContent>
+        <DialogContentText>{`御利用いただいている方の詳細を入力ください。`}</DialogContentText>
         <TextField
-          onChange={changeAge}
+          onChange={this.handleNameChange}
+          className={classes.editTextField}
+          variant="outlined"
+          defaultValue={sensor.name}
+          label="名前"
+          InputProps={{
+            endAdornment: <InputAdornment position="start">様</InputAdornment>,
+          }}
+        />
+
+        <TextField
+          onChange={this.handleAgeChange}
           className={classes.editTextField}
           variant="outlined"
           defaultValue={sensor.age}
@@ -32,23 +87,11 @@ export default withStyles(styles)((props) => {
             endAdornment: <InputAdornment position="start">才</InputAdornment>,
           }}
         />
-        <hr />
-        {([...sensor.zoneCoefficients]).reverse().map((coef, index) => (
-          <div key={index}>
-            <div>心拍ゾーン</div>
-            <TextField
-              onChange={changeCoefficients.bind({}, index)}
-              defaultValue={coef *  100}
-              className={classes.editTextField}
-              variant="outlined"
-              InputProps={{
-                endAdornment: <InputAdornment position="start">%</InputAdornment>,
-              }}
-            />
-            <span className="card_{index}">{index}</span>
-          </div>
-        ))}
-      </div>
-    </DialogContent>
-  )
-})
+        <Divider />
+        <Coefficients coefficients={sensor.zoneCoefficients} age={sensor.age} />
+      </DialogContent>
+    )
+  }
+}
+
+export default withStyles(styles)(Form)

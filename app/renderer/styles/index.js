@@ -11,7 +11,7 @@ export default (theme) => ({
     flexGrow: 1,
     display: 'flex',
     backgroundImage: 'url("images/icon.png")',
-    backgroundSize: '75%',
+    backgroundSize: '55%',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
   },
@@ -31,6 +31,10 @@ export default (theme) => ({
     fontSize: '20vw',
   },
 
+  userName: {
+    fontSize: theme.typography.fontSize * 1.5,
+  },
+
   icon: {
     color: 'white',
   },
@@ -47,7 +51,7 @@ export default (theme) => ({
   dataIndicator: {
     display: 'inline',
     position: 'absolute',
-    margin: theme.spacing.unit * 3,
+    margin: theme.spacing.unit * 2 + 2,
     left: 0,
   },
 
@@ -123,6 +127,39 @@ export default (theme) => ({
     flexBasis: 200,
     margin: theme.spacing.unit,
   },
+  coefficients: {
+    color: '#fff',
+    marginTop: theme.spacing.unit * 2,
+  },
+
+  coefficientsTitle: {
+    padding: theme.spacing.unit,
+  },
+
+  zonePercentageLabel: {
+    display: 'inline-block',
+    textAlign: 'center',
+    margin: theme.spacing.unit,
+    flexGrow: 1,
+    minWidth: theme.typography.fontSize * 4,
+  },
+
+  zoneRangeLabel: {
+    flexGrow: 1,
+    minWidth: theme.typography.fontSize * 2,
+  },
+
+  zoneData: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: theme.spacing.unit,
+    textAlign: 'center',
+    color: '#fff',
+    height: theme.spacing.unit * 8,
+  },
+
   bottomBar: {
     flexDirection: 'row',
     display: 'flex',
