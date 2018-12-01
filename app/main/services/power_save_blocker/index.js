@@ -4,7 +4,7 @@ export default {
   blockId: undefined,
 
   isStarted() {
-    return this.blockId && powerSaveBlocker.isStarted(this.blockId)
+    return this.blockId !== undefined && powerSaveBlocker.isStarted(this.blockId)
   },
 
   activate() {
@@ -19,5 +19,7 @@ export default {
       return
     }
     powerSaveBlocker.stop(this.blockId)
+
+    delete this.blockId
   },
 }
