@@ -43,8 +43,12 @@ class AntReceiver extends events.EventEmitter {
       this.remove(transmitter)
     })
     this.stick.removeAllListeners()
-    this.stick.close()
-    this.stick.reset()
+    try {
+      this.stick.close()
+      this.stick.reset()
+    } catch(e) {
+      console.log(e)
+    }
     this.removeAllListeners()
     this.isActive = false
   }
