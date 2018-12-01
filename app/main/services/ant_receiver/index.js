@@ -39,14 +39,14 @@ class AntReceiver extends events.EventEmitter {
     if (!this.isActive) {
       return
     }
-    ([...transmitters]).forEach((transmitter) => {
+    ;[...transmitters].forEach((transmitter) => {
       this.remove(transmitter)
     })
     this.stick.removeAllListeners()
     try {
       this.stick.close()
       this.stick.reset()
-    } catch(e) {
+    } catch (e) {
       console.log(e)
     }
     this.removeAllListeners()

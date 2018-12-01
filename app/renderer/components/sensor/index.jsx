@@ -35,7 +35,7 @@ class Sensor extends Component {
   }
 
   zoneLabel() {
-    const {transmitter, zoneCoefficients, age } = this.state
+    const { transmitter, zoneCoefficients, age } = this.state
     const { ComputedHeartRate } = transmitter
     return heartZoneFor(age, zoneCoefficients, ComputedHeartRate)
   }
@@ -75,7 +75,7 @@ class Sensor extends Component {
     })
   }
 
-  onSave = (state)  => {
+  onSave = (state) => {
     this.finishEdit(state)
   }
 
@@ -89,23 +89,30 @@ class Sensor extends Component {
     const { ComputedHeartRate } = transmitter
     const zoneClass = `rate_${this.zoneLabel()}`
     return (
-      <Paper elevation={4} className={classNames(classes.gridListItem, classes.sensor, classes[sensorClass])}>
+      <Paper
+        elevation={4}
+        className={classNames(classes.gridListItem, classes.sensor, classes[sensorClass])}>
         {isEditing && (
-          <Edit sensor={{...this.state}} onSave={this.onSave} onCancel={this.onCancel} isOpen={isEditing} />
+          <Edit
+            sensor={{ ...this.state }}
+            onSave={this.onSave}
+            onCancel={this.onCancel}
+            isOpen={isEditing}
+          />
         )}
         <GridListTile onClick={this.edit}>
           <GridListTileBar
             className={classes.gridTileBar}
-            title={`${Math.round((ComputedHeartRate / (220 - this.state.age))*100)}%`}
+            title={`${Math.round((ComputedHeartRate / (220 - this.state.age)) * 100)}%`}
           />
           <ActivityIndicator
             className={classes.dataIndicator}
             color="primary"
             badgeContent={''}
             invisible={invisible}>
-            <span/>
-            </ActivityIndicator>
-            <Typography className={classes.userName}>{this.state.name}&nbsp;</Typography>
+            <span />
+          </ActivityIndicator>
+          <Typography className={classes.userName}>{this.state.name}&nbsp;</Typography>
           <div className={classNames(classes[sensorClass], classes[zoneClass])}>
             {ComputedHeartRate}
           </div>

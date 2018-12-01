@@ -176,7 +176,7 @@ export default (theme) => ({
   bottomBarItem: {
     paddingLeft: theme.spacing.unit,
     '&:last': {
-      paddingRight: theme.spacing.unit
-    }
-  }
+      paddingRight: theme.spacing.unit,
+    },
+  },
 })

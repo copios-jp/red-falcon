@@ -9,7 +9,7 @@ import Sensor from './sensor/'
 
 export class SensorList extends Component {
   state = {
-    transmitters: []
+    transmitters: [],
   }
 
   componentDidMount() {
@@ -36,10 +36,7 @@ export class SensorList extends Component {
     return (
       <GridList cellHeight={'auto'} padding={0} className={classes.gridList}>
         {transmitters.map((transmitter, index) => (
-          <Sensor
-            key={index}
-            sensorClass={`sensor_${length}`}
-            transmitter={transmitter} />
+          <Sensor key={index} sensorClass={`sensor_${length}`} transmitter={transmitter} />
         ))}
       </GridList>
     )

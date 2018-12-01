@@ -2,8 +2,8 @@ import * as React from 'react'
 import { Component } from 'react'
 import { MAX_HR, ZONE_LABELS } from '../../../../constants'
 import { Button, Typography, Divider } from '@material-ui/core'
-import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
+import AddIcon from '@material-ui/icons/Add'
+import RemoveIcon from '@material-ui/icons/Remove'
 
 import { withStyles } from '@material-ui/core/styles'
 import styles from '../../../styles/'
@@ -49,17 +49,36 @@ class Coefficients extends Component {
     })
   }
 
-
   rangeBar() {
     const { classes } = this.props
     const ranges = this.ranges()
     return (
       <div className={classes.zoneData}>
-        <span style={{width: `${Math.round(100 * (ranges[0].max - ranges[0].min))}%`}} className={classes[`rate_${ZONE_LABELS[0]}`]}>&nbsp;</span>
-        <span style={{width: `${Math.round(100 * (ranges[1].max - ranges[1].min))}%`}} className={classes[`rate_${ZONE_LABELS[1]}`]}>&nbsp;</span>
-        <span style={{width: `${Math.round(100 * (ranges[2].max - ranges[2].min))}%`}} className={classes[`rate_${ZONE_LABELS[2]}`]}>&nbsp;</span>
-        <span style={{width: `${Math.round(100 * (ranges[3].max - ranges[3].min))}%`}} className={classes[`rate_${ZONE_LABELS[3]}`]}>&nbsp;</span>
-        <span style={{width: `${Math.round(100 * (ranges[4].max - ranges[4].min))}%`}} className={classes[`rate_${ZONE_LABELS[4]}`]}>&nbsp;</span>
+        <span
+          style={{ width: `${Math.round(100 * (ranges[0].max - ranges[0].min))}%` }}
+          className={classes[`rate_${ZONE_LABELS[0]}`]}>
+          &nbsp;
+        </span>
+        <span
+          style={{ width: `${Math.round(100 * (ranges[1].max - ranges[1].min))}%` }}
+          className={classes[`rate_${ZONE_LABELS[1]}`]}>
+          &nbsp;
+        </span>
+        <span
+          style={{ width: `${Math.round(100 * (ranges[2].max - ranges[2].min))}%` }}
+          className={classes[`rate_${ZONE_LABELS[2]}`]}>
+          &nbsp;
+        </span>
+        <span
+          style={{ width: `${Math.round(100 * (ranges[3].max - ranges[3].min))}%` }}
+          className={classes[`rate_${ZONE_LABELS[3]}`]}>
+          &nbsp;
+        </span>
+        <span
+          style={{ width: `${Math.round(100 * (ranges[4].max - ranges[4].min))}%` }}
+          className={classes[`rate_${ZONE_LABELS[4]}`]}>
+          &nbsp;
+        </span>
       </div>
     )
   }
@@ -70,15 +89,21 @@ class Coefficients extends Component {
     const ranges = this.ranges()
     return (
       <div className={classes.coefficients}>
-        <Typography variant="body1" className={classes.coefficientsTitle}>心拍ゾーン</Typography>
+        <Typography variant="body1" className={classes.coefficientsTitle}>
+          心拍ゾーン
+        </Typography>
         {coefficients.map((coef, index) => (
-          <div key={index} className={[classes[`rate_${ZONE_LABELS[index]}`], classes.zoneData].join(' ' )}>
+          <div
+            key={index}
+            className={[classes[`rate_${ZONE_LABELS[index]}`], classes.zoneData].join(' ')}>
             <span className={classes.zoneRangeLabel}>{ranges[index].min}</span>
-              <Button variant="outlined" onClick={this.step.bind(this, -1, index)}>
-                <RemoveIcon />
-              </Button>
+            <Button variant="outlined" onClick={this.step.bind(this, -1, index)}>
+              <RemoveIcon />
+            </Button>
 
-            <Typography className={classes.zonePercentageLabel}>{Math.round(coef * 100)}%</Typography>
+            <Typography className={classes.zonePercentageLabel}>
+              {Math.round(coef * 100)}%
+            </Typography>
 
             <Button variant="outlined" onClick={this.step.bind(this, 1, index)}>
               <AddIcon />
@@ -86,8 +111,8 @@ class Coefficients extends Component {
             <span className={classes.zoneRangeLabel}>{ranges[index].max}</span>
           </div>
         ))}
-        <Divider/>
-        { this.rangeBar() }
+        <Divider />
+        {this.rangeBar()}
       </div>
     )
   }

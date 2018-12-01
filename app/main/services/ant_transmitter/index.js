@@ -10,7 +10,7 @@ class AntTransmitter extends events.EventEmitter {
   isActive = false
 
   activate = () => {
-    if(this.isActive) {
+    if (this.isActive) {
       return
     }
 
@@ -26,7 +26,7 @@ class AntTransmitter extends events.EventEmitter {
   }
 
   deactivate = () => {
-    if(!this.isActive) {
+    if (!this.isActive) {
       return
     }
     this.sensor.removeAllListeners()

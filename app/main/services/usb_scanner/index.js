@@ -59,9 +59,7 @@ class USBScanner extends events.EventEmitter {
 
   scan() {
     const devices = usb.getDeviceList().filter(isAntPlusReceiver)
-    receivers
-      .filter(unknownReceivers.bind({}, devices))
-      .forEach(this.remove)
+    receivers.filter(unknownReceivers.bind({}, devices)).forEach(this.remove)
 
     if (devices.length <= receivers.length) {
       return

@@ -75,8 +75,12 @@ export class SensorsView extends Component {
             <Typography variant="caption" className={classes.copyright}>
               &copy; COPIOS
             </Typography>
-            <Typography className={classes.bottomBarItem} variant="caption">受信機数:{this.state.receiverCount}</Typography>
-            <Typography className={classes.bottomBarItem} variant="caption">送信機数:{this.state.transmitterCount}</Typography>
+            <Typography className={classes.bottomBarItem} variant="caption">
+              受信機数:{this.state.receiverCount}
+            </Typography>
+            <Typography className={classes.bottomBarItem} variant="caption">
+              送信機数:{this.state.transmitterCount}
+            </Typography>
           </div>
         </Paper>
       </div>
