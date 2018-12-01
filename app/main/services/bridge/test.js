@@ -49,7 +49,7 @@ const receiver = {
 
 describe('bridge', () => {
   describe('activate', () => {
-    beforeAll(() => {
+    beforeEach(() => {
       Bridge.activate(webContents)
     })
 
@@ -67,7 +67,7 @@ describe('bridge', () => {
   })
 
   describe('deactivate', () => {
-    beforeAll(() => {
+    beforeEach(() => {
       Bridge.deactivate()
     })
 
@@ -77,7 +77,7 @@ describe('bridge', () => {
   })
 
   describe('receiver-added', () => {
-    beforeAll(() => {
+    beforeEach(() => {
       Bridge.activate(webContents)
       USBScanner.emit('receiver-added', receiver, [receiver])
     })
@@ -93,7 +93,7 @@ describe('bridge', () => {
   })
 
   describe('receiver-removed', () => {
-    beforeAll(() => {
+    beforeEach(() => {
       Bridge.activate(webContents)
       USBScanner.emit('receiver-removed', receiver, [receiver])
     })
@@ -104,7 +104,7 @@ describe('bridge', () => {
   })
 
   describe('transmitter-added', () => {
-    beforeAll(() => {
+    beforeEach(() => {
       Bridge.activate(webContents)
       USBScanner.emit('receiver-added', receiver, [receiver])
       receiver.emit('transmitter-added', transmitter, [transmitter])
@@ -120,7 +120,7 @@ describe('bridge', () => {
   })
 
   describe('transmitter-removed', () => {
-    beforeAll(() => {
+    beforeEach(() => {
       Bridge.activate(webContents)
       USBScanner.emit('receiver-added', receiver, [receiver])
       receiver.emit('transmitter-removed', transmitter, [transmitter])
@@ -133,7 +133,7 @@ describe('bridge', () => {
 
   describe('transmitter-data', () => {
     const data = {}
-    beforeAll(() => {
+    beforeEach(() => {
       Bridge.activate(webContents)
       USBScanner.emit('receiver-added', receiver, [receiver])
       receiver.emit('transmitter-added', transmitter, [transmitter])

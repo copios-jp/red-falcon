@@ -20,7 +20,7 @@ export const unknownReceivers = (devices, receiver) => {
   return !exists
 }
 
-const receivers = []
+export const receivers = []
 
 class USBScanner extends events.EventEmitter {
   activate = () => {
@@ -39,13 +39,6 @@ class USBScanner extends events.EventEmitter {
     receiver.activate()
   }
 
-  remove = (receiver) => {
-    const index = receivers.indexOf(receiver)
-    receiver.deactivate()
-    receivers.splice(index, 1)
-    this.emit('receiver-removed', receiver, receivers)
-  }
-
   deactivate = () => {
     if (!this.isActive) {
       return
@@ -57,7 +50,14 @@ class USBScanner extends events.EventEmitter {
     this.isActive = false
   }
 
-  scan() {
+  remove = (receiver) => {
+    const index = receivers.indexOf(receiver)
+    receiver.deactivate()
+    receivers.splice(index, 1)
+    this.emit('receiver-removed', receiver, receivers)
+  }
+
+  scan = () => {
     const devices = usb.getDeviceList().filter(isAntPlusReceiver)
     receivers.filter(unknownReceivers.bind({}, devices)).forEach(this.remove)
 
@@ -65,7 +65,7 @@ class USBScanner extends events.EventEmitter {
       return
     }
 
-    ;[Ant.GaminStick2, Ant.GarminStick3].forEach((Stick) => {
+    ;[Ant.GarminStick2, Ant.GarminStick3].forEach((Stick) => {
       const stick = new Stick()
       stick.once('startup', () => {
         this.add(new AntReceiver(stick))
