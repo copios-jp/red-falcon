@@ -37,7 +37,6 @@ jest.useFakeTimers()
 describe('USBScanner', () => {
   describe('activate', () => {
     describe('when not active', () => {
-
       const spy = jest.spyOn(USBScanner, 'scan')
       beforeAll(() => {
         setup()
@@ -73,7 +72,6 @@ describe('USBScanner', () => {
         setup()
         USBScanner.isActive = true
         USBScanner.activate()
-
       })
       afterAll(() => {
         teardown()

@@ -3,7 +3,6 @@ import USBScanner from '../usb_scanner'
 
 import Bridge from './'
 
-
 const webContents = {
   send: jest.fn(),
 }
