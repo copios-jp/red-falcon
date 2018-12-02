@@ -1,5 +1,5 @@
 import events from 'events'
-import Ant from 'ant-plus'
+import { HeartRateSensor } from 'ant-plus'
 import AntTransmitter from '../ant_transmitter/'
 
 export const MAX_LISTENERS = 16 // 8 channels with two reads each
@@ -56,7 +56,7 @@ class AntReceiver extends events.EventEmitter {
 
 const scan = function() {
   for (let id = 0; id < this.stick.maxChannels; id++) {
-    const sensor = new Ant.HeartRateSensor(this.stick)
+    const sensor = new HeartRateSensor(this.stick)
     const transmitter = new AntTransmitter(sensor, id)
 
     sensor.once('hbData', (data) => {

@@ -6,7 +6,7 @@ import { autoUpdater } from 'electron-updater'
 import tooling from './tooling/'
 import menuTemplate from './menu_template'
 import PowerSaveBlocker from './services/power_save_blocker/'
-import Bridge from './services/bridge/'
+import { scanner }  from './services/usb_scanner/'
 
 // TODO - move this kind of setup out of index.js
 autoUpdater.logger = log
@@ -66,13 +66,13 @@ app.on('ready', async () => {
 
 app.on('before-quit', () => {
   PowerSaveBlocker.deactivate()
-  Bridge.deactivate()
+  scanner.deactivate()
 })
 
 ipcMain.on('activate', () => {
-  Bridge.activate(mainWindow.webContents)
+  scanner.bindTo(mainWindow.webContents).activate()
 })
 
 ipcMain.on('deactivate', () => {
-  Bridge.deactivate()
+  scanner.deactivate()
 })

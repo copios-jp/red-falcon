@@ -1,4 +1,4 @@
-import USBScanner from './'
+import { scanner } from './'
 import { SCAN_INTERVAL, receivers } from './'
 /*
 Ant.GarminStick2.mockImplementation(() => {})
@@ -23,24 +23,19 @@ const setup = () => {
     activate: jest.fn(),
     deactivate: jest.fn(),
   }
-  USBScanner.isActive = false
-  USBScanner.intervalId = undefined
+  scanner.isActive = false
+  scanner.intervalId = undefined
 }
 
 jest.useFakeTimers()
 
-describe('USBScanner', () => {
+describe('scanner', () => {
   describe('activate', () => {
     describe('when not active', () => {
-      const spy = jest.spyOn(USBScanner, 'scan')
+      const spy = jest.spyOn(scanner, 'scan')
       beforeAll(() => {
         setup()
-        /*
-        usb.getDeviceList.mockImplementation(() => {
-          return []
-        })
-        */
-        USBScanner.activate()
+        scanner.activate()
       })
       afterAll(() => {
         teardown()
@@ -52,26 +47,26 @@ describe('USBScanner', () => {
       })
 
       it('sets scan interval', () => {
-        expect(setInterval).toBeCalledWith(USBScanner.scan, SCAN_INTERVAL)
-        expect(USBScanner.intervalId).toBeGreaterThan(0)
+        expect(setInterval).toBeCalledWith(scanner.scan, SCAN_INTERVAL)
+        expect(scanner.intervalId).toBeGreaterThan(0)
       })
 
       it('isActive', () => {
-        expect(USBScanner.isActive).toEqual(true)
+        expect(scanner.isActive).toEqual(true)
       })
     })
 
     describe('when active', () => {
-      const spy = jest.spyOn(USBScanner, 'scan')
+      const spy = jest.spyOn(scanner, 'scan')
       beforeAll(() => {
         setup()
-        USBScanner.isActive = true
-        USBScanner.activate()
+        scanner.isActive = true
+        scanner.activate()
       })
       afterAll(() => {
         teardown()
         spy.mockRestore()
-        USBScanner.scan.mockRestore()
+        scanner.scan.mockRestore()
       })
 
       it('doesnt scan', () => {
@@ -79,7 +74,7 @@ describe('USBScanner', () => {
       })
 
       it('doesnt setup the interval', () => {
-        expect(USBScanner.intervalId).toEqual(undefined)
+        expect(scanner.intervalId).toEqual(undefined)
       })
     })
   })
@@ -87,8 +82,8 @@ describe('USBScanner', () => {
   describe('add', () => {
     beforeAll(() => {
       setup()
-      jest.spyOn(USBScanner, 'emit')
-      USBScanner.add(receiver)
+      jest.spyOn(scanner, 'emit')
+      scanner.add(receiver)
     })
     afterAll(teardown)
 
@@ -96,11 +91,11 @@ describe('USBScanner', () => {
       expect(receivers.length).toEqual(1)
     })
     it('subscribes to remove once', () => {
-      expect(receiver.once).toBeCalledWith('remove', USBScanner.remove)
+      expect(receiver.once).toBeCalledWith('remove', scanner.remove)
     })
 
     it('emits receiver-added', () => {
-      expect(USBScanner.emit).toBeCalledWith('receiver-added', receiver, receivers)
+      expect(scanner.emit).toBeCalledWith('receiver-added', receiver, receivers)
     })
 
     it('activated the receiver', () => {
@@ -110,12 +105,12 @@ describe('USBScanner', () => {
 
   describe('deactivate', () => {
     describe('when active', () => {
-      const spy = jest.spyOn(USBScanner, 'remove')
+      const spy = jest.spyOn(scanner, 'remove')
       beforeAll(() => {
         setup()
-        USBScanner.isActive = true
+        scanner.isActive = true
         receivers.push(receiver)
-        USBScanner.deactivate()
+        scanner.deactivate()
       })
       afterAll(() => {
         teardown()
@@ -127,20 +122,20 @@ describe('USBScanner', () => {
       })
 
       it('clears the scan interval', () => {
-        expect(USBScanner.intervalId).toEqual(undefined)
+        expect(scanner.intervalId).toEqual(undefined)
       })
 
       it('is not longer active', () => {
-        expect(USBScanner.isActive).toEqual(false)
+        expect(scanner.isActive).toEqual(false)
       })
     })
     describe('when not active', () => {
-      const spy = jest.spyOn(USBScanner, 'remove')
+      const spy = jest.spyOn(scanner, 'remove')
       beforeAll(() => {
         setup()
-        USBScanner.isActive = false
+        scanner.isActive = false
         receivers.push(receiver)
-        USBScanner.deactivate()
+        scanner.deactivate()
       })
       afterAll(() => {
         teardown()
@@ -161,8 +156,8 @@ describe('USBScanner', () => {
       })
       receivers.push(receiver)
       jest.spyOn(receivers, 'splice')
-      jest.spyOn(USBScanner, 'emit')
-      USBScanner.remove(receivers[0])
+      jest.spyOn(scanner, 'emit')
+      scanner.remove(receivers[0])
     })
     afterAll(teardown)
 
@@ -175,7 +170,7 @@ describe('USBScanner', () => {
     })
 
     it('emits receiver-removed', () => {
-      expect(USBScanner.emit).toBeCalledWith('receiver-removed', receiver, receivers)
+      expect(scanner.emit).toBeCalledWith('receiver-removed', receiver, receivers)
     })
   })
 

@@ -1,29 +1,10 @@
-import Ant from 'ant-plus'
-import { getDeviceList } from 'ant-plus'
+import { GarminStick2, GarminStick3, getDeviceList } from 'ant-plus'
 import events from 'events'
 import AntReceiver from '../ant_receiver/'
+import { onReceiverAdded, onReceiverRemoved } from './handlers'
+import { isAntPlusReceiver, unknownReceivers } from './filters'
 
 export const SCAN_INTERVAL = 5000
-export const VENDOR_ID = 0x0fcf
-export const VENDOR_IDS = [VENDOR_ID]
-
-export const GARMIN_2 = 0x1008
-export const GARMIN_3 = 0x1009
-
-export const PRODUCT_IDS = [GARMIN_2, GARMIN_3]
-
-export const isAntPlusReceiver = (device) => {
-  const { idVendor, idProduct } = device.deviceDescriptor
-  return VENDOR_IDS.includes(idVendor) && PRODUCT_IDS.includes(idProduct)
-}
-
-export const unknownReceivers = (devices, receiver) => {
-  const exists = devices.find((device) => {
-    const { busNumber, deviceAddress } = receiver.stick.device
-    return device.busNumber === busNumber && device.deviceAddress === deviceAddress
-  })
-  return !exists
-}
 
 export const receivers = []
 
@@ -53,6 +34,7 @@ class USBScanner extends events.EventEmitter {
     })
     clearInterval(this.intervalId)
     this.isActive = false
+    this.removeAllListeners()
   }
 
   remove = (receiver) => {
@@ -70,7 +52,7 @@ class USBScanner extends events.EventEmitter {
       return
     }
 
-    ;[Ant.GarminStick2, Ant.GarminStick3].forEach((Stick) => {
+    ;[GarminStick2, GarminStick3].forEach((Stick) => {
       const stick = new Stick()
       stick.once('startup', () => {
         this.add(new AntReceiver(stick))
@@ -80,5 +62,11 @@ class USBScanner extends events.EventEmitter {
   }
 }
 
-const scanner = new USBScanner()
-export default scanner
+export const scanner = new USBScanner()
+
+export const bindTo = (webContents) => {
+  scanner.on('receiver-added', onReceiverAdded(webContents))
+  scanner.on('receiver-removed', onReceiverRemoved(webContents))
+  return scanner
+}
+
