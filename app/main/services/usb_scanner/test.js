@@ -13,6 +13,7 @@ const teardown = () => {
   ;[...receivers].forEach((receiver, index) => {
     receivers.splice(index, 1)
   })
+  scanner.on.mockRestore()
 }
 const webContents = {
   send: jest.fn(),
@@ -25,8 +26,18 @@ const setup = () => {
     activate: jest.fn(),
     deactivate: jest.fn(),
   }
+  jest.spyOn(scanner, 'on')
   scanner.isActive = false
   scanner.intervalId = undefined
+}
+
+const transmitterBus = {}
+const transmitter = {
+  activate: jest.fn(),
+  deactivate: jest.fn(),
+  on: jest.fn(helpers.onImplementation(transmitterBus)),
+  emit: jest.fn(helpers.emitImplementation(transmitterBus)),
+  once: jest.fn(helpers.onImplementation(transmitterBus)),
 }
 
 jest.useFakeTimers()
@@ -55,6 +66,14 @@ describe('scanner', () => {
 
       it('isActive', () => {
         expect(scanner.isActive).toEqual(true)
+      })
+
+      it('binds receiver added', () => {
+        expect(scanner.on.mock.calls[0][0]).toEqual('receiver-added')
+      })
+
+      it('binds receiver removed', () => {
+        expect(scanner.on.mock.calls[1][0]).toEqual('receiver-removed')
       })
     })
 
@@ -112,11 +131,13 @@ describe('scanner', () => {
         setup()
         scanner.isActive = true
         receivers.push(receiver)
+        jest.spyOn(scanner, 'removeAllListeners')
         scanner.deactivate()
       })
       afterAll(() => {
         teardown()
         spy.mockRestore()
+        scanner.removeAllListeners.mockRestore()
       })
 
       it('removes all receivers', () => {
@@ -127,10 +148,15 @@ describe('scanner', () => {
         expect(scanner.intervalId).toEqual(undefined)
       })
 
+      it('removes listeners', () => {
+        expect(scanner.removeAllListeners).toBeCalled()
+      })
+
       it('is not longer active', () => {
         expect(scanner.isActive).toEqual(false)
       })
     })
+
     describe('when not active', () => {
       const spy = jest.spyOn(scanner, 'remove')
       beforeAll(() => {
@@ -173,6 +199,47 @@ describe('scanner', () => {
 
     it('emits receiver-removed', () => {
       expect(scanner.emit).toBeCalledWith('receiver-removed', receiver, receivers)
+    })
+  })
+
+  describe('events', () => {
+    describe('transmitter', () => {
+      beforeAll(() => {
+        scanner.activate(webContents)
+        scanner.add(receiver)
+        receiver.emit('transmitter-added', transmitter, [transmitter])
+        receiver.emit('transmitter-removed', transmitter, [transmitter])
+        transmitter.emit('transmitter-data', transmitter)
+      })
+
+      afterAll(teardown)
+
+      it('sends transmitter-added', () => {
+        expect(webContents.send).toBeCalledWith('transmitter-added', transmitter, [transmitter])
+      })
+      it('sends transmitter-removed', () => {
+        expect(webContents.send).toBeCalledWith('transmitter-removed', transmitter, [transmitter])
+      })
+      it('sends transmitter-data', () => {
+        expect(webContents.send).toBeCalledWith('transmitter-data', transmitter)
+      })
+
+    })
+    describe('reciever', () => {
+      beforeAll(() => {
+        scanner.activate(webContents)
+        scanner.emit('receiver-added', receiver, [receiver])
+        scanner.emit('receiver-removed', receiver, [receiver])
+      })
+
+      afterAll(teardown)
+      it('sends receiver added', () => {
+        expect(webContents.send).toBeCalledWith('receiver-added', receiver, [receiver])
+      })
+
+      it('sends receiver removed', () => {
+        expect(webContents.send).toBeCalledWith('receiver-removed', receiver, [receiver])
+      })
     })
   })
 
