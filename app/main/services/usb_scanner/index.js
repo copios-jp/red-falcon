@@ -1,5 +1,5 @@
-import usb from 'usb'
 import Ant from 'ant-plus'
+import { getDeviceList } from 'ant-plus'
 import events from 'events'
 import AntReceiver from '../ant_receiver/'
 
@@ -63,7 +63,7 @@ class USBScanner extends events.EventEmitter {
   }
 
   scan = () => {
-    const devices = usb.getDeviceList().filter(isAntPlusReceiver)
+    const devices = getDeviceList().filter(isAntPlusReceiver)
     receivers.filter(unknownReceivers.bind({}, devices)).forEach(this.remove)
 
     if (devices.length <= receivers.length) {
