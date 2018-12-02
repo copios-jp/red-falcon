@@ -13,7 +13,7 @@
     "@material-ui/core": "^3.4.0",
     "@material-ui/icons": "^3.0.1",
     "@sentry/electron": "0.14.0",
-    "ant-plus": "https://copios-deploy@github.com/copios-jp/ant-plus.git#master",
+    "ant-plus": "https://github.com/copios-jp/ant-plus.git",
     "classnames": "^2.2.6",
     "electron-log": "^2.2.17",
     "electron-updater": "^4.0.4",
