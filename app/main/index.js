@@ -1,10 +1,12 @@
 import path from 'path'
-import { app, crashReporter, BrowserWindow, Menu } from 'electron'
+import { app, crashReporter, BrowserWindow, Menu, ipcMain } from 'electron'
 import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
+
 import tooling from './tooling/'
 import menuTemplate from './menu_template'
-// import updater from './services/updater'
+import PowerSaveBlocker from './services/power_save_blocker/'
+import { scanner } from './services/usb_scanner/'
 
 // TODO - move this kind of setup out of index.js
 autoUpdater.logger = log
@@ -14,8 +16,6 @@ tooling.logger = log
 log.info(app.getName(), app.getVersion())
 
 let mainWindow = null
-
-// let forceQuit = false
 
 crashReporter.start({
   productName: 'Beats',
@@ -42,26 +42,11 @@ app.on('ready', async () => {
   // show window once on first load
   mainWindow.webContents.once('did-finish-load', () => {
     mainWindow.show()
+    autoUpdater.checkForUpdatesAndNotify()
+    PowerSaveBlocker.activate()
   })
 
   mainWindow.webContents.on('did-finish-load', () => {
-    /*
-     * This may be interferring with auto updates
-    mainWindow.on('close', function(e) {
-      if (!forceQuit) {
-        e.preventDefault()
-        mainWindow.hide()
-      }
-    })
-
-    app.on('activate', () => {
-      mainWindow.show()
-    })
-
-    app.on('before-quit', () => {
-      forceQuit = true
-    })
-    */
     app.on('activate', () => {
       mainWindow.show()
     })
@@ -79,17 +64,15 @@ app.on('ready', async () => {
   })
 })
 
-app.on('ready', () => {
-  autoUpdater.checkForUpdatesAndNotify()
-  /*
-  log.info('whaaaat? ARGV')
-  log.info(process.argv)
-  const isRelaunch = process.argv.indexOf('--relaunch') === -1
-  const isProduction = process.env.NODE_ENV === undefined
+app.on('before-quit', () => {
+  PowerSaveBlocker.deactivate()
+  scanner.deactivate()
+})
 
-  if (isRelaunch && isProduction) {
-    autoUpdater.checkForUpdatesAndNotify()
-    // updater.checkForUpdates()
-  }
-  */
+ipcMain.on('activate', () => {
+  scanner.activate(mainWindow.webContents)
+})
+
+ipcMain.on('deactivate', () => {
+  scanner.deactivate()
 })

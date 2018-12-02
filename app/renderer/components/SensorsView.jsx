@@ -4,119 +4,84 @@ import { Paper, Typography } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 
 import SensorList from './SensorList'
-import TopBar from './TopBar'
+import TopBar from './top_bar/'
 
 import styles from '../styles/'
-
-const usb = window['require']('usb')
-const Ant = window['require']('ant-plus')
-
-const ID_VENDOR = 0x0fcf
-const ID_PRODUCT = 0x1008
-const MAX_LISTENERS = 16 // 8 channels with two reads each
+import { ipcRenderer } from 'electron'
 
 export class SensorsView extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      channels: {},
-    }
+  state = {
+    receiverCount: 0,
+    transmitterCount: 0,
+    isActive: false,
   }
 
-  createChannelFor = (sensor) => {
-    const { channelId } = sensor
-    const channel = {
-      sensor,
-      id: channelId,
-    }
-
-    sensor.once('hbData', (data) => {
-      channel.data = data
-      this.setState(this.state)
-    })
-
-    return channel
+  componentDidMount() {
+    ipcRenderer.on('receiver-added', this.onReceiver)
+    ipcRenderer.on('receiver-removed', this.onReceiver)
+    ipcRenderer.on('transmitter-added', this.onTransmitter)
+    ipcRenderer.on('transmitter-removed', this.onTransmitter)
+    this.toggleActivation()
   }
 
-  makeSensors = () => {
-    const state = { ...this.state }
-    state.maxChannels = this.stick.maxChannels
-    for (let id = 0; id < this.stick.maxChannels; id++) {
-      const sensor = new Ant.HeartRateSensor(this.stick)
-      sensor.channelId = id
-      state.channels[id] = this.createChannelFor(sensor)
-      sensor.attach(id, 0)
-    }
-    this.setState(state)
+  componentWillUnmount() {
+    ipcRenderer.off('receiver-added', this.onReceiver)
+    ipcRenderer.off('receiver-removed', this.onReceiver)
+    ipcRenderer.off('transmitter-added', this.onTransmitter)
+    ipcRenderer.off('transmitter-removed', this.onTransmitter)
+    ipcRenderer.send('deactivate')
   }
 
   activate = () => {
-    if (this.isActivated()) {
-      return
-    }
-    const usbDevices = usb.getDeviceList()
+    ipcRenderer.send('activate')
+  }
 
-    usbDevices.forEach((device) => {
-      const { deviceDescriptor } = device
-      const { idVendor, idProduct } = deviceDescriptor
-      if (idVendor === ID_VENDOR && idProduct === ID_PRODUCT) {
-        this.stick = new Ant.GarminStick2()
-        this.stick.setMaxListeners(MAX_LISTENERS)
-        this.stick.once('startup', this.makeSensors)
-        if (!this.stick.open()) {
-          console.log('oh shit')
-          return
-        }
-      }
+  onReceiver = (event, receiver, receivers) => {
+    this.setState((state) => {
+      return { ...state, receiverCount: receivers.length }
+    })
+  }
+
+  onTransmitter = (event, transmitter, transmitters) => {
+    this.setState((state) => {
+      return { ...state, transmitterCount: transmitters.length }
     })
   }
 
   deactivate = () => {
-    Object.values(this.state.channels).forEach(this.remove)
-  }
-
-  isActivated = () => {
-    return Object.keys(this.state.channels).length > 0
+    ipcRenderer.send('deactivate')
   }
 
   toggleActivation = () => {
-    const action = this.isActivated() ? this.deactivate : this.activate
-    action()
+    const action = this.state.isActive ? 'deactivate' : 'activate'
+    this[action]()
+    this.setState((state) => {
+      return { ...state, isActive: !state.isActive }
+    })
   }
-
-  remove = (channel) => {
-    const sensor = channel.sensor
-    sensor.detach()
-    sensor.removeAllListeners()
-    delete this.state.channels[channel.id]
-    if (!this.isActivated()) {
-      this.stick.close()
-    }
-    this.setState(this.state)
-  }
-
-  getActiveChannels() {
-    return Object.values(this.state.channels).filter((channel) => channel.data)
-  }
-
-  isFull() {
-    return this.state.maxChannels === this.getActiveChannels().length
-  }
-
   render() {
     const { classes } = this.props
-    const channels = this.getActiveChannels()
-    const activated = this.isActivated()
-    const add = this.addFakeSensor ? this.addFakeSensor.bind(this) : () => {}
+    const activated = this.state.isActive
+
+    const add = () => {}
+    //  this.addFakeSensor ? this.addFakeSensor.bind(this) : () => {}
 
     return (
       <div className={classes.wrapper}>
         <TopBar activated={activated} toggle={this.toggleActivation} add={add} />
         <Paper className={classes.content}>
-          <SensorList channels={channels} activated={activated} />
-          <Typography variant="caption" className={classes.copyright}>
-            &copy; COPIOS
-          </Typography>
+          <SensorList channels={[]} activated={activated} />
+          <div className={classes.bottomBar}>
+            <Typography variant="caption" className={classes.copyright}>
+              &copy; COPIOS
+            </Typography>
+            <Typography className={classes.bottomBarItem} variant="caption">
+              受信機数:{this.state.receiverCount}
+            </Typography>
+            <Typography className={classes.bottomBarItem} variant="caption">
+              送信機数:{this.state.transmitterCount}
+            </Typography>
+          </div>
         </Paper>
       </div>
     )

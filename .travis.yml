@@ -6,7 +6,7 @@ node_js:
 os: osx
 
 install:
-  - yarn install
+  - npm install
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-darwin-amd64 > ./cc-test-reporter
@@ -14,9 +14,10 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-- yarn run check-format
-- yarn run lint
-- NODE_ENV=test nyc mocha
+- npm run check-format
+- npm run lint
+- electron --version
+- ELECTRON_RUN_AS_NODE=true ./node_modules/.bin/electron ./node_modules/.bin/jest app/ --coverage
 
 branches:
   except:
@@ -31,5 +32,6 @@ before_deploy:
 deploy:
   - provider: script
     skip_cleanup: true
+    branch: release
     script:
       - semantic-release --debug

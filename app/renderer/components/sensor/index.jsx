@@ -6,95 +6,115 @@ import { withStyles } from '@material-ui/core/styles'
 import { GridListTile } from '@material-ui/core'
 import { GridListTileBar } from '@material-ui/core'
 import { Paper } from '@material-ui/core'
-
+import { Typography } from '@material-ui/core'
+import { ipcRenderer } from 'electron'
 import classNames from 'classnames'
+import _ from 'underscore'
+import ActivityIndicator from './activity_indicator/'
+import { heartZoneFor } from '../../services/analytics'
+
+import { DEFAULT_ZONE_COEFFICIENTS } from '../../../constants'
 
 const ages = []
 import styles from '../../styles/'
 ages[5329145] = 37
 ages[5329182] = 44
 
-function getZoneFor(sensor) {
-  if (!sensor.age && sensor.SerialNumber) {
-    sensor.age = ages[sensor.SerialNumber]
-  }
-
-  const rate = sensor.ComputedHeartRate
-  const max = 220 - sensor.age || 44
-
-  let index = 0
-  let zone = 'rest'
-
-  const labels = ['recovery', 'aerobic', 'anaerobic', 'max']
-  const zones = [max * 0.6, max * 0.7, max * 0.8, max * 0.9]
-
-  while (rate > zones[index]) {
-    zone = labels[index]
-    index++
-  }
-
-  return zone
-}
-
 class Sensor extends Component {
-  constructor(props) {
-    super(props)
-    const { channel } = props
-    this.state = {
-      channel,
-      isEditing: false,
-    }
+  state = {
+    transmitter: this.props.transmitter,
+    isEditing: false,
+    invisible: true,
+    age: 0,
+    zoneCoefficients: [...DEFAULT_ZONE_COEFFICIENTS],
+    name: '',
   }
 
   componentDidMount() {
-    const sensor = this.state.channel.sensor
-    sensor.on('hbData', this.handleDataUpdate)
+    ipcRenderer.on('transmitter-data', this.onTransmitter)
+  }
+
+  zoneLabel() {
+    const { transmitter, zoneCoefficients, age } = this.state
+    const { ComputedHeartRate } = transmitter
+    return heartZoneFor(age, zoneCoefficients, ComputedHeartRate)
+  }
+
+  componentWillUnmount() {
+    this.blink.cancel()
+    ipcRenderer.off('transmitter-data', this.onTransmitter)
+  }
+
+  blink = _.debounce(() => {
+    this.setState((state) => {
+      // state.transmitter.ComputedHeartRate = 0
+      return { ...state, invisible: true }
+    })
+  }, 1000)
+
+  onTransmitter = (event, transmitter) => {
+    if (transmitter.channel === this.state.transmitter.channel) {
+      this.setState((state) => {
+        return { ...state, transmitter, invisible: false }
+      })
+      this.blink()
+    }
   }
 
   edit = () => {
-    this.state.channel.sensor.removeAllListeners('hbData')
-    this.setState({ ...this.state, isEditing: true })
+    ipcRenderer.off('transmitter-data', this.onTransmitter)
+    this.setState((state) => {
+      return { ...state, isEditing: true }
+    })
   }
 
-  handleDataUpdate = (data) => {
-    const channel = this.state.channel
-    channel.data = { ...channel.data, ...data }
-    this.setState(this.state)
+  finishEdit = (newState) => {
+    ipcRenderer.on('transmitter-data', this.onTransmitter)
+    this.setState((state) => {
+      return { ...state, ...newState, isEditing: false }
+    })
   }
 
-  finishEdit = () => {
-    this.setState({ ...this.state, isEditing: false })
-    this.state.channel.sensor.on('hbData', this.handleDataUpdate)
+  onSave = (state) => {
+    this.finishEdit(state)
   }
 
-  channelId() {
-    return this.state.channel.id
-  }
-
-  zoneClass() {
-    const zone = getZoneFor(this.state.channel.data)
-    return `rate_${zone}`
+  onCancel = () => {
+    this.finishEdit(this.state)
   }
 
   render() {
     const { classes, sensorClass } = this.props
-
+    const { isEditing, transmitter, invisible } = this.state
+    const { ComputedHeartRate } = transmitter
+    const zoneClass = `rate_${this.zoneLabel()}`
     return (
-      <Paper className={classNames(classes.gridListItem, classes.sensor, classes[sensorClass])}>
-        {this.state.isEditing && (
+      <Paper
+        elevation={4}
+        className={classNames(classes.gridListItem, classes.sensor, classes[sensorClass])}>
+        {isEditing && (
           <Edit
-            channel={this.state.channel}
-            onClose={this.finishEdit}
-            isOpen={this.state.isEditing}
+            sensor={{ ...this.state }}
+            onSave={this.onSave}
+            onCancel={this.onCancel}
+            isOpen={isEditing}
           />
         )}
         <GridListTile onClick={this.edit}>
           <GridListTileBar
             className={classes.gridTileBar}
-            title={`受信機番号:${this.channelId()}`}
+            title={`${Math.round((ComputedHeartRate / (220 - this.state.age)) * 100)}%`}
           />
-          <div className={classNames(classes[sensorClass], classes[this.zoneClass()])}>
-            {this.state.channel.data.ComputedHeartRate}
+          <ActivityIndicator
+            className={classes.dataIndicator}
+            color="primary"
+            badgeContent={''}
+            invisible={invisible}>
+            <span />
+          </ActivityIndicator>
+          <Typography className={classes.userName}>{this.state.name}&nbsp;</Typography>
+          <div className={classNames(classes[sensorClass], classes[zoneClass])}>
+            {ComputedHeartRate}
           </div>
         </GridListTile>
       </Paper>
