@@ -5,12 +5,8 @@ node_js:
 
 os: osx
 
-before_install: 
-  - curl -o- -L https://yarnpkg.com/install.sh | bash
-  - export PATH=${TRAVIS_HOME}/.yarn/bin:$PATH
-
 install:
-  - yarn install
+  - npm install
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-darwin-amd64 > ./cc-test-reporter
@@ -18,8 +14,8 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-- yarn run check-format
-- yarn run lint
+- npm run check-format
+- npm run lint
 - electron --version
 - ELECTRON_RUN_AS_NODE=true ./node_modules/.bin/electron ./node_modules/.bin/jest app/ --coverage
 
