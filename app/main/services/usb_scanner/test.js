@@ -223,7 +223,6 @@ describe('scanner', () => {
       it('sends transmitter-data', () => {
         expect(webContents.send).toBeCalledWith('transmitter-data', transmitter)
       })
-
     })
     describe('reciever', () => {
       beforeAll(() => {
