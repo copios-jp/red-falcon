@@ -6,7 +6,7 @@ import { autoUpdater } from 'electron-updater'
 import tooling from './tooling/'
 import menuTemplate from './menu_template'
 import PowerSaveBlocker from './services/power_save_blocker/'
-import { scanner }  from './services/usb_scanner/'
+import { scanner } from './services/usb_scanner/'
 
 // TODO - move this kind of setup out of index.js
 autoUpdater.logger = log
@@ -70,7 +70,7 @@ app.on('before-quit', () => {
 })
 
 ipcMain.on('activate', () => {
-  scanner.bindTo(mainWindow.webContents).activate()
+  scanner.activate(mainWindow.webContents)
 })
 
 ipcMain.on('deactivate', () => {

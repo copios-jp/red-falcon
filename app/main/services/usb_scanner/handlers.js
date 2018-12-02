@@ -30,4 +30,3 @@ export const onReceiverRemoved = (webContents) => {
     webContents.send('receiver-removed', receiver, receivers)
   }
 }
-

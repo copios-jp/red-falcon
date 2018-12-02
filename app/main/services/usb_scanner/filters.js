@@ -18,5 +18,3 @@ export const unknownReceivers = (devices, receiver) => {
   })
   return !exists
 }
-
-

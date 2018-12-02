@@ -14,7 +14,9 @@ const teardown = () => {
     receivers.splice(index, 1)
   })
 }
-
+const webContents = {
+  send: jest.fn(),
+}
 const setup = () => {
   receiver = {
     on: jest.fn(helpers.onImplementation(receiverBus)),
@@ -35,7 +37,7 @@ describe('scanner', () => {
       const spy = jest.spyOn(scanner, 'scan')
       beforeAll(() => {
         setup()
-        scanner.activate()
+        scanner.activate(webContents)
       })
       afterAll(() => {
         teardown()
@@ -61,7 +63,7 @@ describe('scanner', () => {
       beforeAll(() => {
         setup()
         scanner.isActive = true
-        scanner.activate()
+        scanner.activate(webContents)
       })
       afterAll(() => {
         teardown()

@@ -9,10 +9,13 @@ export const SCAN_INTERVAL = 5000
 export const receivers = []
 
 class USBScanner extends events.EventEmitter {
-  activate = () => {
+  activate = (webContents) => {
     if (this.isActive) {
       return
     }
+    this.on('receiver-added', onReceiverAdded(webContents))
+    this.on('receiver-removed', onReceiverRemoved(webContents))
+
     this.scan()
     this.intervalId = setInterval(this.scan, SCAN_INTERVAL)
     this.isActive = true
@@ -63,10 +66,3 @@ class USBScanner extends events.EventEmitter {
 }
 
 export const scanner = new USBScanner()
-
-export const bindTo = (webContents) => {
-  scanner.on('receiver-added', onReceiverAdded(webContents))
-  scanner.on('receiver-removed', onReceiverRemoved(webContents))
-  return scanner
-}
-
