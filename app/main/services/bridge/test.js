@@ -1,5 +1,9 @@
+jest.mock('usb')
 jest.mock('../usb_scanner')
 import USBScanner from '../usb_scanner'
+import usb from 'usb'
+
+console.log(usb)
 
 import Bridge from './'
 
