@@ -1,10 +1,5 @@
-jest.mock('usb')
-import usb from 'usb'
 import USBScanner from './'
 import { SCAN_INTERVAL, receivers } from './'
-usb.getDeviceList.mockImplementation(() => {
-  return []
-})
 /*
 Ant.GarminStick2.mockImplementation(() => {})
 Ant.GarminStick3.mockImplementation(() => {})
