@@ -16,7 +16,7 @@ before_script:
 script:
 - yarn run check-format
 - yarn run lint
-- yarn run test-ci
+- ELECTRON_RUN_AS_NODE=true ./node_modules/.bin/electron ./node_modules/.bin/jest
 
 branches:
   except:

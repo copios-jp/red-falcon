@@ -4,8 +4,13 @@ import events from 'events'
 import AntReceiver from '../ant_receiver/'
 
 export const SCAN_INTERVAL = 5000
-export const VENDOR_IDS = [0x0fcf]
-export const PRODUCT_IDS = [0x1008, 0x1009]
+export const VENDOR_ID = 0x0fcf
+export const VENDOR_IDS = [VENDOR_ID]
+
+export const GARMIN_2 = 0x1008
+export const GARMIN_3 = 0x1009
+
+export const PRODUCT_IDS = [GARMIN_2, GARMIN_3]
 
 export const isAntPlusReceiver = (device) => {
   const { idVendor, idProduct } = device.deviceDescriptor

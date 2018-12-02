@@ -2,17 +2,21 @@ import { powerSaveBlocker } from 'electron'
 
 import Service from './'
 
+const setup = () => {
+  Service.activate()
+  jest.spyOn(powerSaveBlocker, 'start')
+  jest.spyOn(powerSaveBlocker, 'stop')
+}
 const teardown = () => {
   Service.deactivate()
+  powerSaveBlocker.start.mockClear()
+  powerSaveBlocker.stop.mockClear()
 }
 
 describe('PowerSaveBlocker', () => {
   describe('activate', () => {
-    beforeEach(() => {
-      jest.spyOn(powerSaveBlocker, 'start')
-      Service.activate()
-    })
-    afterEach(teardown)
+    beforeAll(setup)
+    afterAll(teardown)
 
     it('has activate member', () => {
       expect(Service.activate).toBeDefined()
@@ -30,13 +34,12 @@ describe('PowerSaveBlocker', () => {
   })
   describe('deactivate', () => {
     let id
-    beforeEach(() => {
-      jest.spyOn(powerSaveBlocker, 'start')
-      Service.activate()
+    beforeAll(() => {
+      setup()
       id = Service.blockId
       Service.deactivate()
     })
-    afterEach(teardown)
+    afterAll(teardown)
 
     it('has deactivate member', () => {
       expect(Service.deactivate).toBeDefined()

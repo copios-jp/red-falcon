@@ -5,5 +5,4 @@ module.exports = {
   },
   testPathIgnorePatterns: ["/node_modules/"],
   setupTestFrameworkScriptFile: '<rootDir>/jest.setup.js',
-  clearMocks: true,
 }

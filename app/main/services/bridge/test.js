@@ -1,55 +1,32 @@
 jest.mock('../usb_scanner')
-jest.mock('usb')
-import Bridge from './'
 import USBScanner from '../usb_scanner'
 
-const onImplementation = (bus) => {
-  return (event, handler) => {
-    let handlers = bus[event]
-    if (handlers === undefined) {
-      handlers = []
-    }
-    handlers.push(handler)
-    bus[event] = handlers
-  }
-}
+import Bridge from './'
 
-const emitImplementation = (bus) => {
-  return function() {
-    const args = Array.from(arguments)
-    const event = args.shift()
-    const handlers = bus[event]
-    if (handlers) {
-      handlers.forEach((handler) => {
-        handler.apply({}, args)
-      })
-    }
-  }
-}
 
 const webContents = {
   send: jest.fn(),
 }
 
 const USBbus = {}
-USBScanner.on.mockImplementation(onImplementation(USBbus))
-USBScanner.emit.mockImplementation(emitImplementation(USBbus))
+USBScanner.on.mockImplementation(helpers.onImplementation(USBbus))
+USBScanner.emit.mockImplementation(helpers.emitImplementation(USBbus))
 
 const transmitterBus = {}
 const transmitter = {
-  on: jest.fn(onImplementation(transmitterBus)),
-  emit: jest.fn(emitImplementation(transmitterBus)),
+  on: jest.fn(helpers.onImplementation(transmitterBus)),
+  emit: jest.fn(helpers.emitImplementation(transmitterBus)),
 }
 
 const receiverBus = {}
 const receiver = {
-  on: jest.fn(onImplementation(receiverBus)),
-  emit: jest.fn(emitImplementation(receiverBus)),
+  on: jest.fn(helpers.onImplementation(receiverBus)),
+  emit: jest.fn(helpers.emitImplementation(receiverBus)),
 }
 
 describe('bridge', () => {
   describe('activate', () => {
-    beforeEach(() => {
+    beforeAll(() => {
       Bridge.activate(webContents)
     })
 
@@ -67,7 +44,7 @@ describe('bridge', () => {
   })
 
   describe('deactivate', () => {
-    beforeEach(() => {
+    beforeAll(() => {
       Bridge.deactivate()
     })
 
@@ -77,7 +54,7 @@ describe('bridge', () => {
   })
 
   describe('receiver-added', () => {
-    beforeEach(() => {
+    beforeAll(() => {
       Bridge.activate(webContents)
       USBScanner.emit('receiver-added', receiver, [receiver])
     })
@@ -93,7 +70,7 @@ describe('bridge', () => {
   })
 
   describe('receiver-removed', () => {
-    beforeEach(() => {
+    beforeAll(() => {
       Bridge.activate(webContents)
       USBScanner.emit('receiver-removed', receiver, [receiver])
     })
@@ -104,7 +81,7 @@ describe('bridge', () => {
   })
 
   describe('transmitter-added', () => {
-    beforeEach(() => {
+    beforeAll(() => {
       Bridge.activate(webContents)
       USBScanner.emit('receiver-added', receiver, [receiver])
       receiver.emit('transmitter-added', transmitter, [transmitter])
@@ -120,7 +97,7 @@ describe('bridge', () => {
   })
 
   describe('transmitter-removed', () => {
-    beforeEach(() => {
+    beforeAll(() => {
       Bridge.activate(webContents)
       USBScanner.emit('receiver-added', receiver, [receiver])
       receiver.emit('transmitter-removed', transmitter, [transmitter])
@@ -133,7 +110,7 @@ describe('bridge', () => {
 
   describe('transmitter-data', () => {
     const data = {}
-    beforeEach(() => {
+    beforeAll(() => {
       Bridge.activate(webContents)
       USBScanner.emit('receiver-added', receiver, [receiver])
       receiver.emit('transmitter-added', transmitter, [transmitter])
