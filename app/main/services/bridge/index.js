@@ -1,27 +1,23 @@
-/*
- * This object defines the bridge between main and renderer
-import { scanner } from '../usb_scanner'
-
-const onTransmitterData = (webContents) => {
+export const onTransmitterData = (webContents) => {
   return (transmitter) => {
     webContents.send('transmitter-data', transmitter)
   }
 }
 
-const onTransmitterAdded = (webContents) => {
+export const onTransmitterAdded = (webContents) => {
   return (transmitter, transmitters) => {
     webContents.send('transmitter-added', transmitter, transmitters)
     transmitter.on('transmitter-data', onTransmitterData(webContents))
   }
 }
 
-const onTransmitterRemoved = (webContents) => {
+export const onTransmitterRemoved = (webContents) => {
   return (transmitter, transmitters) => {
     webContents.send('transmitter-removed', transmitter, transmitters)
   }
 }
 
-const onReceiverAdded = (webContents) => {
+export const onReceiverAdded = (webContents) => {
   return (receiver, receivers) => {
     webContents.send('receiver-added', receiver, receivers)
     receiver.on('transmitter-added', onTransmitterAdded(webContents))
@@ -29,21 +25,19 @@ const onReceiverAdded = (webContents) => {
   }
 }
 
-const onReceiverRemoved = (webContents) => {
+export const onReceiverRemoved = (webContents) => {
   return (receiver, receivers) => {
     webContents.send('receiver-removed', receiver, receivers)
   }
 }
 
-export default {
-  activate(webContents) {
+export default (scanner, webContents) => {
+  scanner.once('scanner-activated', () => {
     scanner.on('receiver-added', onReceiverAdded(webContents))
     scanner.on('receiver-removed', onReceiverRemoved(webContents))
-    scanner.activate()
-  },
-
-  deactivate() {
-    scanner.deactivate()
-  },
+  })
+  scanner.once('scanner-deactivated', () => {
+    scanner.removeAllListeners('receiver-added')
+    scanner.removeAllListeners('receiver-removed')
+  })
 }
-*/

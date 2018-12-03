@@ -7,6 +7,7 @@ import tooling from './tooling/'
 import menuTemplate from './menu_template'
 import PowerSaveBlocker from './services/power_save_blocker/'
 import { scanner } from './services/usb_scanner/'
+import bridge from './services/bridge/'
 
 // TODO - move this kind of setup out of index.js
 autoUpdater.logger = log
@@ -44,9 +45,7 @@ app.on('ready', async () => {
     mainWindow.show()
     autoUpdater.checkForUpdatesAndNotify()
     PowerSaveBlocker.activate()
-  })
-
-  mainWindow.webContents.on('did-finish-load', () => {
+    bridge(scanner, mainWindow.webContents)
     app.on('activate', () => {
       mainWindow.show()
     })
@@ -70,7 +69,7 @@ app.on('before-quit', () => {
 })
 
 ipcMain.on('activate', () => {
-  scanner.activate(mainWindow.webContents)
+  scanner.activate()
 })
 
 ipcMain.on('deactivate', () => {
