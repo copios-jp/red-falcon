@@ -41,4 +41,3 @@ export default (scanner, webContents) => {
     scanner.removeAllListeners('receiver-removed')
   })
 }
-

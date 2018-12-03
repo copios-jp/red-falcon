@@ -73,7 +73,7 @@ class USBScanner extends events.EventEmitter {
   startScanning = () => {
     this.openNewDevices()
 
-    if(this.intervalId) {
+    if (this.intervalId) {
       this.stopScanning()
     }
 
