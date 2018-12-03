@@ -5,5 +5,4 @@ module.exports = {
   },
   testPathIgnorePatterns: ['/node_modules/', '/build/'],
   setupTestFrameworkScriptFile: '<rootDir>/jest.setup.js',
-  testMatch: ['**/__tests__/**/*.js?(x)', '**/?(*.)+(spec|test).js?(x)'],
 }
