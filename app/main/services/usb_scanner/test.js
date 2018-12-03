@@ -6,23 +6,23 @@ import AntReceiver from '../ant_receiver/'
 Ant.getDeviceList.mockImplementation(() => {
   return [
     {
-    deviceDescriptor: {
-      idVendor: 0x0fcf,
-      idProduct: 0x1008,
+      deviceDescriptor: {
+        idVendor: 0x0fcf,
+        idProduct: 0x1008,
+      },
     },
-  },
-  {
-    deviceDescriptor: {
-      idVendor: 0x0fcf,
-      idProduct: 0x1009,
+    {
+      deviceDescriptor: {
+        idVendor: 0x0fcf,
+        idProduct: 0x1009,
+      },
     },
-  },
-  {
-    deviceDescriptor: {
-      idVendor: 1234,
-      idProduct: 1234,
+    {
+      deviceDescriptor: {
+        idVendor: 1234,
+        idProduct: 1234,
+      },
     },
-  },
   ]
 })
 
@@ -47,7 +47,6 @@ const Stick = function() {
   this.close = () => {}
   this.reset = () => {}
 }
-
 
 describe('scanner', () => {
   describe('activate', () => {
