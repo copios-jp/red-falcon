@@ -1,6 +1,6 @@
 import { scanner } from './'
 import { SCAN_INTERVAL, receivers } from './'
-import { GarminStick2 } from 'ant-plus'
+// import { GarminStick2 } from 'ant-plus'
 /*
 Ant.GarminStick2.mockImplementation(() => {})
 Ant.GarminStick3.mockImplementation(() => {})
