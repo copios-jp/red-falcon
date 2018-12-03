@@ -47,21 +47,24 @@ class USBScanner extends events.EventEmitter {
     this.emit('receiver-removed', receiver, receivers)
   }
 
-  scan = () => {
+  openStick = (Stick) => {
+    const stick = new Stick()
+    stick.once('startup', () => {
+      this.add(new AntReceiver(stick))
+    })
+    stick.open()
+  }
+
+  cleanReceivers = () => {
     const devices = getDeviceList().filter(isAntPlusReceiver)
     receivers.filter(unknownReceivers.bind({}, devices)).forEach(this.remove)
+    return devices.length > receivers.length
+  }
 
-    if (devices.length <= receivers.length) {
-      return
+  scan = () => {
+    if(this.cleanReceivers())  {
+      ;[GarminStick2, GarminStick3].forEach(this.openStick)
     }
-
-    ;[GarminStick2, GarminStick3].forEach((Stick) => {
-      const stick = new Stick()
-      stick.once('startup', () => {
-        this.add(new AntReceiver(stick))
-      })
-      stick.open()
-    })
   }
 }
 

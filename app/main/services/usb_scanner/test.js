@@ -1,5 +1,6 @@
 import { scanner } from './'
 import { SCAN_INTERVAL, receivers } from './'
+import { GarminStick2 } from 'ant-plus'
 /*
 Ant.GarminStick2.mockImplementation(() => {})
 Ant.GarminStick3.mockImplementation(() => {})
@@ -14,6 +15,7 @@ const teardown = () => {
     receivers.splice(index, 1)
   })
   scanner.on.mockRestore()
+  scanner.add.mockRestore()
 }
 const webContents = {
   send: jest.fn(),
@@ -27,6 +29,7 @@ const setup = () => {
     deactivate: jest.fn(),
   }
   jest.spyOn(scanner, 'on')
+  jest.spyOn(scanner, 'add')
   scanner.isActive = false
   scanner.intervalId = undefined
 }
@@ -224,6 +227,7 @@ describe('scanner', () => {
         expect(webContents.send).toBeCalledWith('transmitter-data', transmitter)
       })
     })
+
     describe('reciever', () => {
       beforeAll(() => {
         scanner.activate(webContents)
@@ -241,17 +245,22 @@ describe('scanner', () => {
       })
     })
   })
-
-  describe('scan', () => {
+  describe('openStick', () => {
+/* TODO
     beforeAll(() => {
       setup()
+      jest.spyOn(GarminStick2.prototype, 'open').mockImplementation(function() {
+        this.emit('startup')
+      })
+      jest.spyOn(scanner, 'add')
+      scanner.openStick(GarminStick2)
     })
     afterAll(teardown)
 
-    describe('remove missing receivers', () => {})
+    describe('it adds a new receiver on startup', () => {
+      expect(scanner.add).toBeCalled()
+    })
 
-    describe('no new devices', () => {})
-
-    describe('new device', () => {})
+  */
   })
 })
