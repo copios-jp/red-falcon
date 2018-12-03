@@ -1,112 +1,69 @@
 import { scanner } from './'
 import { SCAN_INTERVAL, receivers } from './'
-// import { GarminStick2 } from 'ant-plus'
+import Ant from 'ant-plus'
+
 /*
-Ant.GarminStick2.mockImplementation(() => {})
-Ant.GarminStick3.mockImplementation(() => {})
+   Ant.GarminStick2.mockImplementation(() => {})
+   Ant.GarminStick3.mockImplementation(() => {})
 */
-
-const receiverBus = {}
-
 let receiver
+let transmitter
+let webContents
 
-const teardown = () => {
-  ;[...receivers].forEach((receiver, index) => {
-    receivers.splice(index, 1)
-  })
-  scanner.on.mockRestore()
-  scanner.add.mockRestore()
-}
-const webContents = {
-  send: jest.fn(),
-}
 const setup = () => {
-  receiver = {
-    on: jest.fn(helpers.onImplementation(receiverBus)),
-    once: jest.fn(helpers.onImplementation(receiverBus)),
-    emit: jest.fn(helpers.emitImplementation(receiverBus)),
-    activate: jest.fn(),
-    deactivate: jest.fn(),
+  webContents = {
+    send: jest.fn(),
   }
+
+  receiver = helpers.apiMember({})
+  transmitter = helpers.apiMember({})
+
   jest.spyOn(scanner, 'on')
   jest.spyOn(scanner, 'add')
-  scanner.isActive = false
-  scanner.intervalId = undefined
-}
-
-const transmitterBus = {}
-const transmitter = {
-  activate: jest.fn(),
-  deactivate: jest.fn(),
-  on: jest.fn(helpers.onImplementation(transmitterBus)),
-  emit: jest.fn(helpers.emitImplementation(transmitterBus)),
-  once: jest.fn(helpers.onImplementation(transmitterBus)),
+  jest.spyOn(scanner, 'emit')
+  jest.spyOn(scanner, 'startScanning')
+  jest.spyOn(scanner, 'stopScanning')
+  jest.spyOn(scanner, 'remove')
+  scanner.activate(webContents)
 }
 
 jest.useFakeTimers()
 
+const teardown = () => {
+  receiver.mockRestore()
+  transmitter.mockRestore()
+  ;[...receivers].forEach((receiver, index) => {
+    receivers.splice(index, 1)
+  })
+
+  scanner.on.mockRestore()
+  scanner.add.mockRestore()
+  scanner.emit.mockRestore()
+  scanner.startScanning.mockRestore()
+  scanner.stopScanning.mockRestore()
+  scanner.remove.mockRestore()
+  scanner.deactivate()
+
+  webContents.send.mockRestore()
+}
+
 describe('scanner', () => {
   describe('activate', () => {
-    describe('when not active', () => {
-      const spy = jest.spyOn(scanner, 'scan')
-      beforeAll(() => {
-        setup()
-        scanner.activate(webContents)
-      })
-      afterAll(() => {
-        teardown()
-        spy.mockRestore()
-      })
+    beforeAll(setup)
+    afterAll(teardown)
 
-      it('scans', () => {
-        expect(spy).toBeCalled()
-      })
-
-      it('sets scan interval', () => {
-        expect(setInterval).toBeCalledWith(scanner.scan, SCAN_INTERVAL)
-        expect(scanner.intervalId).toBeGreaterThan(0)
-      })
-
-      it('isActive', () => {
-        expect(scanner.isActive).toEqual(true)
-      })
-
-      it('binds receiver added', () => {
-        expect(scanner.on.mock.calls[0][0]).toEqual('receiver-added')
-      })
-
-      it('binds receiver removed', () => {
-        expect(scanner.on.mock.calls[1][0]).toEqual('receiver-removed')
-      })
+    it('emits scanner-activated', () => {
+      expect(scanner.emit).toBeCalledWith('scanner-activated', scanner)
     })
 
-    describe('when active', () => {
-      const spy = jest.spyOn(scanner, 'scan')
-      beforeAll(() => {
-        setup()
-        scanner.isActive = true
-        scanner.activate(webContents)
-      })
-      afterAll(() => {
-        teardown()
-        spy.mockRestore()
-        scanner.scan.mockRestore()
-      })
-
-      it('doesnt scan', () => {
-        expect(spy.mock.calls.length).toEqual(0)
-      })
-
-      it('doesnt setup the interval', () => {
-        expect(scanner.intervalId).toEqual(undefined)
-      })
+    it('starts scanning', () => {
+      expect(scanner.startScanning).toBeCalled()
     })
   })
 
   describe('add', () => {
     beforeAll(() => {
       setup()
-      jest.spyOn(scanner, 'emit')
       scanner.add(receiver)
     })
     afterAll(teardown)
@@ -127,67 +84,180 @@ describe('scanner', () => {
     })
   })
 
-  describe('deactivate', () => {
-    describe('when active', () => {
-      const spy = jest.spyOn(scanner, 'remove')
-      beforeAll(() => {
-        setup()
-        scanner.isActive = true
-        receivers.push(receiver)
-        jest.spyOn(scanner, 'removeAllListeners')
-        scanner.deactivate()
-      })
-      afterAll(() => {
-        teardown()
-        spy.mockRestore()
-        scanner.removeAllListeners.mockRestore()
-      })
+  describe('cleanReceivers', () => {
+    const knownReceiver = helpers.apiMember({})
+    beforeAll(() => {
+      setup()
+      knownReceiver.stick = {
+        device: {
+          busNumber: 1,
+          deviceAddress: 1,
+        },
+      }
+      receiver.stick = {
+        device: {
+          busNumber: 0,
+          deviceAddress: 0,
+        },
+      }
 
-      it('removes all receivers', () => {
-        expect(spy).toBeCalledWith(receiver)
+      jest.spyOn(scanner, 'getDevices').mockImplementation(() => {
+        return [{ busNumber: 1, deviceAddress: 1 }]
       })
-
-      it('clears the scan interval', () => {
-        expect(scanner.intervalId).toEqual(undefined)
-      })
-
-      it('removes listeners', () => {
-        expect(scanner.removeAllListeners).toBeCalled()
-      })
-
-      it('is not longer active', () => {
-        expect(scanner.isActive).toEqual(false)
-      })
+      receivers.push(receiver)
+      receivers.push(knownReceiver)
+      scanner.cleanReceivers()
+    })
+    afterAll(() => {
+      scanner.getDevices.mockRestore()
+      teardown()
+    })
+    it('removes unknown receivers', () => {
+      expect(scanner.remove).toBeCalledWith(receiver, 0, [receiver])
     })
 
-    describe('when not active', () => {
-      const spy = jest.spyOn(scanner, 'remove')
-      beforeAll(() => {
-        setup()
-        scanner.isActive = false
-        receivers.push(receiver)
-        scanner.deactivate()
-      })
-      afterAll(() => {
-        teardown()
-        spy.mockRestore()
-      })
+    it('does not remove known receivers', () => {
+      expect(receivers.length).toEqual(1)
+      expect(receivers[0].stick.device.busNumber).toEqual(1)
+    })
+  })
 
-      it('does not remove receivers', () => {
-        expect(spy.mock.calls.length).toEqual(0)
-      })
+  describe('deactivate', () => {
+    beforeAll(() => {
+      setup()
+      receivers.push(receiver)
+      scanner.deactivate()
+    })
+    afterAll(teardown)
+
+    it('stops scanning', () => {
+      expect(scanner.stopScanning).toBeCalled()
+    })
+
+    it('removes all receivers', () => {
+      expect(scanner.remove).toBeCalledWith(receiver)
+    })
+
+    it('emits scanner-activated', () => {
+      expect(scanner.emit).toBeCalledWith('scanner-deactivated', scanner)
+    })
+  })
+
+  describe('getDevices', () => {
+    beforeAll(() => {
+      jest.spyOn(Ant, 'getDeviceList').mockImplementation(() => [
+        {
+          deviceDescriptor: {
+            idVendor: 0x0fcf,
+            idProduct: 0x1008,
+          },
+        },
+        {
+          deviceDescriptor: {
+            idVendor: 0x0fcf,
+            idProduct: 0x1009,
+          },
+        },
+        {
+          deviceDescriptor: {
+            idVendor: 1234,
+            idProduct: 1234,
+          },
+        },
+      ])
+    })
+    afterAll(() => {
+      Ant.getDeviceList.mockRestore()
+    })
+    it('only returns garmin devices', () => {
+      expect(scanner.getDevices().length).toEqual(2)
+    })
+  })
+
+  describe('newDevicesAvailable', () => {
+    let length
+    beforeAll(() => {
+      jest.spyOn(scanner, 'getDevices').mockImplementation(() => ({
+        length,
+      }))
+      jest.spyOn(scanner, 'cleanReceivers')
+      scanner.newDevicesAvailable()
+    })
+    afterAll(() => {
+      scanner.getDevices.mockRestore()
+      scanner.cleanReceivers.mockRestore()
+    })
+
+    it('cleans receivers so there are no unknown receivers', () => {
+      expect(scanner.cleanReceivers).toBeCalled()
+    })
+
+    it('is true when there are more devices than receivers', () => {
+      length = 1
+      expect(scanner.newDevicesAvailable()).toEqual(true)
+    })
+    it('is false when there are more devices than receivers', () => {
+      length = 0
+      expect(scanner.newDevicesAvailable()).toEqual(false)
+    })
+  })
+
+  describe('openNewDevices', () => {
+    let available
+    beforeEach(() => {
+      jest.spyOn(scanner, 'newDevicesAvailable').mockImplementation(() => available)
+      jest.spyOn(scanner, 'openStick')
+    })
+    afterEach(() => {
+      scanner.newDevicesAvailable.mockRestore()
+      scanner.openStick.mockRestore()
+    })
+
+    it('calls open stick with each of our sticks when there is a device available', () => {
+      available = true
+      scanner.openNewDevices()
+      expect(scanner.openStick).toBeCalledWith(scanner.sticks[0], 0, scanner.sticks)
+      expect(scanner.openStick).toBeCalledWith(scanner.sticks[1], 1, scanner.sticks)
+    })
+
+    it('does not openStick when there are not devices available', () => {
+      available = false
+      scanner.openNewDevices()
+      expect(scanner.openStick).not.toBeCalled()
+    })
+  })
+
+  describe('openStick', () => {
+    const stick = function() {
+      Object.assign(this, helpers.apiMember({}))
+      this.open = () => {
+        this.emit('startup')
+      }
+      this.setMaxListeners = () => {}
+      this.device = {}
+      this.close = () => {}
+      this.reset = () => {}
+    }
+
+    beforeAll(() => {
+      setup()
+      scanner.openStick(stick)
+    })
+    afterAll(() => {
+      stick.mockRestore()
+      teardown()
+    })
+
+    it('adds the stick on startup', () => {
+      expect(scanner.add).toBeCalled()
     })
   })
 
   describe('remove', () => {
     beforeAll(() => {
       setup()
-      ;[...receivers].forEach((receiver, index) => {
-        receivers.splice(index, 1)
-      })
       receivers.push(receiver)
       jest.spyOn(receivers, 'splice')
-      jest.spyOn(scanner, 'emit')
       scanner.remove(receivers[0])
     })
     afterAll(teardown)
@@ -205,62 +275,30 @@ describe('scanner', () => {
     })
   })
 
-  describe('events', () => {
-    describe('transmitter', () => {
-      beforeAll(() => {
-        scanner.activate(webContents)
-        scanner.add(receiver)
-        receiver.emit('transmitter-added', transmitter, [transmitter])
-        receiver.emit('transmitter-removed', transmitter, [transmitter])
-        transmitter.emit('transmitter-data', transmitter)
-      })
-
-      afterAll(teardown)
-
-      it('sends transmitter-added', () => {
-        expect(webContents.send).toBeCalledWith('transmitter-added', transmitter, [transmitter])
-      })
-      it('sends transmitter-removed', () => {
-        expect(webContents.send).toBeCalledWith('transmitter-removed', transmitter, [transmitter])
-      })
-      it('sends transmitter-data', () => {
-        expect(webContents.send).toBeCalledWith('transmitter-data', transmitter)
-      })
+  describe('startScanning', () => {
+    beforeAll(setup)
+    afterAll(teardown)
+    it('sets the interval', () => {
+      expect(setInterval).toBeCalledWith(scanner.openNewDevices, SCAN_INTERVAL)
     })
-
-    describe('reciever', () => {
-      beforeAll(() => {
-        scanner.activate(webContents)
-        scanner.emit('receiver-added', receiver, [receiver])
-        scanner.emit('receiver-removed', receiver, [receiver])
-      })
-
-      afterAll(teardown)
-      it('sends receiver added', () => {
-        expect(webContents.send).toBeCalledWith('receiver-added', receiver, [receiver])
-      })
-
-      it('sends receiver removed', () => {
-        expect(webContents.send).toBeCalledWith('receiver-removed', receiver, [receiver])
-      })
+    it('stops scanning if it is already scanning', () => {
+      scanner.startScanning()
+      expect(scanner.stopScanning).toBeCalled()
+      expect(setInterval).toBeCalledWith(scanner.openNewDevices, SCAN_INTERVAL)
     })
   })
-  describe('openStick', () => {
-/* TODO
+
+  describe('stopScanning', () => {
+    let id
     beforeAll(() => {
       setup()
-      jest.spyOn(GarminStick2.prototype, 'open').mockImplementation(function() {
-        this.emit('startup')
-      })
-      jest.spyOn(scanner, 'add')
-      scanner.openStick(GarminStick2)
+      id = scanner.intervalId
+      scanner.stopScanning()
     })
     afterAll(teardown)
-
-    describe('it adds a new receiver on startup', () => {
-      expect(scanner.add).toBeCalled()
+    it('clears the interval', () => {
+      expect(clearInterval).toBeCalledWith(id)
+      expect(scanner.intervalId).toEqual(undefined)
     })
-
-  */
   })
 })

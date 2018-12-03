@@ -1,7 +1,6 @@
 import { GarminStick2, GarminStick3, getDeviceList } from 'ant-plus'
 import events from 'events'
 import AntReceiver from '../ant_receiver/'
-import { onReceiverAdded, onReceiverRemoved } from './handlers'
 import { isAntPlusReceiver, unknownReceivers } from './filters'
 
 export const SCAN_INTERVAL = 5000
@@ -9,16 +8,15 @@ export const SCAN_INTERVAL = 5000
 export const receivers = []
 
 class USBScanner extends events.EventEmitter {
-  activate = (webContents) => {
-    if (this.isActive) {
-      return
-    }
-    this.on('receiver-added', onReceiverAdded(webContents))
-    this.on('receiver-removed', onReceiverRemoved(webContents))
+  constructor() {
+    super()
+  }
 
-    this.scan()
-    this.intervalId = setInterval(this.scan, SCAN_INTERVAL)
-    this.isActive = true
+  sticks = [GarminStick2, GarminStick3]
+
+  activate = () => {
+    this.emit('scanner-activated', this)
+    this.startScanning()
   }
 
   add = (receiver) => {
@@ -28,23 +26,33 @@ class USBScanner extends events.EventEmitter {
     receiver.activate()
   }
 
+  cleanReceivers = () => {
+    const devices = this.getDevices()
+    receivers.filter(unknownReceivers.bind({}, devices)).forEach(this.remove)
+    return devices.length > receivers.length
+  }
+
   deactivate = () => {
-    if (!this.isActive) {
-      return
-    }
+    this.stopScanning()
     ;[...receivers].forEach((receiver) => {
       this.remove(receiver)
     })
-    clearInterval(this.intervalId)
-    this.isActive = false
-    this.removeAllListeners()
+    this.emit('scanner-deactivated', this)
   }
 
-  remove = (receiver) => {
-    const index = receivers.indexOf(receiver)
-    receiver.deactivate()
-    receivers.splice(index, 1)
-    this.emit('receiver-removed', receiver, receivers)
+  getDevices() {
+    return getDeviceList().filter(isAntPlusReceiver)
+  }
+
+  newDevicesAvailable() {
+    this.cleanReceivers()
+    return this.getDevices().length > receivers.length
+  }
+
+  openNewDevices() {
+    if (this.newDevicesAvailable()) {
+      this.sticks.forEach(this.openStick)
+    }
   }
 
   openStick = (Stick) => {
@@ -55,16 +63,26 @@ class USBScanner extends events.EventEmitter {
     stick.open()
   }
 
-  cleanReceivers = () => {
-    const devices = getDeviceList().filter(isAntPlusReceiver)
-    receivers.filter(unknownReceivers.bind({}, devices)).forEach(this.remove)
-    return devices.length > receivers.length
+  remove = (receiver) => {
+    const index = receivers.indexOf(receiver)
+    receiver.deactivate()
+    receivers.splice(index, 1)
+    this.emit('receiver-removed', receiver, receivers)
   }
 
-  scan = () => {
-    if(this.cleanReceivers())  {
-      ;[GarminStick2, GarminStick3].forEach(this.openStick)
+  startScanning = () => {
+    this.openNewDevices()
+
+    if(this.intervalId) {
+      this.stopScanning()
     }
+
+    this.intervalId = setInterval(this.openNewDevices, SCAN_INTERVAL)
+  }
+
+  stopScanning = () => {
+    clearInterval(this.intervalId)
+    delete this.intervalId
   }
 }
 
