@@ -1,72 +1,83 @@
 import { scanner } from './'
 import { SCAN_INTERVAL, receivers } from './'
-import Ant from 'ant-plus'
+import Ant from '../ant/'
+import AntReceiver from '../ant_receiver/'
 
-/*
-   Ant.GarminStick2.mockImplementation(() => {})
-   Ant.GarminStick3.mockImplementation(() => {})
-*/
-let receiver
-let transmitter
-let webContents
-
-const setup = () => {
-  webContents = {
-    send: jest.fn(),
-  }
-
-  receiver = helpers.apiMember({})
-  transmitter = helpers.apiMember({})
-
-  jest.spyOn(scanner, 'on')
-  jest.spyOn(scanner, 'add')
-  jest.spyOn(scanner, 'emit')
-  jest.spyOn(scanner, 'startScanning')
-  jest.spyOn(scanner, 'stopScanning')
-  jest.spyOn(scanner, 'remove')
-  scanner.activate(webContents)
-}
+Ant.getDeviceList.mockImplementation(() => {
+  return [
+    {
+      deviceDescriptor: {
+        idVendor: 0x0fcf,
+        idProduct: 0x1008,
+      },
+    },
+    {
+      deviceDescriptor: {
+        idVendor: 0x0fcf,
+        idProduct: 0x1009,
+      },
+    },
+    {
+      deviceDescriptor: {
+        idVendor: 1234,
+        idProduct: 1234,
+      },
+    },
+  ]
+})
 
 jest.useFakeTimers()
+jest.mock('../ant/')
+jest.mock('../ant_receiver/', () => {
+  return function() {
+    this.activate = jest.fn()
+    this.deactivate = jest.fn()
+    this.once = jest.fn()
+    this.emit = jest.fn()
+  }
+})
 
-const teardown = () => {
-  receiver.mockRestore()
-  transmitter.mockRestore()
-  ;[...receivers].forEach((receiver, index) => {
-    receivers.splice(index, 1)
-  })
-
-  scanner.on.mockRestore()
-  scanner.add.mockRestore()
-  scanner.emit.mockRestore()
-  scanner.startScanning.mockRestore()
-  scanner.stopScanning.mockRestore()
-  scanner.remove.mockRestore()
-  scanner.deactivate()
-
-  webContents.send.mockRestore()
+const Stick = function() {
+  Object.assign(this, helpers.apiMember({}))
+  this.open = () => {
+    this.emit('startup')
+  }
+  this.setMaxListeners = () => {}
+  this.device = {}
+  this.close = () => {}
+  this.reset = () => {}
 }
 
 describe('scanner', () => {
   describe('activate', () => {
-    beforeAll(setup)
-    afterAll(teardown)
+    beforeAll(() => {
+      jest.spyOn(scanner, 'emit')
+      scanner.activate()
+    })
+    afterAll(() => {
+      scanner.deactivate()
+      scanner.emit.mockRestore()
+    })
 
     it('emits scanner-activated', () => {
       expect(scanner.emit).toBeCalledWith('scanner-activated', scanner)
     })
 
-    it('starts scanning', () => {
-      expect(scanner.startScanning).toBeCalled()
+    it('is scanning since it has intervalId', () => {
+      expect(scanner.intervalId).not.toEqual(undefined)
     })
   })
 
   describe('add', () => {
+    const receiver = new AntReceiver()
     beforeAll(() => {
-      setup()
+      jest.spyOn(scanner, 'emit')
       scanner.add(receiver)
     })
-    afterAll(teardown)
+    afterAll(() => {
+      scanner.emit.mockRestore()
+      scanner.deactivate()
+    })
 
     it('adds a receiver', () => {
       expect(receivers.length).toEqual(1)
@@ -86,8 +97,8 @@ describe('scanner', () => {
 
   describe('cleanReceivers', () => {
     const knownReceiver = helpers.apiMember({})
+    const receiver = new AntReceiver()
     beforeAll(() => {
-      setup()
       knownReceiver.stick = {
         device: {
           busNumber: 1,
@@ -104,13 +115,16 @@ describe('scanner', () => {
       jest.spyOn(scanner, 'getDevices').mockImplementation(() => {
         return [{ busNumber: 1, deviceAddress: 1 }]
       })
+
+      jest.spyOn(scanner, 'remove')
       receivers.push(receiver)
       receivers.push(knownReceiver)
       scanner.cleanReceivers()
     })
     afterAll(() => {
       scanner.getDevices.mockRestore()
-      teardown()
+      scanner.remove.mockRestore()
+      scanner.deactivate()
     })
     it('removes unknown receivers', () => {
       expect(scanner.remove).toBeCalledWith(receiver, 0, [receiver])
@@ -123,12 +137,19 @@ describe('scanner', () => {
   })
 
   describe('deactivate', () => {
+    const receiver = new AntReceiver()
     beforeAll(() => {
-      setup()
       receivers.push(receiver)
+      jest.spyOn(scanner, 'stopScanning')
+      jest.spyOn(scanner, 'emit')
+      jest.spyOn(scanner, 'remove')
       scanner.deactivate()
     })
-    afterAll(teardown)
+    afterAll(() => {
+      scanner.stopScanning.mockRestore()
+      scanner.emit.mockRestore()
+      scanner.remove.mockRestore()
+    })
 
     it('stops scanning', () => {
       expect(scanner.stopScanning).toBeCalled()
@@ -144,31 +165,6 @@ describe('scanner', () => {
   })
 
   describe('getDevices', () => {
-    beforeAll(() => {
-      jest.spyOn(Ant, 'getDeviceList').mockImplementation(() => [
-        {
-          deviceDescriptor: {
-            idVendor: 0x0fcf,
-            idProduct: 0x1008,
-          },
-        },
-        {
-          deviceDescriptor: {
-            idVendor: 0x0fcf,
-            idProduct: 0x1009,
-          },
-        },
-        {
-          deviceDescriptor: {
-            idVendor: 1234,
-            idProduct: 1234,
-          },
-        },
-      ])
-    })
-    afterAll(() => {
-      Ant.getDeviceList.mockRestore()
-    })
     it('only returns garmin devices', () => {
       expect(scanner.getDevices().length).toEqual(2)
     })
@@ -228,39 +224,34 @@ describe('scanner', () => {
   })
 
   describe('openStick', () => {
-    const stick = function() {
-      Object.assign(this, helpers.apiMember({}))
-      this.open = () => {
-        this.emit('startup')
-      }
-      this.setMaxListeners = () => {}
-      this.device = {}
-      this.close = () => {}
-      this.reset = () => {}
-    }
-
     beforeAll(() => {
-      setup()
-      scanner.openStick(stick)
+      jest.spyOn(scanner, 'add')
+      scanner.openStick(Stick)
     })
     afterAll(() => {
-      stick.mockRestore()
-      teardown()
+      scanner.add.mockRestore()
+      scanner.deactivate()
     })
 
     it('adds the stick on startup', () => {
       expect(scanner.add).toBeCalled()
+      expect(scanner.add.mock.calls[0][0]).toBeInstanceOf(AntReceiver)
     })
   })
 
   describe('remove', () => {
+    const receiver = new AntReceiver()
     beforeAll(() => {
-      setup()
       receivers.push(receiver)
       jest.spyOn(receivers, 'splice')
+      jest.spyOn(scanner, 'emit')
       scanner.remove(receivers[0])
     })
-    afterAll(teardown)
+    afterAll(() => {
+      receivers.splice.mockRestore()
+      scanner.remove.mockRestore()
+      scanner.emit.mockRestore()
+    })
 
     it('removes the receiver', () => {
       expect(receivers.length).toEqual(0)
@@ -276,8 +267,15 @@ describe('scanner', () => {
   })
 
   describe('startScanning', () => {
-    beforeAll(setup)
-    afterAll(teardown)
+    beforeAll(() => {
+      jest.spyOn(scanner, 'stopScanning')
+      scanner.startScanning()
+    })
+    afterAll(() => {
+      scanner.deactivate()
+      scanner.stopScanning.mockRestore()
+    })
+
     it('sets the interval', () => {
       expect(setInterval).toBeCalledWith(scanner.openNewDevices, SCAN_INTERVAL)
     })
@@ -291,11 +289,9 @@ describe('scanner', () => {
   describe('stopScanning', () => {
     let id
     beforeAll(() => {
-      setup()
       id = scanner.intervalId
       scanner.stopScanning()
     })
-    afterAll(teardown)
     it('clears the interval', () => {
       expect(clearInterval).toBeCalledWith(id)
       expect(scanner.intervalId).toEqual(undefined)

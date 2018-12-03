@@ -1,5 +1,5 @@
 import events from 'events'
-import { HeartRateSensor } from 'ant-plus'
+import { HeartRateSensor } from '../ant/'
 import AntTransmitter from '../ant_transmitter/'
 
 export const MAX_LISTENERS = 16 // 8 channels with two reads each
