@@ -18,7 +18,7 @@ script:
 - npm run lint
 - electron --version
 - pwd
-- ELECTRON_RUN_AS_NODE=true ./node_modules/.bin/electron ./node_modules/.bin/jest --coverage
+- npm run test-ci
 
 branches:
   except:
