@@ -1,4 +1,4 @@
-import { GarminStick2, GarminStick3, getDeviceList } from 'ant-plus'
+import { GarminStick2, GarminStick3, getDeviceList } from '../ant/'
 import events from 'events'
 import AntReceiver from '../ant_receiver/'
 import { isAntPlusReceiver, unknownReceivers } from './filters'
