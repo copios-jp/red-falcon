@@ -11,34 +11,6 @@ import Coefficients from './Coefficients'
 import { withStyles } from '@material-ui/core/styles'
 import styles from '../../../styles/'
 
-/*
-export default withStyles(styles)((props) => {
-  const { classes, sensor } = props
-  const changeAge = (event) => {
-    sensor.age = parseInt(event.target.value) || undefined
-  }
-
-  return (
-    <DialogContent>
-      <DialogContentText>{`御利用いただいている方の詳細を入力ください。`}</DialogContentText>
-      <TextField
-        onChange={changeAge}
-        className={classes.editTextField}
-        variant="outlined"
-        defaultValue={sensor.age}
-        label="年齢"
-        InputProps={{
-          endAdornment: <InputAdornment position="start">才</InputAdornment>,
-        }}
-      />
-      <Divider />
-      <div>心拍ゾーン</div>
-      <Coefficients coefficients={sensor.zoneCoefficients} age={sensor.age} />
-    </DialogContent>
-  )
-})
-*/
-
 class Form extends Component {
   state = {
     sensor: this.props.sensor,
@@ -59,34 +31,29 @@ class Form extends Component {
     this.props.sensor.name = name
   }
 
-  render() {
+  textField(handler, value, adornment, label) {
     const { classes } = this.props
-    const { sensor } = this.state
+    return (
+      <TextField
+        onChange={handler}
+        className={classes.editTextField}
+        variant="outlined"
+        defaultValue={value}
+        label={label}
+        InputProps={{
+          endAdornment: <InputAdornment position="start">{adornment}</InputAdornment>,
+        }}
+      />
+    )
+  }
 
+  render() {
+    const { sensor } = this.state
     return (
       <DialogContent>
         <DialogContentText>{`御利用いただいている方の詳細を入力ください。`}</DialogContentText>
-        <TextField
-          onChange={this.handleNameChange}
-          className={classes.editTextField}
-          variant="outlined"
-          defaultValue={sensor.name}
-          label="名前"
-          InputProps={{
-            endAdornment: <InputAdornment position="start">様</InputAdornment>,
-          }}
-        />
-
-        <TextField
-          onChange={this.handleAgeChange}
-          className={classes.editTextField}
-          variant="outlined"
-          defaultValue={sensor.age}
-          label="年齢"
-          InputProps={{
-            endAdornment: <InputAdornment position="start">才</InputAdornment>,
-          }}
-        />
+        {this.textField(this.handleNameChange, sensor.name, '様', '名前')}
+        {this.textField(this.handleAgeChange, sensor.age, '才', '年齢')}
         <Divider />
         <Coefficients coefficients={sensor.zoneCoefficients} age={sensor.age} />
       </DialogContent>
