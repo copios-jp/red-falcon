@@ -49,36 +49,42 @@ class Coefficients extends Component {
     })
   }
 
+  range(values, index) {
+    const { classes } = this.props
+    return (
+      <span
+        style={{ width: `${Math.round(100 * (values.max - values.min))}%` }}
+        className={classes[`rate_${ZONE_LABELS[index]}`]}>
+        &nbsp;
+      </span>
+    )
+  }
+
   rangeBar() {
     const { classes } = this.props
     const ranges = this.ranges()
     return (
       <div className={classes.zoneData}>
-        <span
-          style={{ width: `${Math.round(100 * (ranges[0].max - ranges[0].min))}%` }}
-          className={classes[`rate_${ZONE_LABELS[0]}`]}>
-          &nbsp;
-        </span>
-        <span
-          style={{ width: `${Math.round(100 * (ranges[1].max - ranges[1].min))}%` }}
-          className={classes[`rate_${ZONE_LABELS[1]}`]}>
-          &nbsp;
-        </span>
-        <span
-          style={{ width: `${Math.round(100 * (ranges[2].max - ranges[2].min))}%` }}
-          className={classes[`rate_${ZONE_LABELS[2]}`]}>
-          &nbsp;
-        </span>
-        <span
-          style={{ width: `${Math.round(100 * (ranges[3].max - ranges[3].min))}%` }}
-          className={classes[`rate_${ZONE_LABELS[3]}`]}>
-          &nbsp;
-        </span>
-        <span
-          style={{ width: `${Math.round(100 * (ranges[4].max - ranges[4].min))}%` }}
-          className={classes[`rate_${ZONE_LABELS[4]}`]}>
-          &nbsp;
-        </span>
+        {ranges.map((range, index) => this.range(range, index))}
+      </div>
+    )
+  }
+
+  rangeBand(coef, values, index) {
+    const { classes } = this.props
+    return (
+      <div
+        key={index}
+        className={[classes[`rate_${ZONE_LABELS[index]}`], classes.zoneData].join(' ')}>
+        <span className={classes.zoneRangeLabel}>{values.min}</span>
+        <Button variant="outlined" onClick={this.step.bind(this, -1, index)}>
+          <RemoveIcon />
+        </Button>
+        <Typography className={classes.zonePercentageLabel}>{Math.round(coef * 100)}%</Typography>
+        <Button variant="outlined" onClick={this.step.bind(this, 1, index)}>
+          <AddIcon />
+        </Button>
+        <span className={classes.zoneRangeLabel}>{values.max}</span>
       </div>
     )
   }
@@ -92,25 +98,7 @@ class Coefficients extends Component {
         <Typography variant="body1" className={classes.coefficientsTitle}>
           心拍ゾーン
         </Typography>
-        {coefficients.map((coef, index) => (
-          <div
-            key={index}
-            className={[classes[`rate_${ZONE_LABELS[index]}`], classes.zoneData].join(' ')}>
-            <span className={classes.zoneRangeLabel}>{ranges[index].min}</span>
-            <Button variant="outlined" onClick={this.step.bind(this, -1, index)}>
-              <RemoveIcon />
-            </Button>
-
-            <Typography className={classes.zonePercentageLabel}>
-              {Math.round(coef * 100)}%
-            </Typography>
-
-            <Button variant="outlined" onClick={this.step.bind(this, 1, index)}>
-              <AddIcon />
-            </Button>
-            <span className={classes.zoneRangeLabel}>{ranges[index].max}</span>
-          </div>
-        ))}
+        {coefficients.map((coef, index) => this.rangeBand(coef, ranges[index], index))}
         <Divider />
         {this.rangeBar()}
       </div>
