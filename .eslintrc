@@ -37,6 +37,7 @@
     "browser": true
   },
   "globals": {
-    "helpers": true
+    "helpers": true,
+    "mockApiMember": true
   }
 }

@@ -3,11 +3,10 @@ import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core'
 import { PowerSettingsNew } from '@material-ui/icons'
 import { withStyles } from '@material-ui/core/styles'
 
-import tooling from '../../tooling/'
 import styles from '../../styles/'
 
 const TopBar = (props) => {
-  const { activated, toggle, add, classes } = props
+  const { activated, toggle, classes } = props
   return (
     <AppBar position="static" style={{ WebkitAppRegion: 'drag' }}>
       <Toolbar variant="dense">
@@ -15,7 +14,6 @@ const TopBar = (props) => {
         <IconButton aria-label="Menu" onClick={toggle}>
           <PowerSettingsNew color={activated ? 'secondary' : 'inherit'} />
         </IconButton>
-        {tooling.topBar && tooling.topBar(add)}
       </Toolbar>
     </AppBar>
   )

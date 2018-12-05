@@ -32,11 +32,11 @@ export const onReceiverRemoved = (webContents) => {
 }
 
 export default (scanner, webContents) => {
-  scanner.once('scanner-activated', () => {
+  scanner.on('scanner-activated', () => {
     scanner.on('receiver-added', onReceiverAdded(webContents))
     scanner.on('receiver-removed', onReceiverRemoved(webContents))
   })
-  scanner.once('scanner-deactivated', () => {
+  scanner.on('scanner-deactivated', () => {
     scanner.removeAllListeners('receiver-added')
     scanner.removeAllListeners('receiver-removed')
   })

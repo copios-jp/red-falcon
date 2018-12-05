@@ -21,7 +21,8 @@ export class SensorsView extends Component {
     ipcRenderer.on('receiver-removed', this.onReceiver)
     ipcRenderer.on('transmitter-added', this.onTransmitter)
     ipcRenderer.on('transmitter-removed', this.onTransmitter)
-    this.toggleActivation()
+    ipcRenderer.on('scanner-deactivated', this.onScannerDeactivated)
+    ipcRenderer.on('scanner-activated', this.onScannerActivated)
   }
 
   componentWillUnmount() {
@@ -29,16 +30,32 @@ export class SensorsView extends Component {
     ipcRenderer.off('receiver-removed', this.onReceiver)
     ipcRenderer.off('transmitter-added', this.onTransmitter)
     ipcRenderer.off('transmitter-removed', this.onTransmitter)
-    ipcRenderer.send('deactivate')
+    //ipcRenderer.send('deactivate')
   }
 
   activate = () => {
     ipcRenderer.send('activate')
   }
 
+  deactivate = () => {
+    ipcRenderer.send('deactivate')
+  }
+
+  onScannerDeactivated = () => {
+    this.setState((state) => {
+      return { ...state, isActive: false }
+    })
+  }
+
+  onScannerActivated = () => {
+    this.setState((state) => {
+      return { ...state, isActive: true }
+    })
+  }
+
   onReceiver = (event, receiver, receivers) => {
     this.setState((state) => {
-      return { ...state, receiverCount: receivers.length }
+      return { ...state, receiverCount: receivers.length, isActive: receivers.length > 0 }
     })
   }
 
@@ -46,10 +63,6 @@ export class SensorsView extends Component {
     this.setState((state) => {
       return { ...state, transmitterCount: transmitters.length }
     })
-  }
-
-  deactivate = () => {
-    ipcRenderer.send('deactivate')
   }
 
   toggleActivation = () => {

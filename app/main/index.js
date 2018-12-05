@@ -6,7 +6,7 @@ import { autoUpdater } from 'electron-updater'
 import tooling from './tooling/'
 import menuTemplate from './menu_template'
 import PowerSaveBlocker from './services/power_save_blocker/'
-import { scanner } from './services/usb_scanner/'
+import scanner from './services/ant/Scanner'
 import bridge from './services/bridge/'
 
 // TODO - move this kind of setup out of index.js
@@ -42,10 +42,11 @@ app.on('ready', async () => {
 
   // show window once on first load
   mainWindow.webContents.once('did-finish-load', () => {
+    console.log('did-finish-load')
+    bridge(scanner, mainWindow.webContents)
     mainWindow.show()
     autoUpdater.checkForUpdatesAndNotify()
     PowerSaveBlocker.activate()
-    bridge(scanner, mainWindow.webContents)
     app.on('activate', () => {
       mainWindow.show()
     })
@@ -69,9 +70,11 @@ app.on('before-quit', () => {
 })
 
 ipcMain.on('activate', () => {
+  console.log('ipcMain activate')
   scanner.activate()
 })
 
 ipcMain.on('deactivate', () => {
+  console.log('ipcMain deactivate')
   scanner.deactivate()
 })

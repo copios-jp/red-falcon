@@ -34,9 +34,9 @@ const helpers = {
     }
   },
 
-  apiMember(bus) {
+  apiMember(bus, extended) {
     let thisBus = {...bus}
-    return {
+    return Object.assign({
       activate: jest.fn(),
       deactivate: jest.fn(),
       remove: jest.fn(),
@@ -48,8 +48,9 @@ const helpers = {
         ['activate', 'deactivate', 'on', 'emit', 'once', 'removeAllListeners'].forEach((member) => this[member].mockRestore)
         thisBus = {}
       }
-    }
+    }, extended)
   }
 }
 
 global.helpers = helpers
+global.mockApiMember = helpers.apiMember

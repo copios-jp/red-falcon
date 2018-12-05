@@ -4,6 +4,8 @@ export const VENDOR_IDS = [VENDOR_ID]
 export const GARMIN_2 = 0x1008
 export const GARMIN_3 = 0x1009
 
+export const MAX_INACTIVE_MS = 15000
+
 export const PRODUCT_IDS = [GARMIN_2, GARMIN_3]
 
 export const isAntPlusReceiver = (device) => {
@@ -11,10 +13,15 @@ export const isAntPlusReceiver = (device) => {
   return VENDOR_IDS.includes(idVendor) && PRODUCT_IDS.includes(idProduct)
 }
 
-export const unknownReceivers = (devices, receiver) => {
-  const exists = devices.find((device) => {
+export const unknownReceivers = function(receiver) {
+  const exists = this.find((device) => {
     const { busNumber, deviceAddress } = receiver.stick.device
     return device.busNumber === busNumber && device.deviceAddress === deviceAddress
   })
   return !exists
+}
+
+export const inactiveFilter = (transmitter) => {
+  const inactiveFor = new Date() - transmitter.updated
+  return inactiveFor > MAX_INACTIVE_MS
 }
