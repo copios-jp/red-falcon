@@ -12,53 +12,31 @@ import classNames from 'classnames'
 import _ from 'underscore'
 import ActivityIndicator from './activity_indicator/'
 import { heartZoneFor } from '../../services/analytics'
+import styles from '../../styles/'
 
 import { DEFAULT_ZONE_COEFFICIENTS } from '../../../constants'
 
+import bind from '../../helpers/bind'
+
 const ages = []
-import styles from '../../styles/'
 ages[5329145] = 37
 ages[5329182] = 44
 
 class Sensor extends Component {
-  state = {
-    transmitter: this.props.transmitter,
-    isEditing: false,
-    invisible: true,
-    age: 0,
-    zoneCoefficients: [...DEFAULT_ZONE_COEFFICIENTS],
-    name: '',
-  }
-
-  componentDidMount() {
-    ipcRenderer.on('transmitter-data', this.onTransmitter)
-  }
-
-  zoneLabel() {
-    const { transmitter, zoneCoefficients, age } = this.state
-    const { ComputedHeartRate } = transmitter
-    return heartZoneFor(age, zoneCoefficients, ComputedHeartRate)
-  }
-
-  componentWillUnmount() {
-    this.blink.cancel()
-    ipcRenderer.off('transmitter-data', this.onTransmitter)
-  }
 
   blink = _.debounce(() => {
     this.setState((state) => {
-      // state.transmitter.ComputedHeartRate = 0
       return { ...state, invisible: true }
     })
   }, 1000)
 
-  onTransmitter = (event, transmitter) => {
-    if (transmitter.channel === this.state.transmitter.channel) {
-      this.setState((state) => {
-        return { ...state, transmitter, invisible: false }
-      })
-      this.blink()
-    }
+  componentDidMount() {
+    bind.call(this, 'on')
+  }
+
+  componentWillUnmount() {
+    this.blink.cancel()
+    bind.call(this, 'off')
   }
 
   edit = () => {
@@ -75,12 +53,25 @@ class Sensor extends Component {
     })
   }
 
-  onSave = (state) => {
-    this.finishEdit(state)
+  mainEvents = {
+    onTransmitter: ['transmitter-data'],
   }
 
   onCancel = () => {
     this.finishEdit(this.state)
+  }
+
+  onSave = (state) => {
+    this.finishEdit(state)
+  }
+
+  onTransmitter = (event, transmitter) => {
+    if (transmitter.channel === this.state.transmitter.channel) {
+      this.setState((state) => {
+        return { ...state, transmitter, invisible: false }
+      })
+      this.blink()
+    }
   }
 
   render() {
@@ -119,6 +110,21 @@ class Sensor extends Component {
         </GridListTile>
       </Paper>
     )
+  }
+
+  state = {
+    transmitter: this.props.transmitter,
+    isEditing: false,
+    invisible: true,
+    age: 0,
+    zoneCoefficients: [...DEFAULT_ZONE_COEFFICIENTS],
+    name: '',
+  }
+
+  zoneLabel() {
+    const { transmitter, zoneCoefficients, age } = this.state
+    const { ComputedHeartRate } = transmitter
+    return heartZoneFor(age, zoneCoefficients, ComputedHeartRate)
   }
 }
 

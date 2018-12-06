@@ -1,25 +1,22 @@
 import * as React from 'react'
 import { Component } from 'react'
-import { ipcRenderer } from 'electron'
-
 import { withStyles } from '@material-ui/core/styles'
 import { GridList } from '@material-ui/core'
-import styles from '../styles/'
 import Sensor from './sensor/'
+import styles from '../styles/'
+import bind from '../helpers/bind'
 
 export class SensorList extends Component {
-  state = {
-    transmitters: [],
-  }
-
   componentDidMount() {
-    ipcRenderer.on('transmitter-added', this.onTransmitter)
-    ipcRenderer.on('transmitter-removed', this.onTransmitter)
+    bind.call(this, 'on')
   }
 
   componentWillUnmount() {
-    ipcRenderer.off('transmitter-added', this.onTransmitter)
-    ipcRenderer.off('transmitter-removed', this.onTransmitter)
+    bind.call(this, 'off')
+  }
+
+  mainEvents = {
+    onTransmitter: ['transmitter-added' , 'transmitter-removed']
   }
 
   onTransmitter = (event, transmitter, transmitters) => {
@@ -40,6 +37,10 @@ export class SensorList extends Component {
         ))}
       </GridList>
     )
+  }
+
+  state = {
+    transmitters: [],
   }
 }
 

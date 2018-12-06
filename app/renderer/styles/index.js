@@ -33,6 +33,8 @@ export default (theme) => ({
 
   userName: {
     fontSize: theme.typography.fontSize * 1.5,
+    background:
+      'linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
   },
 
   icon: {
@@ -160,20 +162,24 @@ export default (theme) => ({
     height: theme.spacing.unit * 8,
   },
 
-  bottomBar: {
+  statusBar: {
     flexDirection: 'row',
     display: 'flex',
     position: 'fixed',
     bottom: 0,
     width: '100%',
     paddingRight: theme.spacing.unit,
-    backgroundColor: 'transparent',
+    backgroundColor: '#ff8f00',
   },
+
   copyright: {
+    padding: theme.spacing.unit / 2,
     paddingLeft: theme.spacing.unit,
     flexGrow: 1,
   },
+
   bottomBarItem: {
+    padding: theme.spacing.unit / 2,
     paddingLeft: theme.spacing.unit,
     '&:last': {
       paddingRight: theme.spacing.unit,

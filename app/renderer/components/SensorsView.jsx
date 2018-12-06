@@ -1,103 +1,71 @@
 import * as React from 'react'
 import { Component } from 'react'
-import { Paper, Typography } from '@material-ui/core'
+import { Paper } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
-
 import SensorList from './SensorList'
 import TopBar from './top_bar/'
-
+import StatusBar from './status_bar/'
 import styles from '../styles/'
+import bind from '../helpers/bind'
 import { ipcRenderer } from 'electron'
 
 export class SensorsView extends Component {
-  state = {
-    receiverCount: 0,
-    transmitterCount: 0,
-    isActive: false,
+  activate = () => {
+    ipcRenderer.send('activate')
   }
 
   componentDidMount() {
-    ipcRenderer.on('receiver-added', this.onReceiver)
-    ipcRenderer.on('receiver-removed', this.onReceiver)
-    ipcRenderer.on('transmitter-added', this.onTransmitter)
-    ipcRenderer.on('transmitter-removed', this.onTransmitter)
-    ipcRenderer.on('scanner-deactivated', this.onScannerDeactivated)
-    ipcRenderer.on('scanner-activated', this.onScannerActivated)
+    bind.call(this, 'on')
   }
 
   componentWillUnmount() {
-    ipcRenderer.off('receiver-added', this.onReceiver)
-    ipcRenderer.off('receiver-removed', this.onReceiver)
-    ipcRenderer.off('transmitter-added', this.onTransmitter)
-    ipcRenderer.off('transmitter-removed', this.onTransmitter)
-    //ipcRenderer.send('deactivate')
-  }
-
-  activate = () => {
-    ipcRenderer.send('activate')
+    bind.call(this, 'off')
   }
 
   deactivate = () => {
     ipcRenderer.send('deactivate')
   }
 
-  onScannerDeactivated = () => {
-    this.setState((state) => {
-      return { ...state, isActive: false }
-    })
-  }
-
-  onScannerActivated = () => {
-    this.setState((state) => {
-      return { ...state, isActive: true }
-    })
+  mainEvents = {
+    onReceiver: ['receiver-added', 'receiver-removed'],
+    onTransmitter: ['transmitter-added', 'transmitter-removed'],
   }
 
   onReceiver = (event, receiver, receivers) => {
     this.setState((state) => {
-      return { ...state, receiverCount: receivers.length, isActive: receivers.length > 0 }
+      return { ...state, receivers }
     })
   }
 
   onTransmitter = (event, transmitter, transmitters) => {
     this.setState((state) => {
-      return { ...state, transmitterCount: transmitters.length }
+      return { ...state, transmitters }
     })
   }
 
-  toggleActivation = () => {
-    const action = this.state.isActive ? 'deactivate' : 'activate'
-    this[action]()
-    this.setState((state) => {
-      return { ...state, isActive: !state.isActive }
-    })
-  }
   render() {
     const { classes } = this.props
-    const activated = this.state.isActive
-
-    const add = () => {}
-    //  this.addFakeSensor ? this.addFakeSensor.bind(this) : () => {}
 
     return (
       <div className={classes.wrapper}>
-        <TopBar activated={activated} toggle={this.toggleActivation} add={add} />
+        <TopBar {...this.state} toggle={this.toggleActivation} />
         <Paper className={classes.content}>
-          <SensorList channels={[]} activated={activated} />
-          <div className={classes.bottomBar}>
-            <Typography variant="caption" className={classes.copyright}>
-              &copy; COPIOS
-            </Typography>
-            <Typography className={classes.bottomBarItem} variant="caption">
-              受信機数:{this.state.receiverCount}
-            </Typography>
-            <Typography className={classes.bottomBarItem} variant="caption">
-              送信機数:{this.state.transmitterCount}
-            </Typography>
-          </div>
+          <SensorList />
+          <StatusBar {...this.state} />
         </Paper>
       </div>
     )
+  }
+
+  state = {
+    receivers: [],
+    transmitters: [],
+    isActive: false,
+  }
+
+  toggleActivation = () => {
+    const action = this.state.receivers.length ? 'deactivate' : 'activate'
+    this[action]()
   }
 }
 
