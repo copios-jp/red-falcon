@@ -1,5 +1,6 @@
-import Ant from './'
 import events from 'events'
+
+import Ant from './'
 import Receiver from './Receiver'
 import { isAntPlusReceiver, unknownReceivers } from './filters'
 
@@ -43,13 +44,15 @@ class Scanner extends events.EventEmitter {
   openNewDevices = () => {
     if (this.newDevicesAvailable()) {
       this.sticks.forEach((Stick) => {
-        this.open(new Stick())
+        this.open(new Stick(1))
       })
     }
   }
 
   open = (stick) => {
+    stick.startupTimeout = 1
     stick.once('startup', () => {
+      delete stick.startupTimeout
       const receiver = new Receiver(stick)
       this.add(receiver)
       stick.once('shutdown', this.shutdown.bind(this, receiver))
@@ -57,8 +60,20 @@ class Scanner extends events.EventEmitter {
     try {
       if (!stick.open()) {
         stick.removeAllListeners('startup')
+        stick.reset()
+      } else {
+        setTimeout(() => {
+          if (stick.startupTimeout) {
+            console.log('Scanner#open stick opened but no startup received')
+            stick.close()
+          }
+        }, 500)
       }
     } catch (e) {
+      if (e.message !== "Cannot read property 'transfer' of undefined") {
+        console.log('Scanner#open stick open errored', e)
+        stick.close()
+      }
       stick.removeAllListeners('startup')
     }
   }
@@ -84,7 +99,9 @@ class Scanner extends events.EventEmitter {
     this.intervalId = setInterval(this.openNewDevices, SCAN_INTERVAL)
   }
 
-  sticks = [Ant.GarminStick2, Ant.GarminStick3]
+  // Ant.GarminStick3 not currently supported
+  // as I dont have one to test with
+  sticks = [Ant.GarminStick2]
 
   stopScanning = () => {
     clearInterval(this.intervalId)

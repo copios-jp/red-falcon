@@ -224,7 +224,6 @@ describe('ant', () => {
         available = true
         scanner.openNewDevices()
         expect(scanner.open.mock.calls[0][0]).toBeInstanceOf(scanner.sticks[0])
-        expect(scanner.open.mock.calls[1][0]).toBeInstanceOf(scanner.sticks[1])
       })
 
       it('does not openStick when there are not devices available', () => {
@@ -235,7 +234,6 @@ describe('ant', () => {
     })
 
     describe('open', () => {
-      const stick = mockApiMember({})
       beforeAll(() => {
         stick.open = jest.fn(function() {
           this.emit('startup')
