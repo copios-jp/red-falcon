@@ -1,13 +1,12 @@
 export const onTransmitterData = (webContents) => {
-  return (transmitter) => {
-    webContents.send('transmitter-data', transmitter)
+  return (transmitter, transmitters) => {
+    webContents.send('transmitter-data', transmitter, transmitters)
   }
 }
 
 export const onTransmitterAdded = (webContents) => {
   return (transmitter, transmitters) => {
     webContents.send('transmitter-added', transmitter, transmitters)
-    transmitter.on('transmitter-data', onTransmitterData(webContents))
   }
 }
 
@@ -22,6 +21,7 @@ export const onReceiverAdded = (webContents) => {
     webContents.send('receiver-added', receiver, receivers)
     receiver.on('transmitter-added', onTransmitterAdded(webContents))
     receiver.on('transmitter-removed', onTransmitterRemoved(webContents))
+    receiver.on('transmitter-data', onTransmitterData(webContents))
   }
 }
 

@@ -1,34 +1,33 @@
 import * as React from 'react'
 import { Component } from 'react'
-import {
-  DialogContent,
-  Divider,
-  DialogContentText,
-  TextField,
-  InputAdornment,
-} from '@material-ui/core'
+import { DialogContent, TextField, InputAdornment } from '@material-ui/core'
 import Coefficients from './Coefficients'
 import { withStyles } from '@material-ui/core/styles'
 import styles from '../../../styles/'
 
 class Form extends Component {
   state = {
-    sensor: this.props.sensor,
+    ...this.props.sensor.state,
+  }
+
+  propagateStateChange = (update) => {
+    this.setState((state) => {
+      return { ...state, ...update }
+    })
+
+    this.props.sensor.setState((state) => {
+      return { ...state, ...update }
+    })
   }
 
   handleAgeChange = (event) => {
-    const { sensor } = this.state
     const age = parseInt(event.target.value) || 0
-    sensor.age = age
-    this.props.sensor.age = age
-    this.setState((state) => {
-      return { ...state, sensor }
-    })
+    this.propagateStateChange({ age })
   }
 
   handleNameChange = (event) => {
     const name = event.target.value || ''
-    this.props.sensor.name = name
+    this.propagateStateChange({ name })
   }
 
   textField(handler, value, adornment, label) {
@@ -38,7 +37,7 @@ class Form extends Component {
         onChange={handler}
         className={classes.editTextField}
         variant="outlined"
-        defaultValue={value}
+        defaultValue={value ? value : ''}
         label={label}
         InputProps={{
           endAdornment: <InputAdornment position="start">{adornment}</InputAdornment>,
@@ -48,14 +47,11 @@ class Form extends Component {
   }
 
   render() {
-    const { sensor } = this.state
     return (
       <DialogContent>
-        <DialogContentText>{`御利用いただいている方の詳細を入力ください。`}</DialogContentText>
-        {this.textField(this.handleNameChange, sensor.name, '様', '名前')}
-        {this.textField(this.handleAgeChange, sensor.age, '才', '年齢')}
-        <Divider />
-        <Coefficients coefficients={sensor.zoneCoefficients} age={sensor.age} />
+        {this.textField(this.handleNameChange, this.state.name, '様', '名前')}
+        {this.textField(this.handleAgeChange, this.state.age, '才', '年齢')}
+        <Coefficients coefficients={this.state.zoneCoefficients} age={this.state.age} />
       </DialogContent>
     )
   }

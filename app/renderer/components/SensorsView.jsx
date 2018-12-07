@@ -28,19 +28,6 @@ export class SensorsView extends Component {
 
   mainEvents = {
     onReceiver: ['receiver-added', 'receiver-removed'],
-    onTransmitter: ['transmitter-added', 'transmitter-removed'],
-  }
-
-  onReceiver = (event, receiver, receivers) => {
-    this.setState((state) => {
-      return { ...state, receivers }
-    })
-  }
-
-  onTransmitter = (event, transmitter, transmitters) => {
-    this.setState((state) => {
-      return { ...state, transmitters }
-    })
   }
 
   render() {
@@ -59,7 +46,6 @@ export class SensorsView extends Component {
 
   state = {
     receivers: [],
-    transmitters: [],
     isActive: false,
   }
 

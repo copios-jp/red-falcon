@@ -26,7 +26,7 @@ class Transmitter extends events.EventEmitter {
   onHbData = (data) => {
     this.updated = new Date()
     Object.assign(this, data)
-    this.emit('transmitter-data', this)
+    this.emit('data', this)
   }
 
   remove = () => {

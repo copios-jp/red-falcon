@@ -30,6 +30,9 @@ class Receiver extends events.EventEmitter {
   add = (transmitter) => {
     transmitters.push(transmitter)
     transmitter.once('remove', this.remove)
+    transmitter.on('data', (updatedTransmitter) => {
+      this.emit('transmitter-data', updatedTransmitter, transmitters)
+    })
     this.emit('transmitter-added', transmitter, transmitters)
     transmitter.activate()
   }
@@ -63,8 +66,10 @@ class Receiver extends events.EventEmitter {
   }
 
   open = (sensor, channel) => {
-    sensor.once('hbData', () => {
-      this.add(new Transmitter(sensor))
+    sensor.once('hbData', (data) => {
+      const transmitter = new Transmitter(sensor)
+      Object.assign(transmitter, data)
+      this.add(transmitter)
     })
     sensor.attach(channel, 0)
   }

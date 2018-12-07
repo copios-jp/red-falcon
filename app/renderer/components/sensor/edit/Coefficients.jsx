@@ -53,6 +53,7 @@ class Coefficients extends Component {
     const { classes } = this.props
     return (
       <span
+        key={index}
         style={{ width: `${Math.round(100 * (values.max - values.min))}%` }}
         className={classes[`rate_${ZONE_LABELS[index]}`]}>
         &nbsp;

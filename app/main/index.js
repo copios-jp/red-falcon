@@ -38,11 +38,13 @@ app.on('ready', async () => {
     titleBarStyle: 'hiddenInset',
   })
 
+  mainWindow.on('close', () => {
+    scanner.deactivate()
+  })
   mainWindow.loadFile(path.resolve(path.join(__dirname, '../renderer/index.html')))
 
   // show window once on first load
   mainWindow.webContents.once('did-finish-load', () => {
-    console.log('did-finish-load')
     bridge(scanner, mainWindow.webContents)
     mainWindow.show()
     autoUpdater.checkForUpdatesAndNotify()
@@ -50,6 +52,10 @@ app.on('ready', async () => {
     app.on('activate', () => {
       mainWindow.show()
     })
+  })
+
+  mainWindow.webContents.on('will-navigate', () => {
+    scanner.deactivate()
   })
 
   mainWindow.webContents.on('context-menu', (e, props) => {
@@ -70,11 +76,9 @@ app.on('before-quit', () => {
 })
 
 ipcMain.on('activate', () => {
-  console.log('ipcMain activate')
   scanner.activate()
 })
 
 ipcMain.on('deactivate', () => {
-  console.log('ipcMain deactivate')
   scanner.deactivate()
 })

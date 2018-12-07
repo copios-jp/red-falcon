@@ -6,23 +6,27 @@ import styles from '../../../styles/'
 import Form from './Form'
 
 const EditSensor = (props) => {
-  const { sensor, classes, onSave, onCancel, isOpen } = props
-  const id = sensor.transmitter.channel
+  const { sensor, classes, onDone } = props
+  const previousState = { ...sensor.state }
 
-  const handleSave = () => {
-    onSave(sensor)
+  const onCancel = () => {
+    sensor.setState((state) => {
+      return { ...state, ...previousState }
+    })
+    onDone()
   }
+
   return (
     <div className={classes.editRoot}>
-      <Dialog open={isOpen} onClose={onCancel} aira-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">{`受信機編集(${id})`}</DialogTitle>
+      <Dialog open={true} onClose={onCancel} aira-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">{`受信機編集(${sensor.state.channel})`}</DialogTitle>
         <Form sensor={sensor} />
         <Divider />
         <DialogActions>
           <Button variant="contained" onClick={onCancel} color="secondary">
             キャンセル
           </Button>
-          <Button variant="contained" onClick={handleSave} color="primary">
+          <Button variant="contained" onClick={onDone} color="primary">
             保存
           </Button>
         </DialogActions>

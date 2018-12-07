@@ -15,7 +15,9 @@ describe('TopBar', () => {
   }
 
   beforeEach(() => {
-    props = {}
+    props = {
+      receivers: [],
+    }
     mountedComponent = undefined
   })
 

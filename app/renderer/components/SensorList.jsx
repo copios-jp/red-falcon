@@ -2,9 +2,11 @@ import * as React from 'react'
 import { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import { GridList } from '@material-ui/core'
+import Edit from './sensor/edit/'
 import Sensor from './sensor/'
 import styles from '../styles/'
 import bind from '../helpers/bind'
+// import Edit from './sensor/edit/'
 
 export class SensorList extends Component {
   componentDidMount() {
@@ -16,24 +18,34 @@ export class SensorList extends Component {
   }
 
   mainEvents = {
-    onTransmitter: ['transmitter-added' , 'transmitter-removed']
+    onTransmitter: ['transmitter-added', 'transmitter-removed'],
   }
 
-  onTransmitter = (event, transmitter, transmitters) => {
+  stopEditing = () => {
     this.setState((state) => {
-      return { ...state, transmitters }
+      return { ...state, editing: undefined }
+    })
+  }
+
+  editSensor = (sensor) => {
+    this.setState((state) => {
+      return { ...state, editing: sensor }
     })
   }
 
   render() {
     const { classes } = this.props
-    const { transmitters } = this.state
-    const { length } = transmitters
-
+    const { transmitters, editing } = this.state
     return (
       <GridList cellHeight={'auto'} padding={0} className={classes.gridList}>
+        {editing && <Edit sensor={editing} onDone={this.stopEditing} />}
         {transmitters.map((transmitter, index) => (
-          <Sensor key={index} sensorClass={`sensor_${length}`} transmitter={transmitter} />
+          <Sensor
+            key={index}
+            transmitter={transmitter}
+            sensorClass={`sensor_${transmitters.length}`}
+            onClick={this.editSensor}
+          />
         ))}
       </GridList>
     )
@@ -41,6 +53,7 @@ export class SensorList extends Component {
 
   state = {
     transmitters: [],
+    editing: undefined,
   }
 }
 
