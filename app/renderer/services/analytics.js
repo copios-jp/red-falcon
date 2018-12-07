@@ -1,5 +1,12 @@
 import { MAX_HR, ZONE_LABELS } from '../../constants'
 
+export const maxHR = (age) => {
+  return 220 - age
+}
+
+export const percentageOfMax = (age, rate) => {
+  return Math.round((rate / maxHR(age)) * 100)
+}
 export const heartZoneFor = (age = 0, coefficients = [], rate = 0) => {
   const max = MAX_HR - age
 

@@ -2,18 +2,15 @@
 import * as React from 'react'
 import { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import { GridListTile } from '@material-ui/core'
-import { GridListTileBar } from '@material-ui/core'
-import { Paper } from '@material-ui/core'
-import { Typography } from '@material-ui/core'
+import { GridListTile, GridListTileBar, Paper, Typography } from '@material-ui/core'
 import classNames from 'classnames'
+
 import ActivityIndicator from './activity_indicator/'
-import { heartZoneFor } from '../../services/analytics'
-import styles from '../../styles/'
-
-import { DEFAULT_ZONE_COEFFICIENTS } from '../../../constants'
-
+import { heartZoneFor, percentageOfMax } from '../../services/analytics'
 import bind from '../../helpers/bind'
+
+import styles from '../../styles/'
+import { DEFAULT_ZONE_COEFFICIENTS } from '../../../constants'
 
 class Sensor extends Component {
   componentDidMount() {
@@ -38,17 +35,17 @@ class Sensor extends Component {
     })
   }
 
+  onClick = () => {
+    this.props.onClick(this)
+  }
+
   render() {
     const { classes } = this.props
     const { transmitter } = this.state
-    const { ComputedHeartRate } = transmitter
     const zoneClass = `rate_${this.zoneLabel()}`
-    const handleClick = () => {
-      this.props.onClick(this)
-    }
     return (
       <Paper
-        onClick={handleClick}
+        onClick={this.onClick}
         elevation={4}
         className={classNames(
           classes.gridListItem,
@@ -56,14 +53,11 @@ class Sensor extends Component {
           classes[this.props.sensorClass],
         )}>
         <GridListTile>
-          <GridListTileBar
-            className={classes.gridTileBar}
-            title={`${Math.round((ComputedHeartRate / (220 - this.state.age)) * 100)}%`}
-          />
+          <GridListTileBar className={classes.gridTileBar} title={`${this.tileBarTitle()}%`} />
           <ActivityIndicator transmitter={transmitter} />
           <Typography className={classes.userName}>{this.state.name}&nbsp;</Typography>
           <div className={classNames(classes[this.props.sensorClass], classes[zoneClass])}>
-            {ComputedHeartRate}
+            {transmitter.ComputedHeartRate}
           </div>
         </GridListTile>
       </Paper>
@@ -76,6 +70,10 @@ class Sensor extends Component {
     age: 0,
     zoneCoefficients: [...DEFAULT_ZONE_COEFFICIENTS],
     name: '',
+  }
+
+  tileBarTitle() {
+    return percentageOfMax(this.state.age, this.state.transmitter.ComputedHeartRate)
   }
 
   zoneLabel() {
