@@ -5,4 +5,5 @@ module.exports = {
   },
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/build/'],
   setupTestFrameworkScriptFile: '<rootDir>/jest.setup.js',
+  collectCoverageFrom: ["app/main/**/*.js", "app/renderer/**/*.js*", "!test.js"],
 }
