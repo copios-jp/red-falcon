@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Button, Dialog, DialogContent, DialogActions } from '@material-ui/core'
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core'
 
 import { withStyles } from '@material-ui/core/styles'
 import styles from '../../../styles/'
@@ -23,7 +23,10 @@ const EditSensor = (props) => {
       onClose={onCancel}
       aira-labelledby="form-dialog-title"
       className={classes.editDialog}>
-      <Form sensor={sensor} />
+      <DialogTitle>利用者情報</DialogTitle>
+      <DialogContent>
+        <Form sensor={sensor} />
+      </DialogContent>
       <DialogActions>
         <Button variant="contained" onClick={onCancel} color="secondary">
           キャンセル

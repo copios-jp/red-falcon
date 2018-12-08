@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { Component } from 'react'
-import { MAX_HR, ZONE_LABELS } from '../../../../constants'
 import { Button, Typography, Divider } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import RemoveIcon from '@material-ui/icons/Remove'
@@ -12,7 +11,7 @@ const STEP = 0.02
 
 class Coefficients extends Component {
   state = {
-    ...this.props
+    ...this.props,
   }
 
   componentWillReceiveProps(nextProps) {
@@ -68,7 +67,7 @@ class Coefficients extends Component {
     const ranges = this.ranges()
     return (
       <div className={classes.zoneData}>
-        {ranges.slice(1).map((range, index) => this.range(range, index+1))}
+        {ranges.slice(1).map((range, index) => this.range(range, index + 1))}
       </div>
     )
   }
@@ -76,16 +75,14 @@ class Coefficients extends Component {
   rangeBand(coef, values, index) {
     const { classes } = this.props
     return (
-      <div
-        key={index}
-        className={[classes[`rate_${index}`], classes.zoneData].join(' ')}>
+      <div key={index} className={[classes[`rate_${index}`], classes.zoneData].join(' ')}>
         <span className={classes.zoneRangeLabel}>{values.min}</span>
         <Button size="small" onClick={this.step.bind(this, -1, index)}>
-          <RemoveIcon fontSize="small"/>
+          <RemoveIcon fontSize="small" />
         </Button>
         <Typography className={classes.zonePercentageLabel}>{Math.round(coef * 100)}%</Typography>
         <Button size="small" onClick={this.step.bind(this, 1, index)}>
-          <AddIcon fontSize="small"/>
+          <AddIcon fontSize="small" />
         </Button>
         <span className={classes.zoneRangeLabel}>{values.max}</span>
       </div>
@@ -98,7 +95,9 @@ class Coefficients extends Component {
     const ranges = this.ranges()
     return (
       <div className={classes.coefficients}>
-        {coefficients.slice(1).map((coef, index) => this.rangeBand(coef, ranges[index+1], index+1))}
+        {coefficients
+          .slice(1)
+          .map((coef, index) => this.rangeBand(coef, ranges[index + 1], index + 1))}
         <Divider />
         {this.rangeBar()}
       </div>

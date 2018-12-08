@@ -4,7 +4,7 @@ export const Haskell = {
   at(age) {
     const max = Math.round(208 - 0.7 * age)
     return Number.isNaN(max) ? undefined : max
-  }
+  },
 }
 export const Robergs = {
   id: 'robergs',
@@ -12,7 +12,7 @@ export const Robergs = {
   at(age) {
     const max = Math.round(205.8 - 0.685 * age)
     return Number.isNaN(max) ? undefined : max
-  }
+  },
 }
 export const Gulati = {
   id: 'Gulati',
@@ -20,7 +20,7 @@ export const Gulati = {
   at(age) {
     const max = Math.round(205.8 - 0.685 * age)
     return Number.isNaN(max) ? undefined : max
-  }
+  },
 }
 
 export const Fox = {
@@ -29,7 +29,7 @@ export const Fox = {
   at(age) {
     const max = Math.round(220 - age)
     return Number.isNaN(max) ? undefined : max
-  }
+  },
 }
 export const Tanaka = {
   id: 'tanaka',
@@ -37,7 +37,7 @@ export const Tanaka = {
   at(age) {
     const max = Math.round(208.75 - 0.73 * age)
     return Number.isNaN(max) ? undefined : max
-  }
+  },
 }
 export const Nes = {
   id: 'nes',
@@ -45,13 +45,15 @@ export const Nes = {
   at(age) {
     const max = Math.round(211 - 0.64 * age)
     return Number.isNaN(max) ? undefined : max
-  }
+  },
 }
 
 export const Manual = {
   id: 'manual',
   label: 'Manual',
-  at() { /* noop */}
+  at() {
+    /* noop */
+  },
 }
 
 export default {

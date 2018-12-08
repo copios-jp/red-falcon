@@ -69,7 +69,7 @@ class Sensor extends Component {
 
   state = {
     channel: this.props.channel,
-    analytics: analyticsFor({method: 'fox'}),
+    analytics: analyticsFor({ method: 'fox' }),
   }
 }
 

@@ -38,7 +38,7 @@ export class SensorList extends Component {
     const { transmitters, editing } = this.state
     return (
       <GridList cellHeight={'auto'} padding={0} className={classes.gridList}>
-        { transmitters.map((transmitter, index) => (
+        {transmitters.map((transmitter, index) => (
           <Sensor
             key={index}
             channel={transmitter.sensor.channel}
@@ -46,10 +46,9 @@ export class SensorList extends Component {
             onClick={this.editSensor}
           />
         ))}
-        { editing &&
-          <Edit sensor={editing} onDone={this.stopEditing} />
-        }
-      </GridList>)
+        {editing && <Edit sensor={editing} onDone={this.stopEditing} />}
+      </GridList>
+    )
   }
 
   state = {

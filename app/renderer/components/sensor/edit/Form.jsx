@@ -9,8 +9,6 @@ import {
   Grid,
   OutlinedInput,
   InputLabel,
-  DialogContent,
-  DialogTitle,
   TextField,
   InputAdornment,
 } from '@material-ui/core'
@@ -94,53 +92,43 @@ class Form extends Component {
     const { classes } = this.props
     return (
       <div>
-        <DialogTitle>利用者情報</DialogTitle>
-        <DialogContent>
-          <Grid container spacing={24} justify="space-between">
-            <Grid item xs>
-              {this.textField(this.handleNameChange, '様', '名前', { value: name ? name : '' })}
-            </Grid>
-            <Grid item xs>
-              {this.textField(this.handleAgeChange, '才', '年齢', { value: age ? age : '' })}
-            </Grid>
+        <Grid container spacing={24} justify="space-between">
+          <Grid item xs>
+            {this.textField(this.handleNameChange, '様', '名前', { value: name ? name : '' })}
+          </Grid>
+          <Grid item xs>
+            {this.textField(this.handleAgeChange, '才', '年齢', { value: age ? age : '' })}
+          </Grid>
 
-            <Grid item xs>
-              {this.textField(this.handleWeightChange, 'Kg', '体重', {
-                value: weight ? weight : '',
-              })}
-            </Grid>
+          <Grid item xs>
+            {this.textField(this.handleWeightChange, 'Kg', '体重', {
+              value: weight ? weight : '',
+            })}
           </Grid>
-          <Grid container spacing={24}>
-            <Grid item xs>
-              <FormControl variant="outlined" className={classes.editTextField}>
-                <InputLabel htmlFor="method">計算式</InputLabel>
-                <Select
-                  value={method}
-                  onChange={this.handleMethodChange}
-                  input={
-                    <OutlinedInput
-                      labelWidth={45}
-                      name="method"
-                      notched={true}
-                      id="method"
-                    />
-                  }>
-                  {Object.keys(calculators).map((key) => {
-                    return (
-                      <MenuItem key={key} value={key}>
-                        {calculators[key].label}
-                      </MenuItem>
-                    )
-                  })}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs>
-              {this.textField(this.handleMaxChange, 'BPM', '最大心拍数', { value: max ? max : '' })}
-            </Grid>
+        </Grid>
+        <Grid container spacing={24}>
+          <Grid item xs>
+            <FormControl variant="outlined" className={classes.editTextField}>
+              <InputLabel htmlFor="method">計算式</InputLabel>
+              <Select
+                value={method}
+                onChange={this.handleMethodChange}
+                input={<OutlinedInput labelWidth={45} name="method" notched={true} id="method" />}>
+                {Object.keys(calculators).map((key) => {
+                  return (
+                    <MenuItem key={key} value={key}>
+                      {calculators[key].label}
+                    </MenuItem>
+                  )
+                })}
+              </Select>
+            </FormControl>
           </Grid>
-          <Coefficients coefficients={this.state.coefficients} max={this.state.max} />
-        </DialogContent>
+          <Grid item xs>
+            {this.textField(this.handleMaxChange, 'BPM', '最大心拍数', { value: max ? max : '' })}
+          </Grid>
+        </Grid>
+        <Coefficients coefficients={this.state.coefficients} max={this.state.max} />
       </div>
     )
   }
