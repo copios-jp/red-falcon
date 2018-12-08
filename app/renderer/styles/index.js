@@ -103,35 +103,39 @@ export default (theme) => ({
     minWidth: '25vw',
   },
 
-  rate_rest: {
-    backgroundColor: '#212121',
+  rate_0: {
+    backgroundColor: theme.palette.background.paper,
   },
 
-  rate_recovery: {
-    backgroundColor: '#0D47A1',
-  },
-  rate_aerobic: {
-    backgroundColor: '#1B5E20',
-  },
-  rate_anaerobic: {
-    backgroundColor: '#E65100',
-  },
-  rate_max: {
-    backgroundColor: '#B71C1C',
+  rate_1: {
+    backgroundColor: '#0d47a1',
   },
 
-  editRoot: {
-    display: 'flex',
-    flexWrap: 'wrap',
+  rate_2: {
+    backgroundColor: '#1b5e20',
+  },
+  rate_3: {
+    backgroundColor: '#f57f17',
+  },
+  rate_4: {
+    backgroundColor: '#e65100',
+  },
+  rate_5: {
+    backgroundColor: '#b71c1c',
+  },
+
+  editDialog: {
+    width: '100%',
+    height: '100%',
   },
 
   editTextField: {
-    flexBasis: 200,
-    margin: theme.spacing.unit,
+    margin: theme.spacing.unit * 2,
   },
+
   coefficients: {
     color: '#fff',
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing.unit,
   },
 
   coefficientsTitle: {
@@ -141,9 +145,7 @@ export default (theme) => ({
   zonePercentageLabel: {
     display: 'inline-block',
     textAlign: 'center',
-    margin: theme.spacing.unit,
     flexGrow: 1,
-    minWidth: theme.typography.fontSize * 4,
   },
 
   zoneRangeLabel: {
@@ -159,7 +161,7 @@ export default (theme) => ({
     padding: theme.spacing.unit,
     textAlign: 'center',
     color: '#fff',
-    height: theme.spacing.unit * 8,
+    height: theme.spacing.unit * 5,
   },
 
   statusBar: {

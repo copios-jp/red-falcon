@@ -6,11 +6,10 @@ import { GridListTile, GridListTileBar, Paper, Typography } from '@material-ui/c
 import classNames from 'classnames'
 
 import ActivityIndicator from './activity_indicator/'
-import { heartZoneFor, percentageOfMax } from '../../services/analytics'
+import { analyticsFor } from '../../services/analytics'
 import bind from '../../helpers/bind'
 
 import styles from '../../styles/'
-import { DEFAULT_ZONE_COEFFICIENTS } from '../../../constants'
 
 class Sensor extends Component {
   componentDidMount() {
@@ -26,9 +25,9 @@ class Sensor extends Component {
   }
 
   onTransmitterData = (event, transmitter, transmitters) => {
-    const update = { transmitter, transmitters }
-    if (transmitter.sensor.channel !== this.state.transmitter.sensor.channel) {
-      delete update.transmitter
+    const update = { transmitters }
+    if (transmitter.sensor.channel === this.state.channel) {
+      update.analytics = { ...this.state.analytics, rate: transmitter.ComputedHeartRate }
     }
     this.setState((state) => {
       return { ...state, ...update }
@@ -41,8 +40,9 @@ class Sensor extends Component {
 
   render() {
     const { classes } = this.props
-    const { transmitter } = this.state
-    const zoneClass = `rate_${this.zoneLabel()}`
+    const { analytics, channel } = this.state
+    const zoneClass = `rate_${analytics.getZone()}`
+
     return (
       <Paper
         onClick={this.onClick}
@@ -53,11 +53,14 @@ class Sensor extends Component {
           classes[this.props.sensorClass],
         )}>
         <GridListTile>
-          <GridListTileBar className={classes.gridTileBar} title={`${this.tileBarTitle()}%`} />
-          <ActivityIndicator transmitter={transmitter} />
-          <Typography className={classes.userName}>{this.state.name}&nbsp;</Typography>
+          <GridListTileBar
+            className={classes.gridTileBar}
+            title={`${analytics.getPercentage()}%`}
+          />
+          <ActivityIndicator channel={channel} />
+          <Typography className={classes.userName}>{analytics.name}&nbsp;</Typography>
           <div className={classNames(classes[this.props.sensorClass], classes[zoneClass])}>
-            {transmitter.ComputedHeartRate}
+            {analytics.rate}
           </div>
         </GridListTile>
       </Paper>
@@ -65,21 +68,8 @@ class Sensor extends Component {
   }
 
   state = {
-    transmitter: this.props.transmitter,
-    channel: this.props.transmitter.sensor.channel,
-    age: 0,
-    zoneCoefficients: [...DEFAULT_ZONE_COEFFICIENTS],
-    name: '',
-  }
-
-  tileBarTitle() {
-    return percentageOfMax(this.state.age, this.state.transmitter.ComputedHeartRate)
-  }
-
-  zoneLabel() {
-    const { transmitter, zoneCoefficients, age } = this.state
-    const { ComputedHeartRate } = transmitter
-    return heartZoneFor(age, zoneCoefficients, ComputedHeartRate)
+    channel: this.props.channel,
+    analytics: analyticsFor({method: 'fox'}),
   }
 }
 
