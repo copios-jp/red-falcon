@@ -1,10 +1,5 @@
 import bind from './bind'
 import { ipcRenderer } from 'electron'
-jest.mock('electron', () => {
-  return {
-    ipcRenderer: mockApiMember(),
-  }
-})
 
 describe('bind helper', () => {
   const receiver = {

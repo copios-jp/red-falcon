@@ -24,6 +24,8 @@ export const powerSaveBlocker = {
   },
 }
 
+export const ipcRenderer = mockApiMember()
+
 export const app = {
   fart: 'face',
 }
