@@ -16,17 +16,14 @@ export default function(action) {
     })
   })
 }
+const handler = (name) =>
+  function(event, item, items) {
+    this.setState((state) => {
+      return { ...state, [name]: item, [`${name}s`]: items }
+    })
+  }
 
 const handlers = {
-  onReceiver(event, receiver, receivers) {
-    this.setState((state) => {
-      return { ...state, receiver, receivers }
-    })
-  },
-
-  onTransmitter(event, transmitter, transmitters) {
-    this.setState((state) => {
-      return { ...state, transmitter, transmitters }
-    })
-  },
+  onReceiver: handler('receiver'),
+  onTransmitter: handler('transmitter'),
 }
