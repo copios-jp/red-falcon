@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { Component } from 'react'
 import { methods, MANUAL } from '../../../../services/analytics/MaxHeartRateCalculators'
+import {methods as sexes } from '../../../../services/analytics/CalorieBurnPerHourCalculators'
+
 import { getMaxHeartRate } from '../../../../services/analytics/'
 import { MenuItem, Grid, TextField, InputAdornment } from '@material-ui/core'
 import Coefficients from './Coefficients'
@@ -29,17 +31,32 @@ class Form extends Component {
     })
   }
 
+  sexOptions() {
+    return Object.keys(sexes).map((key) => {
+      const label = sexes[key].label
+      return (
+        <MenuItem key={key} value={key}>
+          {label}
+        </MenuItem>
+      )
+    })
+  }
+
   render() {
-    const { age, weight, name, method, coefficients } = this.props.data
+    const { age, weight, name, method, coefficients, sex } = this.props.data
     const max = getMaxHeartRate(this.props.data)
     const disableMax = method !== MANUAL
     return (
       <Grid container spacing={24}>
         <Grid item xs>
           {this.textField('name', '様', '名前', name)}
+          {this.textField('sex', '性', '性別', sex, {
+            select: true,
+            children: this.sexOptions(),
+          })}
           {this.textField('age', '才', '年齢', age)}
           {this.textField('weight', 'Kg', '体重', weight)}
-          {this.textField('method', 'BPM', '最大心拍数計算式', method, {
+          {this.textField('method', '', '最大心拍数計算式', method, {
             select: true,
             children: this.methodOptions(),
           })}
