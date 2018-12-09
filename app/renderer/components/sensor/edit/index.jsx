@@ -7,20 +7,6 @@ import Form from './Form'
 import styles from '../../../styles/'
 
 class EditSensor extends Component {
-  state = {
-    ...this.props.sensor.state,
-  }
-
-  oldState = { ...this.props.sensor.state }
-
-  onCancel = () => {
-    this.props.onDone(this.oldState)
-  }
-
-  onSave = () => {
-    this.props.onDone({ ...this.state })
-  }
-
   handleChange = (value) => {
     this.setState({ ...value })
   }
@@ -42,6 +28,20 @@ class EditSensor extends Component {
         </DialogActions>
       </Dialog>
     )
+  }
+
+  oldState = { ...this.props.sensor.state }
+
+  onCancel = () => {
+    this.props.onDone(this.oldState)
+  }
+
+  onSave = () => {
+    this.props.onDone({ ...this.state })
+  }
+
+  state = {
+    ...this.props.sensor.state,
   }
 }
 

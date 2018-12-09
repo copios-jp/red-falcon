@@ -6,7 +6,7 @@ import classNames from 'classnames'
 
 import ActivityIndicator from './activity_indicator/'
 
-import { getZone, getPercentageOfMax, FOX } from '../../services/analytics/'
+import { getZone, getPercentageOfMax, FOX } from '../../../services/analytics/'
 
 import bind from '../../helpers/bind'
 
