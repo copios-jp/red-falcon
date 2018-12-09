@@ -21,7 +21,11 @@ export class SensorList extends Component {
     onTransmitter: ['transmitter-added', 'transmitter-removed'],
   }
 
-  stopEditing = () => {
+  stopEditing = (data) => {
+    this.state.editing.setState((state) => {
+      return { ...state, ...data }
+    })
+
     this.setState((state) => {
       return { ...state, editing: undefined }
     })

@@ -1,135 +1,73 @@
 import * as React from 'react'
 import { Component } from 'react'
-import calculators from '../../../services/maxHeartRateCalculations'
-
-import {
-  Select,
-  MenuItem,
-  FormControl,
-  Grid,
-  OutlinedInput,
-  InputLabel,
-  TextField,
-  InputAdornment,
-} from '@material-ui/core'
+import { methods, MANUAL } from '../../../services/analytics/MaxHeartRateCalculators'
+import { getMaxHeartRate } from '../../../services/analytics/'
+import { MenuItem, Grid, TextField, InputAdornment } from '@material-ui/core'
 import Coefficients from './Coefficients'
 import { withStyles } from '@material-ui/core/styles'
 import styles from '../../../styles/'
 
 class Form extends Component {
-  state = {
-    ...this.props.sensor.state.analytics,
-    value: 0,
+  handleFieldChange = (name) => (event) => {
+    const data = { ...this.props.data }
+    const value = event.target.value
+    if (name === 'method') {
+      data.max = getMaxHeartRate(data)
+    }
+    data[name] = value
+    this.props.handleChange(data)
   }
 
-  propagateStateChange = (update) => {
-    this.setState((state) => {
-      const nextState = { ...state, ...update }
-      this.props.sensor.setState((state) => {
-        return { ...state, analytics: { ...nextState } }
-      })
-      return nextState
+  methodOptions() {
+    return Object.keys(methods).map((key) => {
+      const label = methods[key].label
+      return (
+        <MenuItem key={key} value={key}>
+          {label}
+        </MenuItem>
+      )
     })
   }
 
-  handleAgeChange = (event) => {
-    const age = parseInt(event.target.value) || ''
-    const max = this.state.at(age) || this.state.max
-    this.propagateStateChange({ age, max })
+  render() {
+    const { age, weight, name, method, coefficients } = this.props.data
+    const max = getMaxHeartRate(this.props.data)
+    const disableMax = method !== MANUAL
+    return (
+      <Grid container spacing={24}>
+        <Grid item xs>
+          {this.textField('name', '様', '名前', name)}
+          {this.textField('age', '才', '年齢', age)}
+          {this.textField('weight', 'Kg', '体重', weight)}
+          {this.textField('method', 'BPM', '最大心拍数計算式', method, {
+            select: true,
+            children: this.methodOptions(),
+          })}
+          {this.textField('max', 'BPM', '最大心拍数', max, { disabled: disableMax })}
+        </Grid>
+        <Grid item xs>
+          <Coefficients coefficients={coefficients} max={max} />
+        </Grid>
+      </Grid>
+    )
   }
 
-  handleWeightChange = (event) => {
-    const weight = parseInt(event.target.value) || ''
-    this.propagateStateChange({ weight })
-  }
-
-  handleMaxChange = (event) => {
-    const max = parseInt(event.target.value) || ''
-    this.propagateStateChange({ max })
-    this.state.setMethod('manual')
-  }
-
-  handleNameChange = (event) => {
-    const name = event.target.value || ''
-    this.propagateStateChange({ name })
-  }
-
-  handleMethodChange = (event) => {
-    const method = event.target.value
-    this.state.setMethod(method)
-    const max = this.state.at(this.state.age) || this.state.max
-    this.propagateStateChange({ method, max })
-  }
-
-  textField(handler, adornment, label, props) {
+  textField(name, adornment, label, value, props) {
     const { classes } = this.props
     return (
       <TextField
-        onChange={handler}
+        name={name}
+        fullWidth={true}
+        onChange={this.handleFieldChange(name)}
         className={classes.editTextField}
         variant="outlined"
         label={label}
-        InputLabelProps={{ shrink: true }}
+        value={value}
         InputProps={{
           endAdornment: <InputAdornment position="start">{adornment}</InputAdornment>,
         }}
         {...props}
       />
-    )
-  }
-
-  handleChange = (event, value) => {
-    this.setState({ value })
-  }
-
-  //
-  //  Some kind of select box { Object.keys(calculators).forEach((calculator) => (
-  //  <Option/>
-  //  )
-
-  render() {
-    const { age, weight, name, max, method } = this.state
-    const { classes } = this.props
-    return (
-      <div>
-        <Grid container spacing={24} justify="space-between">
-          <Grid item xs>
-            {this.textField(this.handleNameChange, '様', '名前', { value: name ? name : '' })}
-          </Grid>
-          <Grid item xs>
-            {this.textField(this.handleAgeChange, '才', '年齢', { value: age ? age : '' })}
-          </Grid>
-
-          <Grid item xs>
-            {this.textField(this.handleWeightChange, 'Kg', '体重', {
-              value: weight ? weight : '',
-            })}
-          </Grid>
-        </Grid>
-        <Grid container spacing={24}>
-          <Grid item xs>
-            <FormControl variant="outlined" className={classes.editTextField}>
-              <InputLabel htmlFor="method">計算式</InputLabel>
-              <Select
-                value={method}
-                onChange={this.handleMethodChange}
-                input={<OutlinedInput labelWidth={45} name="method" notched={true} id="method" />}>
-                {Object.keys(calculators).map((key) => {
-                  return (
-                    <MenuItem key={key} value={key}>
-                      {calculators[key].label}
-                    </MenuItem>
-                  )
-                })}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs>
-            {this.textField(this.handleMaxChange, 'BPM', '最大心拍数', { value: max ? max : '' })}
-          </Grid>
-        </Grid>
-        <Coefficients coefficients={this.state.coefficients} max={this.state.max} />
-      </div>
     )
   }
 }

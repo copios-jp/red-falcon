@@ -94,7 +94,7 @@ class Coefficients extends Component {
     const { classes } = this.props
     const ranges = this.ranges()
     return (
-      <div className={classes.coefficients}>
+      <div className={(classes.coefficients, classes.editTextField)}>
         {coefficients
           .slice(1)
           .map((coef, index) => this.rangeBand(coef, ranges[index + 1], index + 1))}

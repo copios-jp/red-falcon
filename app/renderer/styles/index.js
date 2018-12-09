@@ -124,13 +124,8 @@ export default (theme) => ({
     backgroundColor: '#b71c1c',
   },
 
-  editDialog: {
-    width: '100%',
-    height: '100%',
-  },
-
   editTextField: {
-    margin: theme.spacing.unit * 2,
+    marginTop: theme.spacing.unit * 2,
   },
 
   coefficients: {
@@ -161,7 +156,7 @@ export default (theme) => ({
     padding: theme.spacing.unit,
     textAlign: 'center',
     color: '#fff',
-    height: theme.spacing.unit * 5,
+    height: theme.spacing.unit * 8,
   },
 
   statusBar: {

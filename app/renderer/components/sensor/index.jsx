@@ -6,10 +6,20 @@ import { GridListTile, GridListTileBar, Paper, Typography } from '@material-ui/c
 import classNames from 'classnames'
 
 import ActivityIndicator from './activity_indicator/'
-import { analyticsFor } from '../../services/analytics'
+
+import { getZone, getPercentageOfMax, FOX } from '../../services/analytics/'
+
 import bind from '../../helpers/bind'
 
 import styles from '../../styles/'
+
+const DEFAULT_ZONE_COEFFICIENTS = [0, 0.5, 0.6, 0.7, 0.8, 0.9]
+const DEFAULT_AGE = 35
+const DEFAULT_WEIGHT = 70
+const DEFAULT_RATE = 60
+
+export const MALE = 'male'
+export const FEMALE = 'female'
 
 class Sensor extends Component {
   componentDidMount() {
@@ -27,7 +37,7 @@ class Sensor extends Component {
   onTransmitterData = (event, transmitter, transmitters) => {
     const update = { transmitters }
     if (transmitter.sensor.channel === this.state.channel) {
-      update.analytics = { ...this.state.analytics, rate: transmitter.ComputedHeartRate }
+      update.rate = transmitter.ComputedHeartRate
     }
     this.setState((state) => {
       return { ...state, ...update }
@@ -40,9 +50,8 @@ class Sensor extends Component {
 
   render() {
     const { classes } = this.props
-    const { analytics, channel } = this.state
-    const zoneClass = `rate_${analytics.getZone()}`
-
+    const { channel, name, rate } = this.state
+    const zoneClass = `rate_${getZone(this.state)}`
     return (
       <Paper
         onClick={this.onClick}
@@ -55,12 +64,12 @@ class Sensor extends Component {
         <GridListTile>
           <GridListTileBar
             className={classes.gridTileBar}
-            title={`${analytics.getPercentage()}%`}
+            title={`${getPercentageOfMax(this.state)}%`}
           />
           <ActivityIndicator channel={channel} />
-          <Typography className={classes.userName}>{analytics.name}&nbsp;</Typography>
+          <Typography className={classes.userName}>{name}&nbsp;</Typography>
           <div className={classNames(classes[this.props.sensorClass], classes[zoneClass])}>
-            {analytics.rate}
+            {rate}
           </div>
         </GridListTile>
       </Paper>
@@ -69,7 +78,13 @@ class Sensor extends Component {
 
   state = {
     channel: this.props.channel,
-    analytics: analyticsFor({ method: 'fox' }),
+    name: '',
+    method: FOX,
+    sex: MALE,
+    coefficients: [].concat(DEFAULT_ZONE_COEFFICIENTS),
+    age: DEFAULT_AGE,
+    weight: DEFAULT_WEIGHT,
+    rate: DEFAULT_RATE,
   }
 }
 
