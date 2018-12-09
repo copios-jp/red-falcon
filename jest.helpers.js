@@ -41,6 +41,7 @@ const helpers = {
       deactivate: jest.fn(),
       remove: jest.fn(),
       on: jest.fn(helpers.onImplementation(thisBus)),
+      off: jest.fn(helpers.onImplementation(thisBus)),
       once: jest.fn(helpers.onImplementation(thisBus)),
       emit: jest.fn(helpers.emitImplementation(thisBus)),
       removeAllListeners: jest.fn(helpers.removeAllListenersImplementation(thisBus)),
