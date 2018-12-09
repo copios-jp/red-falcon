@@ -47,7 +47,8 @@ export default (theme) => ({
 
   gridListItem: {
     margin: theme.spacing.unit,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: 'pink',
+    // backgroundColor: theme.palette.background.paper,
   },
 
   dataIndicator: {
@@ -55,6 +56,11 @@ export default (theme) => ({
     position: 'absolute',
     margin: theme.spacing.unit * 2 + 2,
     left: 0,
+  },
+
+  sensorCard: {
+    paddingBottom: theme.spacing.unit * 6,
+    backgroundColor: 'pink'
   },
 
   sensor: {
@@ -104,7 +110,7 @@ export default (theme) => ({
   },
 
   rate_0: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: '#000000'
   },
 
   rate_1: {
@@ -156,7 +162,7 @@ export default (theme) => ({
     padding: theme.spacing.unit,
     textAlign: 'center',
     color: '#fff',
-    height: theme.spacing.unit * 8,
+    height: theme.spacing.unit * 7,
   },
 
   statusBar: {
