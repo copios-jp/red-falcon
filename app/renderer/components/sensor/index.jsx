@@ -1,4 +1,3 @@
-// import * as PropTypes from 'prop-types'
 import * as React from 'react'
 import { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles'
