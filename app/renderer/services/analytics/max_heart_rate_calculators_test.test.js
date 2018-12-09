@@ -26,6 +26,11 @@ describe('MaxHeartRateCalculators', () => {
     })
   })
 })
+describe('invalid data', () => {
+  it('returns undefined if the calculation results in NaN', () => {
+    expect(methods[FOX].using({ age: undefined })).toEqual(undefined)
+  })
+})
 
 describe('forMethod', () => {
   Object.keys(methods).forEach((methodName) => {

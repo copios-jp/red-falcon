@@ -3,11 +3,13 @@ import { ipcRenderer } from 'electron'
 export default function(action) {
   Object.keys(this.mainEvents).forEach((handler) => {
     this.mainEvents[handler].forEach((event) => {
-      if (this[handler] === undefined) {
-        this[handler] = handlers[handler].bind(this)
-      }
-      const method = this[handler]
-      if (method === undefined) {
+      let method
+      try {
+        if (this[handler] === undefined) {
+          this[handler] = handlers[handler].bind(this)
+        }
+        method = this[handler]
+      } catch (e) {
         throw `helpers#bind handler not defined', ${event}, ${handler}`
       }
       ipcRenderer[action](event, method)

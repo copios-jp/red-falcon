@@ -1,15 +1,55 @@
-import { getMaxHeartRate, getPercentageOfMax, getZone } from './'
-
+import { getMaxHeartRate, getPercentageOfMax, getZone, getCalories, snapshot } from './'
 import MaxHeartRateCalculators from './MaxHeartRateCalculators'
 import { methods, NES, FOX } from './MaxHeartRateCalculators'
+
+import lolex from 'lolex'
+
 const NES_MAX = 196
 const AGE = 23
+const RATE = 123
+const WEIGHT = 65
+const COEFFICIENTS = [0, 0.5, 0.6, 0.7, 0.8, 0.9]
+
 describe('Analytics', () => {
   describe('getCalories', () => {
-    /* TODO */
+    const sensor = {
+      age: AGE,
+      rate: RATE,
+      weight: WEIGHT,
+    }
+    it('gets calories', () => {
+      expect(getCalories(sensor)).toEqual(304)
+    })
   })
+
   describe('snapshot', () => {
-    /* TODO */
+    const sensor = {
+      coefficients: [...COEFFICIENTS],
+      age: AGE,
+      rate: RATE,
+      weight: WEIGHT,
+    }
+    let clock
+    beforeEach(() => {
+      clock = lolex.install()
+    })
+    afterEach(() => {
+      clock = clock.uninstall()
+    })
+
+    it('gets a snapshot', () => {
+      expect(snapshot(sensor)).toEqual({
+        age: 23,
+        calories: 304,
+        coefficients: [0, 0.5, 0.6, 0.7, 0.8, 0.9],
+        created: new Date().toISOString(),
+        max: 197,
+        percent: 62,
+        rate: 123,
+        weight: 65,
+        zone: 2,
+      })
+    })
   })
 
   describe('getMaxHeartRate', () => {
@@ -66,7 +106,7 @@ describe('Analytics', () => {
 
   describe('getZone', () => {
     const sensor = {
-      coefficients: [0, 0.5, 0.6, 0.7, 0.8, 0.9],
+      coefficients: [...COEFFICIENTS],
       age: AGE,
       rate: NES_MAX * 0.4,
       method: NES,

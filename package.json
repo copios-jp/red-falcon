@@ -50,6 +50,7 @@
     "jest": "^23.6.0",
     "jsdom": "13.0.0",
     "jsdom-global": "3.0.2",
+    "lolex": "^3.0.0",
     "npm-run-all": "^4.0.1",
     "prettier": "^1.13.7",
     "rimraf": "^2.5.4",

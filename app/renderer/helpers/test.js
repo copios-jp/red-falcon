@@ -13,6 +13,9 @@ describe('bind helper', () => {
     },
 
     onEvent: jest.fn(),
+    setState: jest.fn((callback) => {
+      callback({})
+    }),
   }
 
   it('binds configured ipcRenderer events to handlers', () => {
@@ -28,5 +31,33 @@ describe('bind helper', () => {
     bind.call(receiver, 'off')
     expect(ipcRenderer.off).toBeCalledWith('some-event', receiver.onEvent)
     expect(ipcRenderer.off).toBeCalledWith('some-other-event', receiver.onEvent)
+  })
+
+  it('provisions onReceiver for free!', () => {
+    receiver.mainEvents.onReceiver = ['receiver-event']
+    bind.call(receiver, 'on')
+    ipcRenderer.emit('receiver-event', receiver, [receiver])
+    ipcRenderer.mockRestore()
+    expect(receiver.setState).toBeCalled()
+
+    receiver.setState.mockClear()
+  })
+
+  it('provisions onTransmitter for free!', () => {
+    const transmitter = {}
+    receiver.mainEvents.onTransmitter = ['transmitter-event']
+    bind.call(receiver, 'on')
+    ipcRenderer.emit('transmitter-event', transmitter, [transmitter])
+    ipcRenderer.mockRestore()
+    expect(receiver.setState).toBeCalled()
+
+    receiver.setState.mockClear()
+  })
+
+  it('errors on unknown handler', () => {
+    receiver.mainEvents.blackHole = ['oops-need-to-define-that-mate']
+    expect(() => {
+      bind.call(receiver, 'on')
+    }).toThrow()
   })
 })
