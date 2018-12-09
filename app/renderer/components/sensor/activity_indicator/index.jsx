@@ -11,19 +11,13 @@ const StyledBadge = withStyles(badgeStyles)(Badge)
 
 export class ActivityIndicator extends Component {
   blink = (event, transmitter) => {
-    if (transmitter.sensor.channel === this.state.channel) {
-      this.setState((state) => {
-        return { ...state, active: true }
-      })
+    if (transmitter.sensor.channel === this.props.channel) {
+      this.props.handleChange({ active: true })
       this.expire()
     }
   }
 
-  expire = _.debounce(() => {
-    this.setState((state) => {
-      return { ...state, active: false }
-    })
-  }, 1000)
+  expire = _.debounce(() => this.props.handleChange({ active: false }), 1000)
 
   componentDidMount() {
     bind.call(this, 'on')
@@ -39,21 +33,16 @@ export class ActivityIndicator extends Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, active } = this.props
     return (
       <StyledBadge
         className={classes.dataIndicator}
         color="primary"
         badgeContent={' '}
-        invisible={!this.state.active}>
-        <span>{this.state.chanel}</span>
+        invisible={!active}>
+        <span />
       </StyledBadge>
     )
-  }
-
-  state = {
-    active: false,
-    channel: this.props.channel,
   }
 }
 

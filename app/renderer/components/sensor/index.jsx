@@ -5,8 +5,44 @@ import { GridListTile, GridListTileBar, Paper, Typography } from '@material-ui/c
 import classNames from 'classnames'
 
 import ActivityIndicator from './activity_indicator/'
-
+/*
+import { RadialGauge } from 'react-canvas-gauges'
+<RadialGauge
+            renderTo='canvas-id'
+            width={300}
+            height={300}
+            units={`${getPercentageOfMax(this.state)}%`}
+            minValue={0}
+            startAngle={90}
+            ticksAngle={180}
+            valueBox={false}
+            maxValue={100}
+            majorTicks={[ "0", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100" ]}
+            minorTicks={2}
+            strokeTicks={true}
+            highlights={[
+              { "from": 0, "to": 49, "color": "#000000" },
+              { "from": 50, "to": 59, "color": "#0d47a1" },
+              { "from": 60, "to": 69, "color": "#1b5e20" },
+              { "from": 70, "to": 79, "color": "#f57f17" },
+              { "from": 80, "to": 89, "color": "#fe6510" },
+              { "from": 90, "to": 100, "color": "#fb71c1" },
+            ]}
+            colorPlate="transparent"
+            borderShadowWidth={0}
+            borders={false}
+            needleType="arrow"
+            needleWidth={2}
+            needleCircleSize={7}
+            needleCircleOuter={false}
+            needleCircleInner={false}
+            animationDuration={1500}
+            value={getPercentageOfMax(this.state)}
+            animationRule="linear"
+                      ></RadialGauge>
+                      */
 import { getZone, getPercentageOfMax, FOX } from '../../../services/analytics/'
+import { UNKNOWN } from '../../../services/analytics/CalorieBurnPerHourCalculators'
 
 import bind from '../../helpers/bind'
 
@@ -33,23 +69,31 @@ class Sensor extends Component {
     onTransmitterData: ['transmitter-data'],
   }
 
-  onTransmitterData = (event, transmitter, transmitters) => {
-    const update = { transmitters }
-    if (transmitter.sensor.channel === this.state.channel) {
-      update.rate = transmitter.ComputedHeartRate
+  isMyChannel(transmitter) {
+    return transmitter.sensor.channel === this.props.channel
+  }
+
+  onTransmitterData = (event, transmitter) => {
+    if (this.isMyChannel(transmitter) === false) {
+      return
     }
-    this.setState((state) => {
-      return { ...state, ...update }
-    })
+
+    this.handleChange({ rate: transmitter.ComputedHeartRate })
   }
 
   onClick = () => {
     this.props.onClick(this)
   }
 
+  handleChange = (update) => {
+    this.setState((state) => {
+      return { ...state, ...update }
+    })
+  }
+
   render() {
     const { classes } = this.props
-    const { channel, name, rate } = this.state
+    const { channel, name, rate, active } = this.state
     const zoneClass = `rate_${getZone(this.state)}`
     return (
       <Paper
@@ -65,21 +109,24 @@ class Sensor extends Component {
             className={classes.gridTileBar}
             title={`${getPercentageOfMax(this.state)}%`}
           />
-          <ActivityIndicator channel={channel} />
+          <ActivityIndicator channel={channel} active={active} handleChange={this.handleChange} />
           <Typography className={classes.userName}>{name}&nbsp;</Typography>
+          <div  className={classes.sensorCard}>
           <div className={classNames(classes[this.props.sensorClass], classes[zoneClass])}>
             {rate}
           </div>
+        </div>
         </GridListTile>
       </Paper>
     )
   }
 
   state = {
+    active: true,
     channel: this.props.channel,
     name: '',
     method: FOX,
-    sex: MALE,
+    sex: UNKNOWN,
     coefficients: [].concat(DEFAULT_ZONE_COEFFICIENTS),
     age: DEFAULT_AGE,
     weight: DEFAULT_WEIGHT,
