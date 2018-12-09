@@ -96,8 +96,7 @@ class Coefficients extends Component {
     return (
       <div className={(classes.coefficients, classes.editTextField)}>
         {coefficients
-          .slice(1)
-          .map((coef, index) => this.rangeBand(coef, ranges[index + 1], index + 1))}
+          .map((coef, index) => this.rangeBand(coef, ranges[index], index))}
         <Divider />
         {this.rangeBar()}
       </div>
