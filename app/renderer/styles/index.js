@@ -16,12 +16,13 @@ export default (theme) => ({
     backgroundRepeat: 'no-repeat',
   },
   gridList: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-    width: '100%',
+    backgroundImage: 'url("images/icon.png")',
+    backgroundSize: '55%',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundColor: theme.palette.background.paper,
+    margin: 0,
+    flexGrow: 1,
   },
   activateBtn: {
     alignSelf: 'center',
@@ -40,62 +41,68 @@ export default (theme) => ({
   icon: {
     color: 'white',
   },
-  gridTileBar: {
+  gridTileBarDead: {
     background:
       'linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
+    position: 'relative'
   },
 
-  gridListItem: {
+  gridListItemDead: {
     margin: theme.spacing.unit,
     backgroundColor: 'pink',
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
     // backgroundColor: theme.palette.background.paper,
   },
 
   dataIndicator: {
     display: 'inline',
     position: 'absolute',
-    margin: theme.spacing.unit * 2 + 2,
+    marginTop: theme.spacing.unit * 3 - 2,
+    marginLeft: theme.spacing.unit * 3,
     left: 0,
   },
 
-  sensorCard: {
-    paddingBottom: theme.spacing.unit * 6,
-    backgroundColor: 'pink'
+  sensorCardDead: {
+    paddingBottom: '48px',
+    paddingTop: '48px',
+    backgroundColor: 'pink',
+    height: '100%'
   },
-
   sensor: {
     color: 'white',
     textAlign: 'center',
   },
-
+/*
   sensor_1: {
-    fontSize: '40vw',
+    fontSize: '35vw',
     minWidth: '80vw',
   },
 
   sensor_2: {
-    fontSize: '25vw',
+    fontSize: '20vw',
     textAlign: 'center',
     minWidth: '45vw',
   },
 
   sensor_3: {
-    fontSize: '23vw',
+    fontSize: '17vw',
     minWidth: '45vw',
   },
 
   sensor_4: {
-    fontSize: '23vw',
+    fontSize: '17vw',
     minWidth: '45vw',
   },
 
   sensor_5: {
-    fontSize: '17vw',
+    fontSize: '13vw',
     minWidth: '32vw',
   },
 
   sensor_6: {
-    fontSize: '17vw',
+    fontSize: '13vw',
     minWidth: '32vw',
   },
 
@@ -108,9 +115,9 @@ export default (theme) => ({
     fontSize: '13vw',
     minWidth: '25vw',
   },
-
+*/
   rate_0: {
-    backgroundColor: '#000000'
+    backgroundColor: '#000000',
   },
 
   rate_1: {
@@ -168,7 +175,6 @@ export default (theme) => ({
   statusBar: {
     flexDirection: 'row',
     display: 'flex',
-    position: 'fixed',
     bottom: 0,
     width: '100%',
     paddingRight: theme.spacing.unit,

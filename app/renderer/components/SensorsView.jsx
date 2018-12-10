@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { Component } from 'react'
-import { Paper } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import SensorList from './SensorList'
 import TopBar from './top_bar/'
@@ -36,10 +35,8 @@ export class SensorsView extends Component {
     return (
       <div className={classes.wrapper}>
         <TopBar {...this.state} toggle={this.toggleActivation} />
-        <Paper className={classes.content}>
-          <SensorList />
-          <StatusBar {...this.state} />
-        </Paper>
+        <SensorList />
+        <StatusBar {...this.state} />
       </div>
     )
   }

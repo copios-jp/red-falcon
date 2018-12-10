@@ -96,31 +96,34 @@ class Sensor extends Component {
     const { channel, name, rate, active } = this.state
     const zoneClass = `rate_${getZone(this.state)}`
     return (
-      <Paper
+      <GridListTile
+        cols={this.props.grid}
+        rows={this.props.grid}
         onClick={this.onClick}
-        elevation={4}
         className={classNames(
           classes.gridListItem,
           classes.sensor,
           classes[this.props.sensorClass],
         )}>
-        <GridListTile>
-          <GridListTileBar
-            className={classes.gridTileBar}
-            title={`${getPercentageOfMax(this.state)}%`}
-          />
-          <ActivityIndicator channel={channel} active={active} handleChange={this.handleChange} />
-          <Typography className={classes.userName}>{name}&nbsp;</Typography>
-          <div  className={classes.sensorCard}>
-          <div className={classNames(classes[this.props.sensorClass], classes[zoneClass])}>
+        <ActivityIndicator channel={channel} active={active} handleChange={this.handleChange} />
+        <GridListTileBar
+          className={classes.userName}
+          title={name}
+          style={{top:0, position: 'relative'}}
+        />
+        <div className={classNames(classes[this.props.sensorClass], classes[zoneClass])}>
             {rate}
-          </div>
         </div>
-        </GridListTile>
-      </Paper>
+        <GridListTileBar
+          className={classes.gridTileBar}
+          style={{bottom:0, position: 'relative'}}
+          title={`${getPercentageOfMax(this.state)}%`}
+        />
+    </GridListTile>
     )
   }
 
+  // <Typography className={classes.userName}>{name}&nbsp;</Typography>
   state = {
     active: true,
     channel: this.props.channel,

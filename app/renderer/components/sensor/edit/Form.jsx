@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Component } from 'react'
 import { methods, MANUAL } from '../../../../services/analytics/MaxHeartRateCalculators'
-import {methods as sexes } from '../../../../services/analytics/CalorieBurnPerHourCalculators'
+import { methods as sexes } from '../../../../services/analytics/CalorieBurnPerHourCalculators'
 
 import { getMaxHeartRate } from '../../../../services/analytics/'
 import { MenuItem, Grid, TextField, InputAdornment } from '@material-ui/core'

@@ -18,21 +18,28 @@ export const UNKNOWN = 'unknown'
 
 function calculator(LABEL, INTERCEPT, RATE_COEF, WEIGHT_COEF, AGE_COEF) {
   return {
-    label:LABEL,
+    label: LABEL,
     using(props) {
       const { rate, weight, age } = props
-      if(rate < getMaxHeartRate(props) * 0.64) {
+      if (rate < getMaxHeartRate(props) * 0.64) {
         return 0
       }
       return Math.round(
-        ((INTERCEPT + RATE_COEF * rate - WEIGHT_COEF * weight + AGE_COEF * age) / JEWEL_TO_KCAL) * HOUR,
+        ((INTERCEPT + RATE_COEF * rate - WEIGHT_COEF * weight + AGE_COEF * age) / JEWEL_TO_KCAL) *
+          HOUR,
       )
     },
   }
 }
 export const methods = {
   [MALE]: calculator('男', MALE_INTERCEPT, MALE_RATE_COEF, MALE_WEIGHT_COEF, MALE_AGE_COEF),
-  [FEMALE]: calculator('女', FEMALE_INTERCEPT, FEMALE_RATE_COEF, FEMALE_WEIGHT_COEF, FEMALE_AGE_COEF),
+  [FEMALE]: calculator(
+    '女',
+    FEMALE_INTERCEPT,
+    FEMALE_RATE_COEF,
+    FEMALE_WEIGHT_COEF,
+    FEMALE_AGE_COEF,
+  ),
   [UNKNOWN]: {
     label: '-',
     using(props) {

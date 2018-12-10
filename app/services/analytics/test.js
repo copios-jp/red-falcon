@@ -6,7 +6,7 @@ import lolex from 'lolex'
 
 const NES_MAX = 196
 const AGE = 23
-const RATE = 123
+const RATE = 155
 const WEIGHT = 65
 const COEFFICIENTS = [0, 0.5, 0.6, 0.7, 0.8, 0.9]
 
@@ -18,7 +18,7 @@ describe('Analytics', () => {
       weight: WEIGHT,
     }
     it('gets calories', () => {
-      expect(getCalories(sensor)).toEqual(304)
+      expect(getCalories(sensor)).toEqual(551)
     })
   })
 
@@ -40,14 +40,14 @@ describe('Analytics', () => {
     it('gets a snapshot', () => {
       expect(snapshot(sensor)).toEqual({
         age: 23,
-        calories: 304,
+        calories: 551,
         coefficients: [0, 0.5, 0.6, 0.7, 0.8, 0.9],
         created: new Date().toISOString(),
         max: 197,
-        percent: 62,
-        rate: 123,
+        percent: 79,
+        rate: 155,
         weight: 65,
-        zone: 2,
+        zone: 3,
       })
     })
   })

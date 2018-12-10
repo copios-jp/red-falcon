@@ -2,13 +2,13 @@ import CalorieBurnPerHourCalculators from './CalorieBurnPerHourCalculators'
 import { FEMALE, MALE, UNKNOWN, methods } from './CalorieBurnPerHourCalculators'
 
 const test = {
-  [MALE]: 204,
-  [FEMALE]: 403,
-  [UNKNOWN]: 304,
+  [MALE]: 475,
+  [FEMALE]: 595,
+  [UNKNOWN]: 535,
 }
 
 const AGE = 23
-const RATE = 123
+const RATE = 153
 const WEIGHT = 65
 
 const sensor = {

@@ -40,11 +40,31 @@ export class SensorList extends Component {
   render() {
     const { classes } = this.props
     const { transmitters, editing } = this.state
+    const grid = Math.ceil(Math.sqrt(transmitters.length))
     return (
-      <GridList cellHeight={'auto'} padding={0} className={classes.gridList}>
+      <GridList cols={grid} spacing={2} style={{margin:0}} className={classes.gridList}>
         {transmitters.map((transmitter, index) => (
           <Sensor
+            grid={grid}
             key={index}
+            channel={transmitter.sensor.channel}
+            sensorClass={`sensor_${transmitters.length}`}
+            onClick={this.editSensor}
+          />
+        ))}
+        {transmitters.map((transmitter, index) => (
+          <Sensor
+            grid={grid}
+            key={index+10}
+            channel={transmitter.sensor.channel}
+            sensorClass={`sensor_${transmitters.length}`}
+            onClick={this.editSensor}
+          />
+        ))}
+       {transmitters.map((transmitter, index) => (
+          <Sensor
+            key={index+10}
+            grid={grid}
             channel={transmitter.sensor.channel}
             sensorClass={`sensor_${transmitters.length}`}
             onClick={this.editSensor}
