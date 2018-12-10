@@ -1,4 +1,11 @@
 export default (theme) => ({
+  root: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    overflow: 'hidden',
+    backgroundColor: theme.palette.background.paper,
+    flexGrow: 1,
+  },
   wrapper: {
     display: 'flex',
     flexDirection: 'column',
@@ -7,15 +14,9 @@ export default (theme) => ({
   appTitle: {
     flexGrow: 1,
   },
-  content: {
-    flexGrow: 1,
-    display: 'flex',
-    backgroundImage: 'url("images/icon.png")',
-    backgroundSize: '55%',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-  },
-  gridList: {
+  grid: {
+    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+    transform: 'translateZ(0)',
     backgroundImage: 'url("images/icon.png")',
     backgroundSize: '55%',
     backgroundPosition: 'center',
@@ -23,7 +24,11 @@ export default (theme) => ({
     backgroundColor: theme.palette.background.paper,
     margin: 0,
     flexGrow: 1,
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-evenly',
   },
+
   activateBtn: {
     alignSelf: 'center',
     margin: 'auto!important',
@@ -32,90 +37,92 @@ export default (theme) => ({
     fontSize: '20vw',
   },
 
-  userName: {
-    fontSize: theme.typography.fontSize * 1.5,
-    background:
-      'linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
+  sensorCard: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignSelf: 'center',
+    backgroundColor: 'pink',
+  },
+
+  sensorContent: {
+    flexGrow: 1,
+  },
+
+  sensorRate: {
+    fontSize: '30vh',
   },
 
   icon: {
     color: 'white',
   },
-  gridTileBarDead: {
-    background:
-      'linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
-    position: 'relative'
-  },
-
-  gridListItemDead: {
-    margin: theme.spacing.unit,
-    backgroundColor: 'pink',
-    flexGrow: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    // backgroundColor: theme.palette.background.paper,
+  userName: {
+    height: '32px',
+    lineHeight: '32px',
+    fontSize: '26px',
+    textAlign: 'center',
+    color: 'white',
+    backgroundColor: theme.palette.background.paper,
+    // background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
   },
 
   dataIndicator: {
     display: 'inline',
     position: 'absolute',
-    marginTop: theme.spacing.unit * 3 - 2,
-    marginLeft: theme.spacing.unit * 3,
+    marginTop: '20px',
+    marginLeft: '14px',
     left: 0,
   },
 
-  sensorCardDead: {
-    paddingBottom: '48px',
-    paddingTop: '48px',
-    backgroundColor: 'pink',
-    height: '100%'
-  },
   sensor: {
     color: 'white',
     textAlign: 'center',
   },
-/*
-  sensor_1: {
-    fontSize: '35vw',
-    minWidth: '80vw',
+
+  card_1_1: {
+    width: '99%',
+    height: '99%',
   },
 
-  sensor_2: {
-    fontSize: '20vw',
-    textAlign: 'center',
-    minWidth: '45vw',
+  card_1_1_text: {
+    fontSize: '65vw',
   },
 
-  sensor_3: {
-    fontSize: '17vw',
-    minWidth: '45vw',
+  card_1_2: {
+    width: '49%',
+    height: '99%',
   },
 
-  sensor_4: {
-    fontSize: '17vw',
-    minWidth: '45vw',
+  card_1_2_text: {
+    fontSize: '25vh',
   },
 
-  sensor_5: {
-    fontSize: '13vw',
-    minWidth: '32vw',
+  card_2_2: {
+    width: '49%',
+    height: '49%',
   },
 
-  sensor_6: {
-    fontSize: '13vw',
-    minWidth: '32vw',
+  card_2_2_text: {
+    fontSize: '25vh',
   },
 
-  sensor_7: {
-    fontSize: '13vw',
-    minWidth: '25vw',
+  card_2_3: {
+    width: '32%',
+    height: '49%',
   },
 
-  sensor_8: {
-    fontSize: '13vw',
-    minWidth: '25vw',
+  card_2_3_text: {
+    fontSize: '16vh',
   },
-*/
+
+  card_3_3: {
+    width: '32%',
+    height: '32%',
+  },
+
+  card_3_3_text: {
+    fontSize: '8vh',
+  },
+
   rate_0: {
     backgroundColor: '#000000',
   },
@@ -173,12 +180,17 @@ export default (theme) => ({
   },
 
   statusBar: {
+    minHeight: '26px',
     flexDirection: 'row',
     display: 'flex',
     bottom: 0,
     width: '100%',
     paddingRight: theme.spacing.unit,
-    backgroundColor: '#ff8f00',
+    borderTopWidth: '1px',
+    borderTopStyle: 'groove',
+    borderTopColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.background.paper,
+    // boxShadow: 'inset 0 10px 20px 1px black',
   },
 
   copyright: {

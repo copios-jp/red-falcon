@@ -8,7 +8,7 @@ import styles from '../../styles/'
 const TopBar = (props) => {
   const { receivers, toggle, classes } = props
   return (
-    <AppBar position="static" style={{ WebkitAppRegion: 'drag' }}>
+    <AppBar position="static" style={{ WebkitAppRegion: 'drag' }} color="primary">
       <Toolbar variant="dense">
         <Typography variant="h6" className={classes.appTitle} />
         <IconButton aria-label="Menu" onClick={toggle}>

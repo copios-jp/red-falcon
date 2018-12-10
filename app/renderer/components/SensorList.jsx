@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import { GridList } from '@material-ui/core'
 import Edit from './sensor/edit/'
 import Sensor from './sensor/'
 import styles from '../styles/'
@@ -40,38 +39,34 @@ export class SensorList extends Component {
   render() {
     const { classes } = this.props
     const { transmitters, editing } = this.state
-    const grid = Math.ceil(Math.sqrt(transmitters.length))
+
+    const cols = 2 // Math.ceil(Math.sqrt(transmitters.length))
+    const rows = 1 // Math.ceil(transmitters.length / cols)
     return (
-      <GridList cols={grid} spacing={2} style={{margin:0}} className={classes.gridList}>
-        {transmitters.map((transmitter, index) => (
-          <Sensor
-            grid={grid}
-            key={index}
-            channel={transmitter.sensor.channel}
-            sensorClass={`sensor_${transmitters.length}`}
-            onClick={this.editSensor}
-          />
-        ))}
-        {transmitters.map((transmitter, index) => (
-          <Sensor
-            grid={grid}
-            key={index+10}
-            channel={transmitter.sensor.channel}
-            sensorClass={`sensor_${transmitters.length}`}
-            onClick={this.editSensor}
-          />
-        ))}
-       {transmitters.map((transmitter, index) => (
-          <Sensor
-            key={index+10}
-            grid={grid}
-            channel={transmitter.sensor.channel}
-            sensorClass={`sensor_${transmitters.length}`}
-            onClick={this.editSensor}
-          />
-        ))}
-        {editing && <Edit sensor={editing} onDone={this.stopEditing} />}
-      </GridList>
+      <div className={classes.root}>
+        <div className={classes.grid}>
+          {transmitters.map((transmitter, index) => (
+            <Sensor
+              cardClass={`card_${rows}_${cols}`}
+              key={index}
+              channel={transmitter.sensor.channel}
+              sensorClass={`sensor_${transmitters.length}`}
+              onClick={this.editSensor}
+            />
+          ))}
+          {transmitters.map((transmitter, index) => (
+            <Sensor
+              cardClass={`card_${rows}_${cols}`}
+              key={index}
+              channel={transmitter.sensor.channel}
+              sensorClass={`sensor_${transmitters.length}`}
+              onClick={this.editSensor}
+            />
+          ))}
+
+          {editing && <Edit sensor={editing} onDone={this.stopEditing} />}
+        </div>
+      </div>
     )
   }
 

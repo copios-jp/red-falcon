@@ -1,8 +1,7 @@
 import * as React from 'react'
 import { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import { GridListTile, GridListTileBar, Paper, Typography } from '@material-ui/core'
-import classNames from 'classnames'
+import { Card } from '@material-ui/core'
 
 import ActivityIndicator from './activity_indicator/'
 /*
@@ -92,34 +91,36 @@ class Sensor extends Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, cardClass } = this.props
     const { channel, name, rate, active } = this.state
     const zoneClass = `rate_${getZone(this.state)}`
     return (
-      <GridListTile
-        cols={this.props.grid}
-        rows={this.props.grid}
-        onClick={this.onClick}
-        className={classNames(
-          classes.gridListItem,
-          classes.sensor,
-          classes[this.props.sensorClass],
-        )}>
-        <ActivityIndicator channel={channel} active={active} handleChange={this.handleChange} />
-        <GridListTileBar
-          className={classes.userName}
-          title={name}
-          style={{top:0, position: 'relative'}}
-        />
-        <div className={classNames(classes[this.props.sensorClass], classes[zoneClass])}>
-            {rate}
+      <Card
+        elevation={5}
+        square={true}
+        className={[classes.sensorCard, classes[cardClass]].join(' ')}
+        onClick={this.onClick}>
+        <div className={classes.userName} style={{ top: 0, position: 'relative' }}>
+          {name}&nbsp;
+          <ActivityIndicator channel={channel} active={active} handleChange={this.handleChange} />
         </div>
-        <GridListTileBar
-          className={classes.gridTileBar}
-          style={{bottom:0, position: 'relative'}}
-          title={`${getPercentageOfMax(this.state)}%`}
-        />
-    </GridListTile>
+        <svg style={{ flexGrow: 1 }} className={classes[zoneClass]}>
+          <text
+            x="50%"
+            y="50%"
+            dominantBaseline="central"
+            textAnchor="middle"
+            fill="white"
+            className={[classes.sensorRate, classes[`${cardClass}_text`]].join(' ')}>
+            {rate}
+          </text>
+        </svg>
+        <div
+          className={classes.userName}
+          style={{ bottom: 0, textAlign: 'left', paddingLeft: '16px' }}>
+          {`${getPercentageOfMax(this.state)}%`}
+        </div>
+      </Card>
     )
   }
 
