@@ -1,39 +1,39 @@
+import _ from 'underscore'
 import * as React from 'react'
+import { Card } from '@material-ui/core'
 import { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import { Card } from '@material-ui/core'
+
 import Header from './header/'
 import Body from './body/'
 import Footer from './footer/'
+
 import { FOX } from '../../../services/analytics/'
 import { UNKNOWN } from '../../../services/analytics/CalorieBurnPerHourCalculators'
-import _ from 'underscore'
-import bind from '../../helpers/bind'
 
 import styles from '../../styles/'
+import bind from '../../helpers/bind'
 
-const DEFAULT_ZONE_COEFFICIENTS = [0, 0.5, 0.6, 0.7, 0.8, 0.9]
-const DEFAULT_AGE = 35
-const DEFAULT_WEIGHT = 70
-const DEFAULT_RATE = 60
+export const DEFAULT_ZONE_COEFFICIENTS = [0, 0.5, 0.6, 0.7, 0.8, 0.9]
+export const DEFAULT_AGE = 35
+export const DEFAULT_WEIGHT = 70
+export const DEFAULT_RATE = 60
+export const INACTIVE_TIMEOUT = 1000
 
-export const MALE = 'male'
-export const FEMALE = 'female'
-
-class Sensor extends Component {
+export class Sensor extends Component {
   componentDidMount() {
     bind.call(this, 'on')
   }
 
   componentWillUnmount() {
     bind.call(this, 'off')
+    this.expire.cancel()
   }
 
-  expire = _.debounce(() => this.setState((state) => ({ ...state, active: false })), 1000)
-
-  isMyChannel(transmitter) {
-    return transmitter.sensor.channel === this.props.channel
-  }
+  expire = _.debounce(
+    () => this.setState((state) => ({ ...state, active: false })),
+    INACTIVE_TIMEOUT,
+  )
 
   mainEvents = {
     onTransmitterData: ['transmitter-data'],
@@ -44,15 +44,15 @@ class Sensor extends Component {
   }
 
   onTransmitterData = (event, transmitter) => {
-    if (this.isMyChannel(transmitter) === false) {
-      return
+    const {
+      ComputedHeartRate,
+      sensor: { channel },
+    } = transmitter
+
+    if (channel === this.props.channel) {
+      this.setState((state) => ({ ...state, rate: ComputedHeartRate, active: true }))
+      this.expire()
     }
-    this.setState((state) => ({
-      ...state,
-      rate: transmitter.ComputedHeartRate,
-      active: true,
-    }))
-    this.expire()
   }
 
   render() {

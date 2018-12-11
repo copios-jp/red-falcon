@@ -47,6 +47,7 @@ function calculator(LABEL, COEF) {
     },
   }
 }
+
 export const methods = {
   [UNKNOWN]: {
     label: '-',

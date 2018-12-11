@@ -29,10 +29,10 @@ export class StatusBar extends Component {
           &copy; COPIOS
         </Typography>
         <Typography className={classes.bottomBarItem} variant="caption">
-          受信機数:{receivers.length}
+          受信機数: {receivers.length}
         </Typography>
         <Typography className={classes.bottomBarItem} variant="caption">
-          送信機数:{transmitters.length}
+          送信機数: {transmitters.length}
         </Typography>
       </div>
     )

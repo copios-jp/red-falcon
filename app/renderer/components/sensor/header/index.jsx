@@ -8,8 +8,8 @@ export const Header = (props) => {
   const { classes, sensor } = props
   return (
     <div className={classes.cardHeader}>
-      {sensor.name}
-      <ActivityIndicator active={sensor.active} />
+      <ActivityIndicator fontSize="small" active={sensor.active} />
+      <div className={classes.cardName}>{sensor.name}&nbsp;</div>
     </div>
   )
 }

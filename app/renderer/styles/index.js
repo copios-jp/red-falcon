@@ -19,56 +19,69 @@ export default (theme) => ({
 
   root: {
     display: 'flex',
-    justifyContent: 'space-around',
     overflow: 'hidden',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: 'pink',
+
+    // backgroundColor: theme.palette.background.paper,
     flexGrow: 1,
   },
 
+  loaderWrapper: {
+    position: 'absolute',
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  loader: {},
+
   grid: {
-    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-    transform: 'translateZ(0)',
     backgroundImage: 'url("images/icon.png")',
     backgroundSize: '55%',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: 'black',
+    // backgroundColor: theme.palette.background.paper,
     margin: 0,
     flexGrow: 1,
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-evenly',
+    cursor: 'default',
+    '&:empty': {
+      cursor: 'pointer',
+    },
+  },
+
+  cardHeader: {
+    minHeight: theme.spacing.unit * 4,
+    fontSize: 'xx-large',
+    color: theme.palette.text.main,
+    position: 'relative',
+    padding: theme.spacing.unit / 2,
+    paddingLeft: theme.spacing.unit * 2,
+    display: 'flex',
+    alignItems: 'center',
+  },
+
+  activityIndicator: {
+    marginLeft: theme.spacing.unit,
+  },
+
+  cardName: {
+    flexGrow: 1,
+    marginLeft: theme.spacing.unit * 3,
   },
 
   sensorCard: {
     display: 'flex',
     flexDirection: 'column',
     alignSelf: 'center',
-  },
-
-  //  icon: {
-  //    color: 'white',
-  //  },
-  cardHeader: {
-    top: 0,
-    height: '32px',
-    lineHeight: '32px',
-    minHeight: '32px',
-    fontSize: '26px',
-    paddingLeft: theme.spacing.unit * 2,
-    textAlign: 'center',
-    color: 'white',
-    background:
-      'linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
-    position: 'relative',
-  },
-
-  activityIndicator: {
-    display: 'inline',
-    position: 'absolute',
-    marginTop: '20px',
-    marginLeft: '14px',
-    left: 0,
+    borderLeft: `1px outset ${theme.palette.background.paper}`,
+    borderRight: `1px outset ${theme.palette.background.paper}`,
+    paddingRight: '1px',
   },
 
   card_1_1: {
@@ -102,48 +115,43 @@ export default (theme) => ({
   },
 
   rate_0: {
-    backgroundColor: '#000000',
+    backgroundColor: theme.palette.rest,
+    backgroundImage: theme.gradient,
   },
 
   rate_1: {
-    background:
-      'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
-    backgroundColor: '#0d47a1',
+    backgroundColor: theme.palette.recovery,
+    backgroundImage: theme.gradient,
   },
 
   rate_2: {
-    background:
-      'linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
-    backgroundColor: '#1b5e20',
+    backgroundColor: theme.palette.lightAerobic,
+    backgroundImage: theme.gradient,
   },
   rate_3: {
-    backgroundColor: '#f57f17',
-    background:
-      'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
+    backgroundColor: theme.palette.hardAerobic,
+    backgroundImage: theme.gradient,
   },
   rate_4: {
-    backgroundColor: '#e65100',
-
-    background:
-      'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
+    backgroundColor: theme.palette.anaerobic,
+    backgroundImage: theme.gradient,
   },
   rate_5: {
-    backgroundColor: '#b71c1c',
+    backgroundColor: theme.palette.maximum,
+    backgroundImage: theme.gradient,
+  },
 
-    background:
-      'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
+  cardRate: {
+    marginLeft: theme.spacing.unit,
   },
 
   cardFooter: {
     minHeight: theme.spacing.unit * 4,
-    lineHeight: `${theme.spacing.unit * 4}px`,
-    fontSize: '26px',
-    paddingLeft: theme.spacing.unit * 2,
-    color: 'white',
-    background:
-      'linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
-
+    fontSize: 'xx-large',
+    color: theme.palette.text.main,
     position: 'relative',
+    padding: theme.spacing.unit / 2,
+    paddingLeft: theme.spacing.unit * 2,
   },
 
   editTextField: {
@@ -151,7 +159,7 @@ export default (theme) => ({
   },
 
   coefficients: {
-    color: '#fff',
+    color: theme.palette.text.main,
     marginTop: theme.spacing.unit,
   },
 
@@ -177,7 +185,7 @@ export default (theme) => ({
     alignItems: 'center',
     padding: theme.spacing.unit,
     textAlign: 'center',
-    color: '#fff',
+    color: theme.palette.text.main,
     height: theme.spacing.unit * 7,
   },
 
@@ -188,7 +196,7 @@ export default (theme) => ({
     display: 'flex',
     bottom: 0,
     width: '100%',
-    paddingRight: theme.spacing.unit,
+    paddingRight: theme.spacing.unit * 2,
     borderTopWidth: '1px',
     borderTopStyle: 'groove',
     borderTopColor: theme.palette.primary.main,
@@ -200,13 +208,11 @@ export default (theme) => ({
     lineHeight: 'inherit',
     paddingLeft: theme.spacing.unit,
     flexGrow: 1,
+    color: theme.palette.text.main,
   },
 
   bottomBarItem: {
     lineHeight: 'inherit',
     paddingLeft: theme.spacing.unit,
-    '&:last': {
-      paddingRight: theme.spacing.unit,
-    },
   },
 })

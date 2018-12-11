@@ -6,13 +6,13 @@ import { withStyles } from '@material-ui/core/styles'
 import styles from '../../styles/'
 
 const TopBar = (props) => {
-  const { receivers, toggle, classes } = props
+  const { isActive, toggle, classes } = props
   return (
     <AppBar position="static" style={{ WebkitAppRegion: 'drag' }} color="primary">
-      <Toolbar variant="dense">
+      <Toolbar variant="dense" disableGutters={true}>
         <Typography variant="h6" className={classes.appTitle} />
         <IconButton aria-label="Menu" onClick={toggle}>
-          <PowerSettingsNew color={receivers.length ? 'secondary' : 'inherit'} />
+          <PowerSettingsNew color={isActive ? 'action' : 'inherit'} />
         </IconButton>
       </Toolbar>
     </AppBar>
