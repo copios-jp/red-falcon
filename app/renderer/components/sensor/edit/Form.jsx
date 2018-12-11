@@ -20,20 +20,9 @@ class Form extends Component {
     this.props.handleChange(data)
   }
 
-  methodOptions() {
-    return Object.keys(methods).map((key) => {
-      const label = methods[key].label
-      return (
-        <MenuItem key={key} value={key}>
-          {label}
-        </MenuItem>
-      )
-    })
-  }
-
-  sexOptions() {
-    return Object.keys(sexes).map((key) => {
-      const label = sexes[key].label
+  optionsFor(collection) {
+    return Object.keys(collection).map((key) => {
+      const label = collection[key].label
       return (
         <MenuItem key={key} value={key}>
           {label}
@@ -52,13 +41,13 @@ class Form extends Component {
           {this.textField('name', '様', '名前', name)}
           {this.textField('sex', '性', '性別', sex, {
             select: true,
-            children: this.sexOptions(),
+            children: this.optionsFor(sexes),
           })}
           {this.textField('age', '才', '年齢', age)}
           {this.textField('weight', 'Kg', '体重', weight)}
           {this.textField('method', '', '最大心拍数計算式', method, {
             select: true,
-            children: this.methodOptions(),
+            children: this.optionsFor(methods),
           })}
           {this.textField('max', 'BPM', '最大心拍数', max, { disabled: disableMax })}
         </Grid>
