@@ -1,4 +1,22 @@
 export default (theme) => ({
+  appTitle: {
+    flexGrow: 1,
+  },
+
+  activateBtn: {
+    alignSelf: 'center',
+    margin: 'auto!important',
+    width: '22vw!important',
+    height: '22vw!important',
+    fontSize: '20vw',
+  },
+
+  wrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+
   root: {
     display: 'flex',
     justifyContent: 'space-around',
@@ -6,14 +24,7 @@ export default (theme) => ({
     backgroundColor: theme.palette.background.paper,
     flexGrow: 1,
   },
-  wrapper: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-  },
-  appTitle: {
-    flexGrow: 1,
-  },
+
   grid: {
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: 'translateZ(0)',
@@ -29,43 +40,30 @@ export default (theme) => ({
     justifyContent: 'space-evenly',
   },
 
-  activateBtn: {
-    alignSelf: 'center',
-    margin: 'auto!important',
-    width: '22vw!important',
-    height: '22vw!important',
-    fontSize: '20vw',
-  },
-
   sensorCard: {
     display: 'flex',
     flexDirection: 'column',
     alignSelf: 'center',
-    backgroundColor: 'pink',
   },
 
-  sensorContent: {
-    flexGrow: 1,
-  },
-
-  sensorRate: {
-    fontSize: '30vh',
-  },
-
-  icon: {
-    color: 'white',
-  },
-  userName: {
+  //  icon: {
+  //    color: 'white',
+  //  },
+  cardHeader: {
+    top: 0,
     height: '32px',
     lineHeight: '32px',
+    minHeight: '32px',
     fontSize: '26px',
+    paddingLeft: theme.spacing.unit * 2,
     textAlign: 'center',
     color: 'white',
-    backgroundColor: theme.palette.background.paper,
-    // background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
+    background:
+      'linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
+    position: 'relative',
   },
 
-  dataIndicator: {
+  activityIndicator: {
     display: 'inline',
     position: 'absolute',
     marginTop: '20px',
@@ -73,53 +71,33 @@ export default (theme) => ({
     left: 0,
   },
 
-  sensor: {
-    color: 'white',
-    textAlign: 'center',
-  },
-
   card_1_1: {
-    width: '99%',
-    height: '99%',
-  },
-
-  card_1_1_text: {
-    fontSize: '65vw',
+    width: '92%',
+    height: '92%',
+    fontSize: '50vh',
   },
 
   card_1_2: {
-    width: '49%',
-    height: '99%',
-  },
-
-  card_1_2_text: {
-    fontSize: '25vh',
+    width: '42%',
+    height: '92%',
+    fontSize: '20vh',
   },
 
   card_2_2: {
-    width: '49%',
-    height: '49%',
-  },
-
-  card_2_2_text: {
-    fontSize: '25vh',
+    width: '42%',
+    height: '42%',
+    fontSize: '20vh',
   },
 
   card_2_3: {
-    width: '32%',
-    height: '49%',
-  },
-
-  card_2_3_text: {
-    fontSize: '16vh',
+    width: '26%',
+    height: '42%',
+    fontSize: '15vh',
   },
 
   card_3_3: {
-    width: '32%',
-    height: '32%',
-  },
-
-  card_3_3_text: {
+    width: '26%',
+    height: '26%',
     fontSize: '8vh',
   },
 
@@ -128,20 +106,44 @@ export default (theme) => ({
   },
 
   rate_1: {
+    background:
+      'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
     backgroundColor: '#0d47a1',
   },
 
   rate_2: {
+    background:
+      'linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
     backgroundColor: '#1b5e20',
   },
   rate_3: {
     backgroundColor: '#f57f17',
+    background:
+      'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
   },
   rate_4: {
     backgroundColor: '#e65100',
+
+    background:
+      'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
   },
   rate_5: {
     backgroundColor: '#b71c1c',
+
+    background:
+      'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
+  },
+
+  cardFooter: {
+    minHeight: theme.spacing.unit * 4,
+    lineHeight: `${theme.spacing.unit * 4}px`,
+    fontSize: '26px',
+    paddingLeft: theme.spacing.unit * 2,
+    color: 'white',
+    background:
+      'linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)',
+
+    position: 'relative',
   },
 
   editTextField: {
@@ -180,7 +182,8 @@ export default (theme) => ({
   },
 
   statusBar: {
-    minHeight: '26px',
+    minHeight: theme.spacing.unit * 4,
+    lineHeight: `${theme.spacing.unit * 4}px`,
     flexDirection: 'row',
     display: 'flex',
     bottom: 0,
@@ -190,17 +193,17 @@ export default (theme) => ({
     borderTopStyle: 'groove',
     borderTopColor: theme.palette.primary.main,
     backgroundColor: theme.palette.background.paper,
-    // boxShadow: 'inset 0 10px 20px 1px black',
+    boxShadow: 'inset 0 10px 20px 1px black',
   },
 
   copyright: {
-    padding: theme.spacing.unit / 2,
+    lineHeight: 'inherit',
     paddingLeft: theme.spacing.unit,
     flexGrow: 1,
   },
 
   bottomBarItem: {
-    padding: theme.spacing.unit / 2,
+    lineHeight: 'inherit',
     paddingLeft: theme.spacing.unit,
     '&:last': {
       paddingRight: theme.spacing.unit,

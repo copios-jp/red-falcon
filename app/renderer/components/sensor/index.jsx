@@ -2,8 +2,85 @@ import * as React from 'react'
 import { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import { Card } from '@material-ui/core'
+import Header from './header/'
+import Body from './body/'
+import Footer from './footer/'
+import { FOX } from '../../../services/analytics/'
+import { UNKNOWN } from '../../../services/analytics/CalorieBurnPerHourCalculators'
+import _ from 'underscore'
+import bind from '../../helpers/bind'
 
-import ActivityIndicator from './activity_indicator/'
+import styles from '../../styles/'
+
+const DEFAULT_ZONE_COEFFICIENTS = [0, 0.5, 0.6, 0.7, 0.8, 0.9]
+const DEFAULT_AGE = 35
+const DEFAULT_WEIGHT = 70
+const DEFAULT_RATE = 60
+
+export const MALE = 'male'
+export const FEMALE = 'female'
+
+class Sensor extends Component {
+  componentDidMount() {
+    bind.call(this, 'on')
+  }
+
+  componentWillUnmount() {
+    bind.call(this, 'off')
+  }
+
+  expire = _.debounce(() => this.setState((state) => ({ ...state, active: false })), 1000)
+
+  isMyChannel(transmitter) {
+    return transmitter.sensor.channel === this.props.channel
+  }
+
+  mainEvents = {
+    onTransmitterData: ['transmitter-data'],
+  }
+
+  onClick = () => {
+    this.props.onClick(this)
+  }
+
+  onTransmitterData = (event, transmitter) => {
+    if (this.isMyChannel(transmitter) === false) {
+      return
+    }
+    this.setState((state) => ({
+      ...state,
+      rate: transmitter.ComputedHeartRate,
+      active: true,
+    }))
+    this.expire()
+  }
+
+  render() {
+    const { classes, cardClass } = this.props
+    const className = [classes.sensorCard, classes[cardClass]].join(' ')
+    return (
+      <Card elevation={5} square={true} className={className} onClick={this.onClick}>
+        <Header sensor={this.state} />
+        <Body sensor={this.state} />
+        <Footer sensor={this.state} />
+      </Card>
+    )
+  }
+
+  state = {
+    active: true,
+    channel: this.props.channel,
+    name: '',
+    method: FOX,
+    sex: UNKNOWN,
+    coefficients: [].concat(DEFAULT_ZONE_COEFFICIENTS),
+    age: DEFAULT_AGE,
+    weight: DEFAULT_WEIGHT,
+    rate: DEFAULT_RATE,
+  }
+}
+
+export default withStyles(styles)(Sensor)
 /*
 import { RadialGauge } from 'react-canvas-gauges'
 <RadialGauge
@@ -40,102 +117,3 @@ import { RadialGauge } from 'react-canvas-gauges'
             animationRule="linear"
                       ></RadialGauge>
                       */
-import { getZone, getPercentageOfMax, FOX } from '../../../services/analytics/'
-import { UNKNOWN } from '../../../services/analytics/CalorieBurnPerHourCalculators'
-
-import bind from '../../helpers/bind'
-
-import styles from '../../styles/'
-
-const DEFAULT_ZONE_COEFFICIENTS = [0, 0.5, 0.6, 0.7, 0.8, 0.9]
-const DEFAULT_AGE = 35
-const DEFAULT_WEIGHT = 70
-const DEFAULT_RATE = 60
-
-export const MALE = 'male'
-export const FEMALE = 'female'
-
-class Sensor extends Component {
-  componentDidMount() {
-    bind.call(this, 'on')
-  }
-
-  componentWillUnmount() {
-    bind.call(this, 'off')
-  }
-
-  mainEvents = {
-    onTransmitterData: ['transmitter-data'],
-  }
-
-  isMyChannel(transmitter) {
-    return transmitter.sensor.channel === this.props.channel
-  }
-
-  onTransmitterData = (event, transmitter) => {
-    if (this.isMyChannel(transmitter) === false) {
-      return
-    }
-
-    this.handleChange({ rate: transmitter.ComputedHeartRate })
-  }
-
-  onClick = () => {
-    this.props.onClick(this)
-  }
-
-  handleChange = (update) => {
-    this.setState((state) => {
-      return { ...state, ...update }
-    })
-  }
-
-  render() {
-    const { classes, cardClass } = this.props
-    const { channel, name, rate, active } = this.state
-    const zoneClass = `rate_${getZone(this.state)}`
-    return (
-      <Card
-        elevation={5}
-        square={true}
-        className={[classes.sensorCard, classes[cardClass]].join(' ')}
-        onClick={this.onClick}>
-        <div className={classes.userName} style={{ top: 0, position: 'relative' }}>
-          {name}&nbsp;
-          <ActivityIndicator channel={channel} active={active} handleChange={this.handleChange} />
-        </div>
-        <svg style={{ flexGrow: 1 }} className={classes[zoneClass]}>
-          <text
-            x="50%"
-            y="50%"
-            dominantBaseline="central"
-            textAnchor="middle"
-            fill="white"
-            className={[classes.sensorRate, classes[`${cardClass}_text`]].join(' ')}>
-            {rate}
-          </text>
-        </svg>
-        <div
-          className={classes.userName}
-          style={{ bottom: 0, textAlign: 'left', paddingLeft: '16px' }}>
-          {`${getPercentageOfMax(this.state)}%`}
-        </div>
-      </Card>
-    )
-  }
-
-  // <Typography className={classes.userName}>{name}&nbsp;</Typography>
-  state = {
-    active: true,
-    channel: this.props.channel,
-    name: '',
-    method: FOX,
-    sex: UNKNOWN,
-    coefficients: [].concat(DEFAULT_ZONE_COEFFICIENTS),
-    age: DEFAULT_AGE,
-    weight: DEFAULT_WEIGHT,
-    rate: DEFAULT_RATE,
-  }
-}
-
-export default withStyles(styles)(Sensor)

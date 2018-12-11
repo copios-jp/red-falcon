@@ -39,9 +39,8 @@ export class SensorList extends Component {
   render() {
     const { classes } = this.props
     const { transmitters, editing } = this.state
-
-    const cols = 2 // Math.ceil(Math.sqrt(transmitters.length))
-    const rows = 1 // Math.ceil(transmitters.length / cols)
+    const cols = Math.ceil(Math.sqrt(transmitters.length))
+    const rows = Math.ceil(transmitters.length / cols)
     return (
       <div className={classes.root}>
         <div className={classes.grid}>
@@ -54,16 +53,6 @@ export class SensorList extends Component {
               onClick={this.editSensor}
             />
           ))}
-          {transmitters.map((transmitter, index) => (
-            <Sensor
-              cardClass={`card_${rows}_${cols}`}
-              key={index}
-              channel={transmitter.sensor.channel}
-              sensorClass={`sensor_${transmitters.length}`}
-              onClick={this.editSensor}
-            />
-          ))}
-
           {editing && <Edit sensor={editing} onDone={this.stopEditing} />}
         </div>
       </div>

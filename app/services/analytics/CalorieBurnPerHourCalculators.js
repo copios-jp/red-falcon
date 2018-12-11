@@ -16,7 +16,22 @@ export const MALE = 'male'
 export const FEMALE = 'female'
 export const UNKNOWN = 'unknown'
 
-function calculator(LABEL, INTERCEPT, RATE_COEF, WEIGHT_COEF, AGE_COEF) {
+const COEF = {
+  [MALE]: {
+    INTERCEPT: MALE_INTERCEPT,
+    RATE: MALE_RATE_COEF,
+    WEIGHT: MALE_WEIGHT_COEF,
+    AGE: MALE_AGE_COEF,
+  },
+  [FEMALE]: {
+    INTERCEPT: FEMALE_INTERCEPT,
+    RATE: FEMALE_RATE_COEF,
+    WEIGHT: FEMALE_WEIGHT_COEF,
+    AGE: FEMALE_AGE_COEF,
+  },
+}
+
+function calculator(LABEL, COEF) {
   return {
     label: LABEL,
     using(props) {
@@ -25,21 +40,14 @@ function calculator(LABEL, INTERCEPT, RATE_COEF, WEIGHT_COEF, AGE_COEF) {
         return 0
       }
       return Math.round(
-        ((INTERCEPT + RATE_COEF * rate - WEIGHT_COEF * weight + AGE_COEF * age) / JEWEL_TO_KCAL) *
+        ((COEF.INTERCEPT + COEF.RATE * rate - COEF.WEIGHT * weight + COEF.AGE * age) /
+          JEWEL_TO_KCAL) *
           HOUR,
       )
     },
   }
 }
 export const methods = {
-  [MALE]: calculator('男', MALE_INTERCEPT, MALE_RATE_COEF, MALE_WEIGHT_COEF, MALE_AGE_COEF),
-  [FEMALE]: calculator(
-    '女',
-    FEMALE_INTERCEPT,
-    FEMALE_RATE_COEF,
-    FEMALE_WEIGHT_COEF,
-    FEMALE_AGE_COEF,
-  ),
   [UNKNOWN]: {
     label: '-',
     using(props) {
@@ -48,6 +56,8 @@ export const methods = {
       return Math.round((male + female) / 2)
     },
   },
+  [MALE]: calculator('男', COEF[MALE]),
+  [FEMALE]: calculator('女', COEF[FEMALE]),
 }
 
 export default {
