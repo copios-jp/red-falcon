@@ -32,12 +32,9 @@ before_deploy:
   - scripts/keychain.sh
 
 deploy:
-  provider:
-    - script
+  provider: script
   skip_cleanup: true
   on:
-    branches:
-      only:
-        - release
+    branch: release
   script:
      - semantic-release --debug
