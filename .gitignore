@@ -7,3 +7,4 @@ build
 .nyc_output
 cov/
 coverage/
+yarn.lock

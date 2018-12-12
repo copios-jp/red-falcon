@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import TopBar from '../../app/renderer/components/TopBar'
+import TopBar from './'
 
 // comment to create fix release bump
 describe('TopBar', () => {
@@ -15,11 +15,13 @@ describe('TopBar', () => {
   }
 
   beforeEach(() => {
-    props = {}
+    props = {
+      receivers: [],
+    }
     mountedComponent = undefined
   })
 
   it('renders a div', () => {
-    expect(topBar().find('div').length).to.eql(1)
+    expect(topBar().find('div').length).toBe(1)
   })
 })

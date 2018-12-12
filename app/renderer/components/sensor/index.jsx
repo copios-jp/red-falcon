@@ -1,105 +1,119 @@
-// import * as PropTypes from 'prop-types'
+import _ from 'underscore'
 import * as React from 'react'
+import { Card } from '@material-ui/core'
 import { Component } from 'react'
-import Edit from './edit/'
 import { withStyles } from '@material-ui/core/styles'
-import { GridListTile } from '@material-ui/core'
-import { GridListTileBar } from '@material-ui/core'
-import { Paper } from '@material-ui/core'
 
-import classNames from 'classnames'
+import Header from './header/'
+import Body from './body/'
+import Footer from './footer/'
 
-const ages = []
+import { FOX } from '../../../services/analytics/'
+import { UNKNOWN } from '../../../services/analytics/CalorieBurnPerHourCalculators'
+
 import styles from '../../styles/'
-ages[5329145] = 37
-ages[5329182] = 44
+import bind from '../../helpers/bind'
 
-function getZoneFor(sensor) {
-  if (!sensor.age && sensor.SerialNumber) {
-    sensor.age = ages[sensor.SerialNumber]
+export const DEFAULT_ZONE_COEFFICIENTS = [0, 0.5, 0.6, 0.7, 0.8, 0.9]
+export const DEFAULT_AGE = 35
+export const DEFAULT_WEIGHT = 70
+export const DEFAULT_RATE = 60
+export const INACTIVE_TIMEOUT = 1000
+
+export class Sensor extends Component {
+  componentDidMount() {
+    bind.call(this, 'on')
   }
 
-  const rate = sensor.ComputedHeartRate
-  const max = 220 - sensor.age || 44
-
-  let index = 0
-  let zone = 'rest'
-
-  const labels = ['recovery', 'aerobic', 'anaerobic', 'max']
-  const zones = [max * 0.6, max * 0.7, max * 0.8, max * 0.9]
-
-  while (rate > zones[index]) {
-    zone = labels[index]
-    index++
+  componentWillUnmount() {
+    bind.call(this, 'off')
+    this.expire.cancel()
   }
 
-  return zone
-}
+  expire = _.debounce(
+    () => this.setState((state) => ({ ...state, active: false })),
+    INACTIVE_TIMEOUT,
+  )
 
-class Sensor extends Component {
-  constructor(props) {
-    super(props)
-    const { channel } = props
-    this.state = {
-      channel,
-      isEditing: false,
+  mainEvents = {
+    onTransmitterData: ['transmitter-data'],
+  }
+
+  onClick = () => {
+    this.props.onClick(this)
+  }
+
+  onTransmitterData = (event, transmitter) => {
+    const {
+      ComputedHeartRate,
+      sensor: { channel },
+    } = transmitter
+
+    if (channel === this.props.channel) {
+      this.setState((state) => ({ ...state, rate: ComputedHeartRate, active: true }))
+      this.expire()
     }
   }
 
-  componentDidMount() {
-    const sensor = this.state.channel.sensor
-    sensor.on('hbData', this.handleDataUpdate)
-  }
-
-  edit = () => {
-    this.state.channel.sensor.removeAllListeners('hbData')
-    this.setState({ ...this.state, isEditing: true })
-  }
-
-  handleDataUpdate = (data) => {
-    const channel = this.state.channel
-    channel.data = { ...channel.data, ...data }
-    this.setState(this.state)
-  }
-
-  finishEdit = () => {
-    this.setState({ ...this.state, isEditing: false })
-    this.state.channel.sensor.on('hbData', this.handleDataUpdate)
-  }
-
-  channelId() {
-    return this.state.channel.id
-  }
-
-  zoneClass() {
-    const zone = getZoneFor(this.state.channel.data)
-    return `rate_${zone}`
-  }
-
   render() {
-    const { classes, sensorClass } = this.props
-
+    const { classes, cardClass } = this.props
+    const className = [classes.sensorCard, classes[cardClass]].join(' ')
     return (
-      <Paper className={classNames(classes.gridListItem, classes.sensor, classes[sensorClass])}>
-        {this.state.isEditing && (
-          <Edit
-            channel={this.state.channel}
-            onClose={this.finishEdit}
-            isOpen={this.state.isEditing}
-          />
-        )}
-        <GridListTile onClick={this.edit}>
-          <GridListTileBar
-            className={classes.gridTileBar}
-            title={`受信機番号:${this.channelId()}`}
-          />
-          <div className={classNames(classes[sensorClass], classes[this.zoneClass()])}>
-            {this.state.channel.data.ComputedHeartRate}
-          </div>
-        </GridListTile>
-      </Paper>
+      <Card elevation={5} square={true} className={className} onClick={this.onClick}>
+        <Header sensor={this.state} />
+        <Body sensor={this.state} />
+        <Footer sensor={this.state} />
+      </Card>
     )
+  }
+
+  state = {
+    active: true,
+    channel: this.props.channel,
+    name: '',
+    method: FOX,
+    sex: UNKNOWN,
+    coefficients: [].concat(DEFAULT_ZONE_COEFFICIENTS),
+    age: DEFAULT_AGE,
+    weight: DEFAULT_WEIGHT,
+    rate: DEFAULT_RATE,
   }
 }
 
 export default withStyles(styles)(Sensor)
+/*
+import { RadialGauge } from 'react-canvas-gauges'
+<RadialGauge
+            renderTo='canvas-id'
+            width={300}
+            height={300}
+            units={`${getPercentageOfMax(this.state)}%`}
+            minValue={0}
+            startAngle={90}
+            ticksAngle={180}
+            valueBox={false}
+            maxValue={100}
+            majorTicks={[ "0", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100" ]}
+            minorTicks={2}
+            strokeTicks={true}
+            highlights={[
+              { "from": 0, "to": 49, "color": "#000000" },
+              { "from": 50, "to": 59, "color": "#0d47a1" },
+              { "from": 60, "to": 69, "color": "#1b5e20" },
+              { "from": 70, "to": 79, "color": "#f57f17" },
+              { "from": 80, "to": 89, "color": "#fe6510" },
+              { "from": 90, "to": 100, "color": "#fb71c1" },
+            ]}
+            colorPlate="transparent"
+            borderShadowWidth={0}
+            borders={false}
+            needleType="arrow"
+            needleWidth={2}
+            needleCircleSize={7}
+            needleCircleOuter={false}
+            needleCircleInner={false}
+            animationDuration={1500}
+            value={getPercentageOfMax(this.state)}
+            animationRule="linear"
+                      ></RadialGauge>
+                      */

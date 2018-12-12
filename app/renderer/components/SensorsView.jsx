@@ -1,126 +1,68 @@
+import { ipcRenderer } from 'electron'
 import * as React from 'react'
 import { Component } from 'react'
-import { Paper, Typography } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
-
+import { CircularProgress } from '@material-ui/core'
+import TopBar from './top_bar/'
 import SensorList from './SensorList'
-import TopBar from './TopBar'
+import StatusBar from './status_bar/'
 
 import styles from '../styles/'
-
-const usb = window['require']('usb')
-const Ant = window['require']('ant-plus')
-
-const ID_VENDOR = 0x0fcf
-const ID_PRODUCT = 0x1008
-const MAX_LISTENERS = 16 // 8 channels with two reads each
+import bind from '../helpers/bind'
 
 export class SensorsView extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      channels: {},
-    }
-  }
-
-  createChannelFor = (sensor) => {
-    const { channelId } = sensor
-    const channel = {
-      sensor,
-      id: channelId,
-    }
-
-    sensor.once('hbData', (data) => {
-      channel.data = data
-      this.setState(this.state)
-    })
-
-    return channel
-  }
-
-  makeSensors = () => {
-    const state = { ...this.state }
-    state.maxChannels = this.stick.maxChannels
-    for (let id = 0; id < this.stick.maxChannels; id++) {
-      const sensor = new Ant.HeartRateSensor(this.stick)
-      sensor.channelId = id
-      state.channels[id] = this.createChannelFor(sensor)
-      sensor.attach(id, 0)
-    }
-    this.setState(state)
-  }
-
   activate = () => {
-    if (this.isActivated()) {
-      return
-    }
-    const usbDevices = usb.getDeviceList()
+    ipcRenderer.send('deactivate')
+    ipcRenderer.send('activate')
+  }
 
-    usbDevices.forEach((device) => {
-      const { deviceDescriptor } = device
-      const { idVendor, idProduct } = deviceDescriptor
-      if (idVendor === ID_VENDOR && idProduct === ID_PRODUCT) {
-        this.stick = new Ant.GarminStick2()
-        this.stick.setMaxListeners(MAX_LISTENERS)
-        this.stick.once('startup', this.makeSensors)
-        if (!this.stick.open()) {
-          console.log('oh shit')
-          return
-        }
-      }
-    })
+  componentDidMount() {
+    bind.call(this, 'on')
+  }
+
+  componentWillUnmount() {
+    bind.call(this, 'off')
   }
 
   deactivate = () => {
-    Object.values(this.state.channels).forEach(this.remove)
+    ipcRenderer.send('deactivate')
   }
 
-  isActivated = () => {
-    return Object.keys(this.state.channels).length > 0
-  }
-
-  toggleActivation = () => {
-    const action = this.isActivated() ? this.deactivate : this.activate
-    action()
-  }
-
-  remove = (channel) => {
-    const sensor = channel.sensor
-    sensor.detach()
-    sensor.removeAllListeners()
-    delete this.state.channels[channel.id]
-    if (!this.isActivated()) {
-      this.stick.close()
-    }
-    this.setState(this.state)
-  }
-
-  getActiveChannels() {
-    return Object.values(this.state.channels).filter((channel) => channel.data)
-  }
-
-  isFull() {
-    return this.state.maxChannels === this.getActiveChannels().length
+  mainEvents = {
+    updateActive: ['receiver-added', 'receiver-removed'],
   }
 
   render() {
     const { classes } = this.props
-    const channels = this.getActiveChannels()
-    const activated = this.isActivated()
-    const add = this.addFakeSensor ? this.addFakeSensor.bind(this) : () => {}
-
+    const { isActive, isLoading } = this.state
     return (
       <div className={classes.wrapper}>
-        <TopBar activated={activated} toggle={this.toggleActivation} add={add} />
-        <Paper className={classes.content}>
-          <SensorList channels={channels} activated={activated} />
-          <Typography variant="caption" className={classes.copyright}>
-            &copy; COPIOS
-          </Typography>
-        </Paper>
+        {//  For future version - show loader until transmitter received
+        // TODO - extrac this into its own component that shows when
+        // receiver is > 0 and transmitter is  < 1
+        isLoading && (
+          <div className={classes.loaderWrapper}>
+            <CircularProgress size={90} className={classes.loader} />
+          </div>
+        )}
+        <TopBar isActive={isActive} toggle={this.toggleActivation} />
+        <SensorList />
+        <StatusBar />
       </div>
     )
   }
+
+  state = {
+    isActive: false,
+  }
+
+  toggleActivation = () => {
+    const { isActive } = this.state
+    return isActive ? this.deactivate() : this.activate()
+  }
+
+  updateActive = (event, receiver, receivers) =>
+    this.setState((state) => ({ ...state, isActive: receivers.length > 0 }))
 }
 
 export default withStyles(styles)(SensorsView)
