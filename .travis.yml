@@ -34,6 +34,9 @@ before_deploy:
 deploy:
   - provider: script
     skip_cleanup: true
-    branch: release
+    on:
+      branches:
+        only:
+          - release
     script:
       - semantic-release --debug
