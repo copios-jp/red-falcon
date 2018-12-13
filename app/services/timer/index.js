@@ -10,10 +10,6 @@ export default class Timer extends events.EventEmitter {
 
   value = 0
 
-  interval = undefined
-
-  startedAt = undefined
-
   reset = () => {
     this.value = 0
     this.emit('tick', this.value)
