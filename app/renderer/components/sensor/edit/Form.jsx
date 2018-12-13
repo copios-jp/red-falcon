@@ -71,7 +71,7 @@ class Form extends Component {
         className={classes.editTextField}
         variant="outlined"
         label={label}
-        value={value}
+        value={value || ''}
         InputProps={{
           endAdornment: <InputAdornment position="start">{adornment}</InputAdornment>,
         }}

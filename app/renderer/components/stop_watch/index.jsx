@@ -12,32 +12,41 @@ const pad = (integer) => {
 
 class StopWatch extends Component {
   componentDidMount() {
-    this.timer.on('tick', () => this.forceUpdate())
+    this.timer.on('tick', this.update)
     this.timer.start()
+  }
+
+  componentDidUpdate = (prevProps) => {
+    if (getZone(prevProps.sensor) != getZone(this.props.sensor)) {
+      this.timer.reset()
+    }
   }
 
   componentWillUnmount() {
     this.timer.stop()
   }
 
-  timer = new Timer()
-
   getFormattedTime() {
-    const timerValue = this.timer.value
-    const minutes = Math.round(timerValue / 60)
-    const seconds = Math.round(timerValue % 60)
+    const { time } = this.state
+    const minutes = Math.round(time / 60)
+    const seconds = Math.round(time % 60)
     return `${pad(minutes)}:${pad(seconds)}`
-  }
-
-  componentDidUpdate(prevProps) {
-    if (getZone(prevProps.sensor) != getZone(this.props.sensor)) {
-      this.timer.reset()
-    }
   }
 
   render = () => {
     const { classes } = this.props
-    return <div className={classes.timer}>{this.getFormattedTime()}</div>
+    const time = this.getFormattedTime()
+    return <div className={classes.timer}>{time}</div>
+  }
+
+  state = {
+    time: this.props.time || 0,
+  }
+
+  timer = new Timer()
+
+  update = (time) => {
+    this.setState({ ...this.state, time })
   }
 }
 
