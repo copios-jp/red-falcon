@@ -1,40 +1,34 @@
 sudo: false
 language: node_js
 node_js:
-  - '10'
-
+- '10'
 os: osx
-
 install:
-  - npm install
-
+- npm install
 before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-darwin-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
-
+- curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-darwin-amd64
+  > ./cc-test-reporter
+- chmod +x ./cc-test-reporter
+- "./cc-test-reporter before-build"
 script:
 - npm run check-format
 - npm run lint
 - electron --version
 - pwd
 - npm run test-ci
-- npm -v
-
 branches:
   except:
-    - /^v\d+\.\d+\.\d+$/
-
+  - "/^v\\d+\\.\\d+\\.\\d+$/"
 after_script:
-  - ./cc-test-reporter after-build -t lcov --debug --exit-code $TRAVIS_TEST_RESULT
-
+- "./cc-test-reporter after-build -t lcov --debug --exit-code $TRAVIS_TEST_RESULT"
 before_deploy:
-  - scripts/keychain.sh
-
+- scripts/keychain.sh
 deploy:
-  provider: script
-  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: hL/y7pJ+FNU+U/BsKfB47QYlJBJrW7WvE/FoVJoyN5MQ11tiliEclKAf++TfduvnwJssoGV1J6kY2gnHV34mBbWBPGBmDYjb/nk9zxHnoE9TOAt4NFr2pOiMAW4MIDBRPQQ9iNKVaX4cRmBrcu6UHRXOK3lPtjJvuZlPL6GWhYZcQw1xqfRHx1ol1jR++SP++1RvIWUaFjt3wPNzuObza/wDD5bq5JaIeNjCrsQpFA4wRpMv4bjaCIFhHkk9xdwbAz18SVWwdxQIg2l7dpo9tCxvhXcTMlm6/+mZl6yR4JlODHfNnexE4qG0/Po7t++LJTUs7Y9oZvWnl/Pb1qakxu5JCeLtpJVW+1ByG0eo11rIsK3siGzNPSH1lalO6IyOcNY4WCJoYlE14Z7y6fPZ4pq9eXHHi5on2P4ag9ld5+SzlxO+8jdwKXbxBvzwp2h1XNUGh9b/Ybw57NSCmSnVyQgmbPAJ1A2pLoGIeBy/6dV2Y6lOPmQRqwGMzAuuNp7HfUuGeynaQ+hOaZfk6DLA2a3r3FrdYYqWWoKzxva3axm7G9kTbfjgLtHTAPCknD8Isg4oKg9RLEDbgvm3apUpnQ9rkidiERBhMP+Mb+DzFPSgPDSnmWyJWjonERUDJGqQxFIm4NdTXBpxmnGAf2b4vMaXKtDnjaqQbDLpwDvjpgk=
   on:
+    repo: copios-jp/red-falcon
     branch: release
   script:
-     - semantic-release --debug
+    - semantic-release --debug
