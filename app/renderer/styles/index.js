@@ -66,6 +66,10 @@ export default (theme) => ({
     alignItems: 'center',
   },
 
+  timer: {
+    paddingRight: theme.spacing.unit,
+  },
+
   activityIndicator: {
     marginLeft: theme.spacing.unit,
   },

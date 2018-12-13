@@ -49,10 +49,13 @@ class Form extends Component {
             select: true,
             children: this.optionsFor(methods),
           })}
-          {this.textField('max', 'BPM', '最大心拍数', max, { disabled: disableMax })}
+          {this.textField('max', 'BPM', '最大心拍数', max, {
+            disabled: disableMax,
+            type: 'number',
+          })}
         </Grid>
         <Grid item xs>
-          <Coefficients coefficients={coefficients} max={max} />
+          <Coefficients coefficients={coefficients} max={max || 1} />
         </Grid>
       </Grid>
     )

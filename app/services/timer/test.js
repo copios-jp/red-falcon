@@ -11,6 +11,8 @@ describe('timer', () => {
 
     jest.spyOn(timer, 'removeAllListeners')
     jest.spyOn(timer, 'emit')
+    jest.spyOn(timer.timer, 'setInterval')
+    jest.spyOn(timer.timer, 'clearInterval').mockImplementation(jest.fn())
     timer.start()
     clock.tick(1000)
   }
@@ -23,14 +25,12 @@ describe('timer', () => {
   }
 
   describe('start', () => {
-    beforeEach(setup)
+    beforeEach(() => {
+      setup()
+    })
     afterEach(teardown)
     it('has an interval', () => {
-      expect(timer.interval).not.toEqual(undefined)
-    })
-
-    it('has a date for started at ', () => {
-      expect(timer.startedAt).toBeInstanceOf(Date)
+      expect(timer.timer.setInterval).toBeCalledWith(timer.tick, '', '1s')
     })
   })
 
@@ -38,29 +38,26 @@ describe('timer', () => {
     beforeEach(setup)
     afterEach(teardown)
     it('value is 0', () => {
-      expect(timer.getValue()).toEqual(1)
+      expect(timer.value).toEqual(1)
       timer.reset()
-      expect(timer.getValue()).toEqual(0)
+      expect(timer.value).toEqual(0)
     })
   })
 
   describe('stop', () => {
     beforeEach(() => {
       setup()
+      jest.spyOn(timer.timer, 'clearInterval')
       timer.stop()
     })
     afterEach(teardown)
 
     it('clears the interval', () => {
-      expect(timer.interval).toEqual(undefined)
-    })
-
-    it('clears the startedAt', () => {
-      expect(timer.startedAt).toEqual(undefined)
+      expect(timer.timer.clearInterval).toBeCalled()
     })
 
     it('value is 0', () => {
-      expect(timer.getValue()).toEqual(0)
+      expect(timer.value).toEqual(0)
     })
 
     it('remmoves listeners', () => {
