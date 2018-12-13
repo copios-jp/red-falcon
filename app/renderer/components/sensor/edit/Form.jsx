@@ -10,8 +10,7 @@ import { withStyles } from '@material-ui/core/styles'
 import styles from '../../../styles/'
 
 class Form extends Component {
-
-  fields = ({age, weight, name, method, sex, max}) => {
+  fields = ({ age, weight, name, method, sex, max }) => {
     return (
       <Grid item xs>
         {this.textField('name', '様', '名前', name)}
@@ -59,7 +58,7 @@ class Form extends Component {
     const max = getMaxHeartRate(this.props.data)
     return (
       <Grid container spacing={24}>
-        {this.fields({...this.props.data, max: getMaxHeartRate(this.props.data)})}
+        {this.fields({ ...this.props.data, max: getMaxHeartRate(this.props.data) })}
         <Grid item xs>
           <Coefficients coefficients={coefficients} max={max || 1} />
         </Grid>
