@@ -4,13 +4,12 @@ const MINUTE_SECONDS = 60
 export const MAX_DURATION = HOUR_MINUTES * MINUTE_SECONDS
 
 export default class Timer extends events.EventEmitter {
-
   interval = undefined
 
   startedAt = undefined
 
   getValue = () => {
-    if(!this.startedAt) {
+    if (!this.startedAt) {
       return 0
     }
     return Math.round((new Date() - this.startedAt) / 1000)
@@ -23,7 +22,7 @@ export default class Timer extends events.EventEmitter {
 
   tick = () => {
     const value = this.getValue()
-    if(value > MAX_DURATION) {
+    if (value > MAX_DURATION) {
       this.stop()
     } else {
       this.emit('tick', this.getValue())

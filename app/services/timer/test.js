@@ -51,7 +51,6 @@ describe('timer', () => {
     })
     afterEach(teardown)
 
-
     it('clears the interval', () => {
       expect(timer.interval).toEqual(undefined)
     })
@@ -82,7 +81,7 @@ describe('timer', () => {
       })
     })
 
-    describe('invalid', () => {
+    describe('running for more than an hour', () => {
       beforeAll(() => {
         setup()
         jest.spyOn(timer, 'stop')
