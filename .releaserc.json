@@ -7,7 +7,7 @@
     "@semantic-release/release-notes-generator",
     ["@semantic-release/exec", {
       "prepareCmd": "npm version v${nextRelease.version} --no-git-tag-version",
-      "publishCmd": "yarn run pack"
+      "publishCmd": "npm run pack"
     }],
     ["@semantic-release/github",
       {
