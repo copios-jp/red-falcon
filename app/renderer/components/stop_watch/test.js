@@ -3,7 +3,6 @@ import { shallow } from 'enzyme'
 import { MANUAL } from '../../../services/analytics/MaxHeartRateCalculators/'
 import { DEFAULT_ZONE_COEFFICIENTS } from '../sensor/'
 
-// import Timer from '../../../services/timer/'
 jest.mock('../../../services/timer/', () => {
   return function() {
     this.on = jest.fn()
