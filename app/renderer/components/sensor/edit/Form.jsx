@@ -10,6 +10,28 @@ import { withStyles } from '@material-ui/core/styles'
 import styles from '../../../styles/'
 
 class Form extends Component {
+  fields = ({ age, weight, name, method, sex, max }) => {
+    return (
+      <Grid item xs>
+        {this.textField('name', '様', '名前', name)}
+        {this.textField('sex', '性', '性別', sex, {
+          select: true,
+          children: this.optionsFor(sexes),
+        })}
+        {this.textField('age', '才', '年齢', age)}
+        {this.textField('weight', 'Kg', '体重', weight)}
+        {this.textField('method', '', '最大心拍数計算式', method, {
+          select: true,
+          children: this.optionsFor(methods),
+        })}
+        {this.textField('max', 'BPM', '最大心拍数', max, {
+          disabled: method !== MANUAL,
+          type: 'number',
+        })}
+      </Grid>
+    )
+  }
+
   handleFieldChange = (name) => (event) => {
     const data = { ...this.props.data }
     const value = event.target.value
@@ -32,27 +54,13 @@ class Form extends Component {
   }
 
   render() {
-    const { age, weight, name, method, coefficients, sex } = this.props.data
+    const { coefficients } = this.props.data
     const max = getMaxHeartRate(this.props.data)
-    const disableMax = method !== MANUAL
     return (
       <Grid container spacing={24}>
+        {this.fields({ ...this.props.data, max: getMaxHeartRate(this.props.data) })}
         <Grid item xs>
-          {this.textField('name', '様', '名前', name)}
-          {this.textField('sex', '性', '性別', sex, {
-            select: true,
-            children: this.optionsFor(sexes),
-          })}
-          {this.textField('age', '才', '年齢', age)}
-          {this.textField('weight', 'Kg', '体重', weight)}
-          {this.textField('method', '', '最大心拍数計算式', method, {
-            select: true,
-            children: this.optionsFor(methods),
-          })}
-          {this.textField('max', 'BPM', '最大心拍数', max, { disabled: disableMax })}
-        </Grid>
-        <Grid item xs>
-          <Coefficients coefficients={coefficients} max={max} />
+          <Coefficients coefficients={coefficients} max={max || 1} />
         </Grid>
       </Grid>
     )
@@ -68,7 +76,7 @@ class Form extends Component {
         className={classes.editTextField}
         variant="outlined"
         label={label}
-        value={value}
+        value={value || ''}
         InputProps={{
           endAdornment: <InputAdornment position="start">{adornment}</InputAdornment>,
         }}

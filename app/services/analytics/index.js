@@ -5,7 +5,9 @@ import { FOX as fox } from './MaxHeartRateCalculators'
 export const getMaxHeartRate = (sensor) => {
   const { method } = sensor
   const calculator = MaxHeartRateCalculators.forMethod(method)
-  return Math.round(calculator.using(sensor))
+  const rate = calculator.using(sensor)
+
+  return rate ? Math.round(calculator.using(sensor)) : undefined
 }
 
 export const getCalories = (sensor) => {
