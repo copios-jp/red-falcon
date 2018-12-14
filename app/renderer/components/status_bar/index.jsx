@@ -18,15 +18,20 @@ export class StatusBar extends Component {
   mainEvents = {
     onTransmitter: ['transmitter-added', 'transmitter-removed'],
     onReceiver: ['receiver-added', 'receiver-removed'],
+    onVersion: ['version'],
+  }
+
+  onVersion = (event, version) => {
+    this.setState({ ...this.state, version })
   }
 
   render = () => {
     const { classes } = this.props
-    const { receivers, transmitters } = this.state
+    const { receivers, transmitters, version } = this.state
     return (
       <div className={classes.statusBar}>
         <Typography variant="caption" className={classes.copyright}>
-          &copy; COPIOS
+          &copy; COPIOS v{version}
         </Typography>
         <Typography className={classes.bottomBarItem} variant="caption">
           受信機数: {receivers.length}
@@ -41,6 +46,7 @@ export class StatusBar extends Component {
   state = {
     receivers: [],
     transmitters: [],
+    version: '-',
   }
 }
 

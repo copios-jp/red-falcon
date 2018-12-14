@@ -38,9 +38,6 @@ app.on('ready', async () => {
     titleBarStyle: 'hiddenInset',
   })
 
-  mainWindow.on('close', () => {
-    scanner.deactivate()
-  })
   mainWindow.loadFile(path.resolve(path.join(__dirname, '../renderer/index.html')))
 
   // show window once on first load
@@ -49,6 +46,8 @@ app.on('ready', async () => {
     mainWindow.show()
     autoUpdater.checkForUpdatesAndNotify()
     PowerSaveBlocker.activate()
+    mainWindow.webContents.send('version', app.getVersion())
+
     app.on('activate', () => {
       mainWindow.show()
     })
@@ -72,7 +71,6 @@ app.on('ready', async () => {
 
 app.on('before-quit', () => {
   PowerSaveBlocker.deactivate()
-  scanner.deactivate()
 })
 
 ipcMain.on('activate', () => {

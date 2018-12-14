@@ -49,6 +49,14 @@ class Scanner extends events.EventEmitter {
     }
   }
 
+  close(stick) {
+    try {
+      stick.close()
+    } catch (err) {
+      /* noop */
+    }
+  }
+
   open = (stick) => {
     stick.startupTimeout = 1
     stick.once('startup', () => {
@@ -64,15 +72,13 @@ class Scanner extends events.EventEmitter {
       } else {
         setTimeout(() => {
           if (stick.startupTimeout) {
-            console.log('Scanner#open stick opened but no startup received')
-            stick.close()
+            this.close(stick)
           }
         }, 500)
       }
     } catch (e) {
       if (e.message !== "Cannot read property 'transfer' of undefined") {
-        console.log('Scanner#open stick open errored', e)
-        stick.close()
+        this.close(stick)
       }
       stick.removeAllListeners('startup')
     }
