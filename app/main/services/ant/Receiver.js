@@ -47,10 +47,9 @@ class Receiver extends events.EventEmitter {
     })
     try {
       this.stick.close()
-      // this.stick.reset()
     } catch (e) {
       if (this.stick) {
-        this.stick.emit('shutdown')
+        this.stick.emit('shutdown', this)
       }
       /* noop */
     }
