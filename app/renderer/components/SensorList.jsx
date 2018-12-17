@@ -17,7 +17,11 @@ export class SensorList extends Component {
     bind.call(this, 'off')
   }
 
-  editSensor = (sensor) => this.setState((state) => ({ ...state, editing: sensor }))
+  editSensor = (sensor) => {
+    if(!sensor.state.isRecording) {
+      this.setState((state) => ({ ...state, editing: sensor }))
+    }
+  }
 
   mainEvents = {
     onTransmitter: ['transmitter-added', 'transmitter-removed'],
@@ -62,9 +66,7 @@ export class SensorList extends Component {
   }
 
   stopEditing = (data) => {
-    this.state.editing.setState((state) => {
-      return { ...state, ...data }
-    })
+    this.state.editing.handleChange(data)
 
     this.setState((state) => {
       return { ...state, editing: undefined }

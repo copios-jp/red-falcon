@@ -67,7 +67,9 @@ export default (theme) => ({
   },
 
   timer: {
-    paddingRight: theme.spacing.unit,
+    paddingRight: theme.spacing.unit * 2,
+    paddingLeft: theme.spacing.unit * 2,
+    minWidth: '100px',
   },
 
   activityIndicator: {
@@ -118,35 +120,40 @@ export default (theme) => ({
     fontSize: '8vh',
   },
 
-  rate_0: {
+  zone_0: {
     backgroundColor: theme.palette.rest,
     backgroundImage: theme.gradient,
+    fill: theme.palette.rest,
+
   },
 
-  rate_1: {
+  zone_1: {
     backgroundColor: theme.palette.recovery,
     backgroundImage: theme.gradient,
+    fill: theme.palette.recovery,
   },
 
-  rate_2: {
+  zone_2: {
     backgroundColor: theme.palette.lightAerobic,
     backgroundImage: theme.gradient,
+    fill: theme.palette.lightAerobic,
   },
-  rate_3: {
+  zone_3: {
     backgroundColor: theme.palette.hardAerobic,
     backgroundImage: theme.gradient,
   },
-  rate_4: {
+  zone_4: {
     backgroundColor: theme.palette.anaerobic,
     backgroundImage: theme.gradient,
   },
-  rate_5: {
+  zone_5: {
     backgroundColor: theme.palette.maximum,
     backgroundImage: theme.gradient,
   },
 
   cardRate: {
     marginLeft: theme.spacing.unit,
+    alignSelf: 'center',
   },
 
   cardFooter: {
@@ -156,6 +163,16 @@ export default (theme) => ({
     position: 'relative',
     padding: theme.spacing.unit / 2,
     paddingLeft: theme.spacing.unit * 2,
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+
+  inlineHistory: {
+    height: '30px',
+    alignSelf:'center',
+    display: 'flex',
+    width: '60px',
+    alignItems:'flex-end',
   },
 
   editTextField: {

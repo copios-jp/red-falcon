@@ -1,4 +1,5 @@
 import MaxHeartRateCalculators from './MaxHeartRateCalculators'
+import SessionStats from './SessionStats'
 import CalorieBurnPerHourCalculators from './CalorieBurnPerHourCalculators'
 import { FOX as fox } from './MaxHeartRateCalculators'
 
@@ -33,16 +34,23 @@ export const getZone = (sensor) => {
   return zone - 1
 }
 
+export const getReport = (history) => {
+  return { ...SessionStats.forHistory(history), history: history }
+}
+
 export const FOX = fox
 
 export const snapshot = (sensor) => {
+  const snap = { ...sensor }
+  delete snap.history
+
   return JSON.parse(
     JSON.stringify({
-      ...sensor,
-      max: getMaxHeartRate(sensor),
-      calories: getCalories(sensor),
-      percent: getPercentageOfMax(sensor),
-      zone: getZone(sensor),
+      ...snap,
+      max: getMaxHeartRate(snap),
+      calories: getCalories(snap),
+      percent: getPercentageOfMax(snap),
+      zone: getZone(snap),
       created: new Date(),
     }),
   )

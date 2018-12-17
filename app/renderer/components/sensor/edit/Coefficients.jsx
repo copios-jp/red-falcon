@@ -56,7 +56,7 @@ class Coefficients extends Component {
       <span
         key={index}
         style={{ width: `${Math.round(100 * (values.max - values.min))}%` }}
-        className={classes[`rate_${index}`]}>
+        className={classes[`zone_{index}`]}>
         &nbsp;
       </span>
     )
@@ -75,7 +75,7 @@ class Coefficients extends Component {
   rangeBand(coef, values, index) {
     const { classes } = this.props
     return (
-      <div key={index} className={[classes[`rate_${index}`], classes.zoneData].join(' ')}>
+      <div key={index} className={[classes[`zone_${index}`], classes.zoneData].join(' ')}>
         <span className={classes.zoneRangeLabel}>{values.min}</span>
         <Button size="small" onClick={this.step.bind(this, -1, index)}>
           <RemoveIcon fontSize="small" />

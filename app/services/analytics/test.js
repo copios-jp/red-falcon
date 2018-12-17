@@ -18,7 +18,7 @@ describe('Analytics', () => {
       weight: WEIGHT,
     }
     it('gets calories', () => {
-      expect(getCalories(sensor)).toEqual(551)
+      expect(getCalories(sensor)).toEqual(854)
     })
   })
 
@@ -40,7 +40,7 @@ describe('Analytics', () => {
     it('gets a snapshot', () => {
       expect(snapshot(sensor)).toEqual({
         age: 23,
-        calories: 551,
+        calories: 854,
         coefficients: [0, 0.5, 0.6, 0.7, 0.8, 0.9],
         created: new Date().toISOString(),
         max: 197,
