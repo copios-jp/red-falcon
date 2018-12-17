@@ -16,14 +16,14 @@ export class HistoryThumb extends Component {
       <div className={classes.inlineHistory}>
         {data.map((sample, index) => {
           let value = sample.percent
-          if(index > 0) {
-            value = (value + data[index-1].percent) / 2
+          if (index > 0) {
+            value = (value + data[index - 1].percent) / 2
           }
           return (
             <span
               className={classes[`zone_${sample.zone}`]}
               key={index}
-              style={{height: `${value}%`, width: '2px' }}
+              style={{ height: `${value}%`, width: '2px' }}
             />
           )
         })}

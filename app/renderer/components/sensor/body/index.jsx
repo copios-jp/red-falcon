@@ -10,8 +10,11 @@ export class Body extends Component {
     const nextSensor = nextProps.sensor
     const { sensor } = this.props
 
-    return nextSensor.rate !== sensor.rate || nextSensor.method !== sensor.method ||
+    return (
+      nextSensor.rate !== sensor.rate ||
+      nextSensor.method !== sensor.method ||
       nextSensor.max !== sensor.max
+    )
   }
 
   render() {

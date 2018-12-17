@@ -29,7 +29,7 @@ export class RecordButton extends Component {
       this.startRecording()
     }
 
-    this.props.handleChange({recording: !recording})
+    this.props.handleChange({ recording: !recording })
   }
 
   onClick = (e) => {

@@ -124,7 +124,6 @@ export default (theme) => ({
     backgroundColor: theme.palette.rest,
     backgroundImage: theme.gradient,
     fill: theme.palette.rest,
-
   },
 
   zone_1: {
@@ -169,10 +168,10 @@ export default (theme) => ({
 
   inlineHistory: {
     height: '30px',
-    alignSelf:'center',
+    alignSelf: 'center',
     display: 'flex',
     width: '60px',
-    alignItems:'flex-end',
+    alignItems: 'flex-end',
   },
 
   editTextField: {

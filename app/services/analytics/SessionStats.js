@@ -3,14 +3,14 @@ import { getZone, getCalories, getPercentageOfMax } from './'
 export const averageHeartRate = (history) => {
   const reducer = (memo, item) => memo + parseInt(item.rate)
   const total = history.reduce(reducer, 0)
-  return Math.round(total/history.length)
+  return Math.round(total / history.length)
 }
 
 export const averagePercentageOfMax = (history) => {
   const rate = averageHeartRate(history)
   return getPercentageOfMax({
     ...history[0],
-    rate
+    rate,
   })
 }
 
@@ -18,24 +18,26 @@ export const averageHeartRateZone = (history) => {
   const rate = averageHeartRate(history)
   return getZone({
     ...history[0],
-    rate
+    rate,
   })
-
 }
 export const caloriesExpended = (history) => {
   const rate = averageHeartRate(history)
-  return getCalories({
-    ...history[0],
-    rate
-  }) / 3600 * duration(history)
+  return (
+    (getCalories({
+      ...history[0],
+      rate,
+    }) /
+      3600) *
+    duration(history)
+  )
 }
-
 
 export const timeInZones = (history) => {
   const commonHistory = history[0]
   const zones = new Array(commonHistory.coefficients.length).fill(0)
-  history.forEach(({rate}) => {
-    zones[getZone({...commonHistory, rate})] += 0.5
+  history.forEach(({ rate }) => {
+    zones[getZone({ ...commonHistory, rate })] += 0.5
   })
 
   return zones
@@ -63,6 +65,5 @@ export default {
       zones: timeInZones(history),
       points: minamiPoints(history),
     }
-  }
+  },
 }
-

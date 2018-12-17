@@ -1,4 +1,3 @@
-import { getMaxHeartRate } from './'
 const MALE_INTERCEPT = -55.0969
 const MALE_RATE_COEF = 0.6309
 const MALE_WEIGHT_COEF = 0.1988

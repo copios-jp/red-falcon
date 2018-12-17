@@ -18,7 +18,7 @@ export class SensorList extends Component {
   }
 
   editSensor = (sensor) => {
-    if(!sensor.state.isRecording) {
+    if (!sensor.state.isRecording) {
       this.setState((state) => ({ ...state, editing: sensor }))
     }
   }

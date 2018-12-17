@@ -59,7 +59,7 @@ export class Sensor extends Component {
   recordSnapshot = () => {
     const history = this.state.history
     history.push(snapshot(this.state))
-    this.handleChange({history})
+    this.handleChange({ history })
   }
 
   handleChange = (value) => {
@@ -71,7 +71,11 @@ export class Sensor extends Component {
     const className = [classes.sensorCard, classes[cardClass]].join(' ')
     return (
       <Card elevation={5} square={true} className={className} onClick={this.onClick}>
-        <Header sensor={this.state} handleChange={this.handleChange} recordSnapshot={this.recordSnapshot}/>
+        <Header
+          sensor={this.state}
+          handleChange={this.handleChange}
+          recordSnapshot={this.recordSnapshot}
+        />
         <Body sensor={this.state} />
         <Footer sensor={this.state} />
       </Card>
@@ -94,4 +98,3 @@ export class Sensor extends Component {
 }
 
 export default withStyles(styles)(Sensor)
-

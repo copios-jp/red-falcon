@@ -6,7 +6,7 @@ const MINUTE_SECONDS = 60
 export const MAX_DURATION = HOUR_MINUTES * MINUTE_SECONDS
 
 export default class Timer extends events.EventEmitter {
-  constructor(interval='1s') {
+  constructor(interval = '1s') {
     super()
     this.interval = interval
   }
