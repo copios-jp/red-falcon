@@ -38,7 +38,6 @@ class Scanner extends events.EventEmitter {
 
   newDevicesAvailable = () => {
     this.clean()
-    console.log(this.getDevices())
     return this.getDevices().length > receivers.length
   }
 

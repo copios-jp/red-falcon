@@ -1,14 +1,12 @@
 import React from 'react'
 import { Component } from 'react'
-import { withStyles } from '@material-ui/core/styles'
 import { Button } from '@material-ui/core'
 import { History } from '@material-ui/icons'
-import styles from '../../../styles'
-import { getReport } from '../../../../services/analytics'
+
 export class HistoryButton extends Component {
   onClick = (e) => {
     e.stopPropagation()
-    console.log(getReport(this.props.sensor.history))
+    this.props.handleChange({ showReport: true })
   }
 
   render = () => {
@@ -25,4 +23,4 @@ export class HistoryButton extends Component {
   }
 }
 
-export default withStyles(styles)(HistoryButton)
+export default HistoryButton

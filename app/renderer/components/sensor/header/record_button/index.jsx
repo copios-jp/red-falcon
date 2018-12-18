@@ -3,8 +3,8 @@ import { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import { Button } from '@material-ui/core'
 import { Stop, CameraEnhance } from '@material-ui/icons'
-import styles from '../../../styles'
-import Timer from '../../../../services/timer/'
+import styles from '../../../../styles'
+import Timer from '../../../../../services/timer'
 
 export class RecordButton extends Component {
   timer = new Timer('1s')

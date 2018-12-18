@@ -4,7 +4,6 @@ import { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import styles from '../../../styles/'
 import Rate from './rate'
-import HistoryThumb from './History'
 
 export class Footer extends Component {
   shouldComponentUpdate(nextProps) {
@@ -18,7 +17,6 @@ export class Footer extends Component {
     return (
       <div className={classes.cardFooter}>
         <Rate rate={sensor.rate} />
-        <HistoryThumb history={sensor.history} length={sensor.history.length} />
       </div>
     )
   }

@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Header from './header/'
 import Body from './body/'
 import Footer from './footer/'
+import Report from './report'
 
 import { FOX } from '../../../services/analytics/'
 import { UNKNOWN } from '../../../services/analytics/CalorieBurnPerHourCalculators'
@@ -68,9 +69,11 @@ export class Sensor extends Component {
 
   render() {
     const { classes, cardClass } = this.props
+    const { showReport } = this.state
     const className = [classes.sensorCard, classes[cardClass]].join(' ')
     return (
       <Card elevation={5} square={true} className={className} onClick={this.onClick}>
+        {showReport && <Report sensor={this.state} handleChange={this.handleChange} />}
         <Header
           sensor={this.state}
           handleChange={this.handleChange}

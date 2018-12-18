@@ -5,8 +5,8 @@ import ActivityIndicator from '../activity_indicator'
 import { withStyles } from '@material-ui/core/styles'
 import styles from '../../../styles/'
 import StopWatch from '../../stop_watch/'
-import RecordButton from '../record_button'
-import HistoryButton from '../history_button'
+import RecordButton from './record_button'
+import HistoryButton from './history_button'
 import { getZone } from '../../../../services/analytics/'
 
 export class Header extends Component {
@@ -23,14 +23,14 @@ export class Header extends Component {
   }
 
   render() {
-    const { classes, sensor, handleChange, recordSnapshot } = this.props
+    const { classes, sensor } = this.props
     return (
       <div className={classes.cardHeader}>
         <ActivityIndicator fontSize="small" active={sensor.active} />
         <div className={classes.cardName}>{sensor.name}&nbsp;</div>
 
-        <HistoryButton sensor={sensor} />
-        <RecordButton sensor={sensor} handleChange={handleChange} recordSnapshot={recordSnapshot} />
+        <HistoryButton {...this.props} />
+        <RecordButton {...this.props} />
         <StopWatch sensor={sensor} />
       </div>
     )

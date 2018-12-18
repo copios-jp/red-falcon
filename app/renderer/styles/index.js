@@ -235,4 +235,33 @@ export default (theme) => ({
     lineHeight: 'inherit',
     paddingLeft: theme.spacing.unit,
   },
+
+  '@media print': {
+    'no-print': {
+      display: 'none !important',
+    },
+  },
+
+  reportCard: {
+    marginTop: theme.spacing.unit * 2,
+  },
+
+  reportGroup: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    backgroundColor: theme.palette.background.paper,
+  },
+
+  titledRow: {
+    paddingTop: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit,
+  },
+
+  titledRowTitle: {
+    marginRight: theme.spacing.unit / 2,
+  },
+
+  titledRowText: {
+    alignSelf: 'center',
+  },
 })

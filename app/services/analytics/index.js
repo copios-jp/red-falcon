@@ -44,14 +44,12 @@ export const snapshot = (sensor) => {
   const snap = { ...sensor }
   delete snap.history
 
-  return JSON.parse(
-    JSON.stringify({
-      ...snap,
-      max: getMaxHeartRate(snap),
-      calories: getCalories(snap),
-      percent: getPercentageOfMax(snap),
-      zone: getZone(snap),
-      created: new Date(),
-    }),
-  )
+  return {
+    ...snap,
+    max: getMaxHeartRate(snap),
+    calories: getCalories(snap),
+    percent: getPercentageOfMax(snap),
+    zone: getZone(snap),
+    created: new Date(),
+  }
 }
