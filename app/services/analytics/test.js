@@ -42,7 +42,7 @@ describe('Analytics', () => {
         age: 23,
         calories: 854,
         coefficients: [0, 0.5, 0.6, 0.7, 0.8, 0.9],
-        created: new Date().toISOString(),
+        created: new Date(),
         max: 197,
         percent: 79,
         rate: 155,

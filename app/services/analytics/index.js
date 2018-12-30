@@ -34,6 +34,10 @@ export const getZone = (sensor) => {
   return zone - 1
 }
 
+export const getBMI = ({ weight = 1, height = 1 }) => {
+  return ((((weight / height) * 100) / height) * 100).toFixed(1)
+}
+
 export const getReport = (history) => {
   return { ...SessionStats.forHistory(history), history: history }
 }

@@ -14,6 +14,18 @@ export const averagePercentageOfMax = (history) => {
   })
 }
 
+export const trainingScore = (history) => {
+  return (
+    parseFloat(
+      (
+        history.reduce((memo, item) => {
+          return memo + getZone(item)
+        }, 0) / history.length
+      ).toFixed(2),
+    ) + 1
+  )
+}
+
 export const averageHeartRateZone = (history) => {
   const rate = averageHeartRate(history)
   return getZone({
@@ -36,8 +48,8 @@ export const caloriesExpended = (history) => {
 export const timeInZones = (history) => {
   const commonHistory = history[0]
   const zones = new Array(commonHistory.coefficients.length).fill(0)
-  history.forEach(({ rate }) => {
-    zones[getZone({ ...commonHistory, rate })] += 0.5
+  history.forEach(({ zone }) => {
+    zones[zone] += 1
   })
 
   return zones
@@ -64,6 +76,7 @@ export default {
       duration: duration(history),
       zones: timeInZones(history),
       points: minamiPoints(history),
+      score: trainingScore(history),
     }
   },
 }

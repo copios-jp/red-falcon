@@ -10,6 +10,7 @@ export class RecordButton extends Component {
   timer = new Timer('1s')
 
   startRecording = () => {
+    this.props.handleChange({ history: [] })
     this.timer.on('tick', this.props.recordSnapshot)
     this.timer.start()
   }

@@ -240,16 +240,73 @@ export default (theme) => ({
     'no-print': {
       display: 'none !important',
     },
+    reportCharts: {},
   },
 
-  reportCard: {
+  reportDialogContent: {
+    backgroundColor: '#fff',
+  },
+
+  chartCard: {
+    display: 'flex',
+    flexDirection: 'column',
     marginTop: theme.spacing.unit * 2,
+    flexGrow: 1,
+  },
+
+  reportCharts: {
+    backgroundColor: 'white',
+    alignItems: 'center',
   },
 
   reportGroup: {
     display: 'flex',
     justifyContent: 'space-between',
-    backgroundColor: theme.palette.background.paper,
+    paddingTop: theme.spacing.unit * 3,
+  },
+
+  trainingScoreChart: {
+    margin: 'auto',
+    left: '-15px',
+    top: '20px',
+    alignSelf: 'center',
+  },
+
+  timeInZoneChartWrapper: {
+    height: '100%',
+    textAlign: 'center',
+    display: 'flex',
+    position: 'relative',
+    alignItems: 'center',
+    maxHeight: '270px',
+  },
+
+  timeInZoneChart: {},
+
+  heartRateChart: {},
+
+  reportDataGroup: {
+    border: '1px inset grey',
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+
+  reportDataGroupData: {
+    padding: theme.spacing.unit,
+    height: '100%',
+  },
+
+  reportDataGroupHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#424242',
+    color: 'white',
+    padding: '8px',
+  },
+
+  reportRow: {
+    justifyContent: 'space-between',
   },
 
   titledRow: {

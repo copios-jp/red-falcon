@@ -3,27 +3,48 @@ import { ipcRenderer } from 'electron'
 import React, { Component } from 'react'
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core'
 
-import { Card, CardContent, Typography } from '@material-ui/core'
+import { Paper, Typography } from '@material-ui/core'
 import { Print } from '@material-ui/icons'
 import styles from '../../../styles'
-import { formatSeconds } from '../../../helpers/time_formatter'
+import { formatDateTime } from '../../../helpers/time_formatter'
 
 import { withStyles } from '@material-ui/core/styles'
 import { getReport } from '../../../../services/analytics'
 
-const TitledRow = withStyles(styles)(({ classes, title, text, inline = false }) => (
-  <div
-    className={classes.titledRow}
-    style={{ textAlign: 'left', display: inline ? 'flex' : 'block' }}>
-    <Typography color="primary" variant="h6" className={classes.titledRowTitle}>
-      {title}
-    </Typography>
-    <Typography variant="body1" className={classes.titledRowText}>
-      {text}
-    </Typography>
+import UserSection from './sections/user/'
+import TrainingSection from './sections/training/'
+import TrainingScoreSection from './sections/training_score/'
+import TimeInZoneSection from './sections/time_in_zone/'
+import HeartRateSection from './sections/heart_rate/'
+import MemoSection from './sections/memo/'
+
+export const TitledRow = withStyles(styles)(
+  ({ classes, title, text, inline = false, color = 'inherit' }) => (
+    <div
+      className={classes.reportRow}
+      style={{ textAlign: 'left', display: inline ? 'flex' : 'block' }}>
+      <Typography color={color} variant="body1" className={classes.titledRowTitle}>
+        {title}
+      </Typography>
+      <Typography color={color} variant="body1" className={classes.titledRowText}>
+        {' '}
+        {text}{' '}
+      </Typography>
+    </div>
+  ),
+)
+
+export const DataGroup = withStyles(styles)(({ classes, icon, header, data, width = '32%' }) => (
+  <div className={classes.reportDataGroup} style={{ width: width }}>
+    <div className={classes.reportDataGroupHeader}>
+      {icon}
+      <Typography color="inherit" variant="body1">
+        {header}
+      </Typography>
+    </div>
+    <div className={classes.reportDataGroupData}>{data}</div>
   </div>
 ))
-
 export class Report extends Component {
   constructor() {
     super()
@@ -36,11 +57,23 @@ export class Report extends Component {
 
   onPrint = (e) => {
     e.stopPropagation()
-    ipcRenderer.send('print')
+    this.originalWidth = window.outerWidth
+    const fileName = `${this.props.sensor.name}_${new Date().toISOString()}`.replace(' ', '_')
+    window.resizeTo(776, window.outerHeight)
+    // keep this - the charts need time to resize
+    // and print media queries will not wait.
+    window.setTimeout(() => {
+      ipcRenderer.send('print', fileName)
+    }, 1000)
   }
 
   printComplete = () => {
+    window.resizeTo(this.originalWidth, window.outerHeight)
     this.props.handleChange({ showReport: false })
+  }
+
+  onClick = (e) => {
+    e.stopPropagation()
   }
 
   onClose = (e) => {
@@ -50,74 +83,39 @@ export class Report extends Component {
 
   render() {
     const {
-      sensor: { name, age, weight, method, history },
+      sensor: { history, showReport },
       classes,
     } = this.props
     const summary = getReport(history)
-    console.log(summary)
-    const formatOptions = {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    }
-    const today = new Date().toLocaleString('ja', formatOptions)
+
     return (
-      <Dialog fullScreen={true} open={this.props.sensor.showReport}>
-        <DialogTitle>
-          Training Session Report {name}
-          <TitledRow title="日付" text={today} />
+      <Dialog
+        PaperProps={{ elevation: 0, style: { border: 'none' } }}
+        fullScreen={true}
+        open={showReport}
+        onClick={this.onClick}>
+        <DialogTitle variant="dense">
+          <TitledRow
+            color="primary"
+            title="トレーニング報告"
+            text={formatDateTime()}
+            inline={true}
+          />
         </DialogTitle>
 
-        <DialogContent style={{ backgroundColor: 'white' }}>
-          <Card className={classes.reportCard}>
-            <CardContent>
-              <Typography variant="h6">トレーニング概容</Typography>
-              <div className={classes.reportGroup}>
-                <TitledRow title="名前" text={name} inline={true} />
-                <TitledRow title="年齢" text={age} inline={true} />
-                <TitledRow title="体重" text={weight} inline={true} />
-
-                {/*<TitledRow title="実施期間" text={`${history[0].created.toLocaleString('ja', formatOptions)} - ${history[history.length - 1].created.toLocaleString('ja', formatOptions)}`} inline={true} />
-                 */}
-              </div>
-
-              <div className={classes.reportGroup}>
-                <TitledRow title="消費カロリー" text={Math.round(summary.calories)} inline={true} />
-                <TitledRow title="MAX%計算式" text={method} inline={true} />
-                <TitledRow title="最大心拍数" text={history[0].max} inline={true} />
-              </div>
-
-              <div className={classes.reportGroup}>
-                <TitledRow title="平均心拍数" text={summary.rate} inline={true} />
-                <TitledRow title="平均心拍数MAX%" text={summary.percentageOfMax} inline={true} />
-                <TitledRow title="期間" text={formatSeconds(summary.duration)} inline={true} />
-              </div>
-            </CardContent>
-          </Card>
-          <Card className={classes.reportCard}>
-            <CardContent>
-              <Typography variant="h6">トレーニングゾーン</Typography>
-              <div className={classes.reportGroup}>
-                Some Charts for {JSON.stringify(summary.zones)}
-              </div>
-            </CardContent>
-          </Card>
-          <Card className={classes.reportCard}>
-            <CardContent>
-              <Typography variant="h6">トレーニング中心拍数</Typography>
-              <div className={classes.reportGroup}>
-                Some Charts for{' '}
-                {JSON.stringify(
-                  history.map((item) => {
-                    return item.rate
-                  }),
-                )}
-              </div>
-            </CardContent>
-          </Card>
+        <DialogContent className={classes.reportDialogContent}>
+          <div className={classes.reportGroup}>
+            <UserSection {...this.props.sensor} max={history[0].max} />
+            <TrainingSection {...this.props} created={history[0].created} summary={summary} />
+            <MemoSection />
+          </div>
+          <div className={classes.reportGroup}>
+            <TrainingScoreSection {...summary} />
+            <TimeInZoneSection {...summary} />
+          </div>
+          <div className={classes.reportGroup}>
+            <HeartRateSection history={history} max={history[0].max} />
+          </div>
         </DialogContent>
 
         <DialogActions className={classes['no-print']}>

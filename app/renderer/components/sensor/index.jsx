@@ -50,7 +50,6 @@ export class Sensor extends Component {
       ComputedHeartRate,
       sensor: { channel },
     } = transmitter
-
     if (channel === this.props.channel) {
       this.setState((state) => ({ ...state, rate: ComputedHeartRate, active: true }))
       this.expire()
@@ -73,6 +72,7 @@ export class Sensor extends Component {
     const className = [classes.sensorCard, classes[cardClass]].join(' ')
     return (
       <Card elevation={5} square={true} className={className} onClick={this.onClick}>
+        {/* TODO - move this to the top of the dom and hide everything else when printing */}
         {showReport && <Report sensor={this.state} handleChange={this.handleChange} />}
         <Header
           sensor={this.state}
@@ -90,7 +90,7 @@ export class Sensor extends Component {
     recording: false,
     history: [],
     channel: this.props.channel,
-    name: '',
+    name: 'Unknown',
     method: FOX,
     sex: UNKNOWN,
     coefficients: [].concat(DEFAULT_ZONE_COEFFICIENTS),

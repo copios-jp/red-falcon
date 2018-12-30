@@ -79,22 +79,30 @@ ipcMain.on('activate', () => {
   scanner.activate()
 })
 
-ipcMain.on('print', (event) => {
-  const pdfPath = path.join(os.tmpdir(), 'output.pdf')
+ipcMain.on('print', (event, fileName) => {
+  const pdfPath = path.join(os.tmpdir(), `${fileName}.pdf`)
   const win = BrowserWindow.fromWebContents(event.sender)
-  win.webContents.printToPDF({}, (err, data) => {
-    if (err) {
-      return console.log(err)
-    }
-
-    fs.writeFile(pdfPath, data, (err) => {
+  win.webContents.printToPDF(
+    {
+      pageSize: 'A4',
+      marginsType: 2,
+      printBackground: true,
+    },
+    (err, data) => {
       if (err) {
         return console.log(err)
       }
-      shell.openExternal('file://' + pdfPath)
-      event.sender.send('print-complete', pdfPath)
-    })
-  })
+
+      fs.writeFile(pdfPath, data, (err) => {
+        if (err) {
+          return console.log(err)
+        }
+
+        shell.openExternal('file://' + pdfPath)
+        event.sender.send('print-complete', pdfPath)
+      })
+    },
+  )
   scanner.activate()
 })
 
