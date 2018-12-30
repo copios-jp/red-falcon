@@ -19,10 +19,7 @@
     "electron-updater": "^4",
     "nanotimer": "^0.3.15",
     "react": "^16.2.0",
-    "react-canvas-gauges": "^1.2.1",
-    "react-d3-speedometer": "^0.4.2",
     "react-dom": "^16.2.0",
-    "react-svg-flexbox": "^0.3.0",
     "react-vis": "^1.11.5",
     "underscore": "^1.9.1"
   },
