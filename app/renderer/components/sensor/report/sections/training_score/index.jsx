@@ -23,7 +23,9 @@ class TrainingScoreSection extends Component {
         icon={<Score />}
         data={
           <div>
-            <Typography variant="body1" color="inherit">{effects[zone]}</Typography>
+            <Typography variant="body1" color="inherit">
+              {effects[zone]}
+            </Typography>
             <TrainingScoreChart score={score} zone={zone} />
           </div>
         }

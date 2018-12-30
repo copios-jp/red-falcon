@@ -35,11 +35,7 @@ class HeartRateChart extends Component {
         colorType="literal">
         <HorizontalGridLines />
         <YAxis title="心拍数MAX%" tickFormat={(t) => `${t}%`} />
-        <YAxis
-          orientation="right"
-          title="心拍数"
-          tickFormat={(t) => Math.round((t / 100) * max)}
-        />
+        <YAxis orientation="right" title="心拍数" tickFormat={(t) => Math.round((t / 100) * max)} />
         <XAxis tickFormat={(v) => formatSeconds(v, 14, 5)} title="mm:ss" tickLabelAngle={-45} />
         <VerticalBarSeries data={seriesData({ history })} />
       </FlexibleWidthXYPlot>
