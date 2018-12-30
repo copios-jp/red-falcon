@@ -6,6 +6,11 @@ const MINUTE_SECONDS = 60
 export const MAX_DURATION = HOUR_MINUTES * MINUTE_SECONDS
 
 export default class Timer extends events.EventEmitter {
+  constructor(interval = '1s') {
+    super()
+    this.interval = interval
+  }
+
   timer = new NanoTimer()
 
   value = 0
@@ -26,7 +31,7 @@ export default class Timer extends events.EventEmitter {
   }
 
   start = () => {
-    this.timer.setInterval(this.tick, '', '1s')
+    this.timer.setInterval(this.tick, '', this.interval)
   }
 
   stop = () => {

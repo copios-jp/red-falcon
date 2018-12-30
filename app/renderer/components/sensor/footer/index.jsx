@@ -1,17 +1,25 @@
 import React from 'react'
+import { Component } from 'react'
 
-import { Favorite } from '@material-ui/icons'
 import { withStyles } from '@material-ui/core/styles'
 import styles from '../../../styles/'
+import Rate from './rate'
 
-export const Footer = (props) => {
-  const { classes, sensor } = props
-  return (
-    <div className={classes.cardFooter}>
-      <Favorite fontSize="small" />
-      <span className={classes.cardRate}>{sensor.rate}</span>
-    </div>
-  )
+export class Footer extends Component {
+  shouldComponentUpdate(nextProps) {
+    const nextSensor = nextProps.sensor
+    const { sensor } = this.props
+    return nextSensor.rate !== sensor.rate || nextSensor.recording
+  }
+
+  render() {
+    const { classes, sensor } = this.props
+    return (
+      <div className={classes.cardFooter}>
+        <Rate rate={sensor.rate} />
+      </div>
+    )
+  }
 }
 
 export default withStyles(styles)(Footer)

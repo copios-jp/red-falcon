@@ -3,12 +3,7 @@ import { Component } from 'react'
 import Timer from '../../../services/timer/'
 import { withStyles } from '@material-ui/core/styles'
 import styles from '../../styles/'
-
 import { getZone } from '../../../services/analytics/'
-
-const pad = (integer) => {
-  return integer < 10 ? `0${integer}` : integer.toString()
-}
 
 class StopWatch extends Component {
   componentDidMount() {
@@ -26,16 +21,9 @@ class StopWatch extends Component {
     this.timer.stop()
   }
 
-  getFormattedTime() {
-    const { time } = this.state
-    const minutes = Math.round(time / 60)
-    const seconds = Math.round(time % 60)
-    return `${pad(minutes)}:${pad(seconds)}`
-  }
-
   render = () => {
     const { classes } = this.props
-    const time = this.getFormattedTime()
+    const time = new Date(this.state.time * 1000).toISOString().substr(14, 5)
     return <div className={classes.timer}>{time}</div>
   }
 
