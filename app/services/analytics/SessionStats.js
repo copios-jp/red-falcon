@@ -70,6 +70,7 @@ export default {
   forHistory(history) {
     return {
       rate: averageHeartRate(history),
+      maxRate: Math.max(...history.map((item) => item.rate)),
       percentageOfMax: averagePercentageOfMax(history),
       zone: averageHeartRateZone(history),
       calories: caloriesExpended(history),

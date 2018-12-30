@@ -9,12 +9,9 @@ import { DataGroup } from '../../'
 class UserSection extends Component {
   render() {
     const {
-      sensor: { history },
-      summary: { duration, percentageOfMax, rate, calories },
+      summary: { duration, maxRate, percentageOfMax, rate, calories },
       created,
     } = this.props
-
-    const maxRate = Math.max(...history.map((item) => item.rate))
 
     return (
       <DataGroup

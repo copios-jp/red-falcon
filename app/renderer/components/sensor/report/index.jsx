@@ -111,7 +111,7 @@ export class Report extends Component {
         <DialogContent className={classes.reportDialogContent}>
           <div className={classes.reportGroup}>
             <UserSection {...this.props.sensor} max={history[0].max} />
-            <TrainingSection {...this.props} created={history[0].created} summary={summary} />
+            <TrainingSection created={history[0].created} summary={summary} />
             <MemoSection />
           </div>
           <div className={classes.reportGroup}>
