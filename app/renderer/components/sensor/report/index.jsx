@@ -1,9 +1,14 @@
 import { ipcRenderer } from 'electron'
 
 import React, { Component } from 'react'
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core'
-
-import { Paper, Typography } from '@material-ui/core'
+import {
+  Typography,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@material-ui/core'
 import { Print } from '@material-ui/icons'
 import styles from '../../../styles'
 import { formatDateTime } from '../../../helpers/time_formatter'
