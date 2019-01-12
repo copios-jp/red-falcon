@@ -1,16 +1,18 @@
 import React, { Component } from 'react'
-import { formatSeconds, formatDateTime } from '../../../../../helpers/time_formatter'
-
+import { withStyles } from '@material-ui/core/styles'
 import { DirectionsRun } from '@material-ui/icons'
 
 import { TitledRow } from '../../'
 import { DataGroup } from '../../'
+import { formatSeconds, formatDateTime } from '../../../../../helpers/time_formatter'
+import styles from '../../../../../styles'
 
-class UserSection extends Component {
+class TrainingSection extends Component {
   render() {
     const {
       summary: { duration, maxRate, percentageOfMax, rate, calories },
       created,
+      classes,
     } = this.props
 
     return (
@@ -18,7 +20,7 @@ class UserSection extends Component {
         icon={<DirectionsRun />}
         header="トレーニング"
         data={
-          <div>
+          <div className={classes.padded}>
             <TitledRow title="開始" text={formatDateTime(created)} inline={true} />
             <TitledRow title="期間" text={formatSeconds(duration)} inline={true} />
             <TitledRow title="消費カロリー" text={Math.round(calories)} inline={true} />
@@ -31,4 +33,4 @@ class UserSection extends Component {
   }
 }
 
-export default UserSection
+export default withStyles(styles)(TrainingSection)

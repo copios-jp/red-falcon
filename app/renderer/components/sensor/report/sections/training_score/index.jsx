@@ -4,25 +4,27 @@ import { Typography } from '@material-ui/core'
 import { Score } from '@material-ui/icons/'
 import { DataGroup } from '../../'
 import TrainingScoreChart from '../../charts/training_score/'
+import { withStyles } from '@material-ui/core/styles'
+import styles from '../../../../../styles'
 
 const effects = [
   'N/A',
-  '有酸素能力の基礎作り・ビギナーの初期トレーニング。ウォームアップやクールダウン、回復を助ける。',
-  '有酸素能力の向上・効果的な脂肪燃焼効果。基礎的な身体能力を向上させ、回復を促進、新陳代謝を増進させる。',
-  'マラソントレーニングに適している・有酸素能力の更なる向上。一般的なトレーニングペースの強化。中強度の運動をより容易にし、運動効率を改善する。',
-  '無酸素性能力の向上・乳酸耐性の向上。早い速度での持久力を維持する力を向上。',
-  '最大酸素摂取量の向上・速度・筋力の向上・上級者向けレベル。呼吸および筋肉への最大またはそれに準ずる負荷',
+  'トレーニング前後のストレッチや柔軟体操効果を高め、ウォームアップやクールダウンで代謝促進や疲労回復をする。',
+  '呼吸をしっかりしながらトレーニングをする事で脂肪燃焼効果が上がり、基礎体力の向上、代謝の促進でダイエット効果が上がる。',
+  '血流の流れが早くなり身体全身に酸素を運びダイエット効果をさらに上げていきます。有酸素運動の効果も上がり、トレーニングレベルも向上します。',
+  'トレーニング強度が上がり筋肥大、心肺機能の向上、消費カロリーも高くなり、筋肉をつけるシェイプアップ効果が上がります。',
+  '心肺機能の90パーセントを超えるアスリートレベルのゾーンです。短時間で筋肉にかかる負担も強く筋肥大、筋力アップをします。',
 ]
 
 class TrainingScoreSection extends Component {
   render() {
-    const { zone, score } = this.props
+    const { zone, score, classes } = this.props
     return (
       <DataGroup
         header="トレーニング効果"
         icon={<Score />}
         data={
-          <div>
+          <div className={classes.padded}>
             <Typography variant="body1" color="inherit">
               {effects[zone]}
             </Typography>
@@ -35,4 +37,4 @@ class TrainingScoreSection extends Component {
   }
 }
 
-export default TrainingScoreSection
+export default withStyles(styles)(TrainingScoreSection)

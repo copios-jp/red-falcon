@@ -22,6 +22,7 @@ import TrainingScoreSection from './sections/training_score/'
 import TimeInZoneSection from './sections/time_in_zone/'
 import HeartRateSection from './sections/heart_rate/'
 import MemoSection from './sections/memo/'
+import ProgrammingSection from './sections/program/'
 
 export const TitledRow = withStyles(styles)(
   ({ classes, title, text, inline = false, color = 'inherit' }) => (
@@ -120,6 +121,9 @@ export class Report extends Component {
           </div>
           <div className={classes.reportGroup}>
             <HeartRateSection history={history} max={history[0].max} />
+          </div>
+          <div className={classes.reportGroup}>
+            <ProgrammingSection />
           </div>
         </DialogContent>
 

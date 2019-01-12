@@ -29,9 +29,9 @@ class HeartRateChart extends Component {
     return (
       <FlexibleWidthXYPlot
         className={classes.heartRateChart}
-        margin={{ right: 30, left: 50, bottom: 35 }}
+        margin={{ right: 50, left: 50, bottom: 50 }}
         yDomain={[20, 110]}
-        height={350}
+        height={280}
         colorType="literal">
         <HorizontalGridLines />
         <YAxis title="心拍数MAX%" tickFormat={(t) => `${t}%`} />

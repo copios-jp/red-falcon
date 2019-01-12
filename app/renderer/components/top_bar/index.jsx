@@ -36,15 +36,17 @@ const TopBar = (props) => {
             }}
           />
         )}
-        <Button
-          className={classes.recordButton}
-          onClick={() => {
-            sensor.showReport = !sensor.showReport
-            toggle()
-          }}
-          color="inherit">
-          <History />
-        </Button>
+        {!isActive && (
+          <Button
+            className={classes.recordButton}
+            onClick={() => {
+              sensor.showReport = !sensor.showReport
+              toggle()
+            }}
+            color="inherit">
+            <History />
+          </Button>
+        )}
         <IconButton aria-label="Menu" onClick={toggle}>
           <PowerSettingsNew color={isActive ? 'action' : 'inherit'} />
         </IconButton>

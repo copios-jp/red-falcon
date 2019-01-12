@@ -13,12 +13,8 @@ class Transmitter extends events.EventEmitter {
 
   deactivate = () => {
     this.removeAllListeners()
-    try {
-      this.sensor.removeAllListeners('hbData')
-      this.sensor.detach()
-    } catch (e) {
-      console.log('Transmitter#deactivate', e)
-    }
+    this.sensor.removeAllListeners()
+    this.sensor.detach()
   }
 
   // TODO - make this a debounce that removes the

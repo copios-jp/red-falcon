@@ -4,7 +4,7 @@ import { Edit } from '@material-ui/icons/'
 
 class MemoSection extends Component {
   render() {
-    return <DataGroup icon={<Edit />} header="プログラミング・備考" width="32%" />
+    return <DataGroup icon={<Edit />} header="備考" width="32%" />
   }
 }
 

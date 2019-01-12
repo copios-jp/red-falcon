@@ -166,6 +166,10 @@ export default (theme) => ({
     justifyContent: 'space-between',
   },
 
+  padded: {
+    padding: theme.spacing.unit,
+  },
+
   inlineHistory: {
     height: '30px',
     alignSelf: 'center',
@@ -292,7 +296,6 @@ export default (theme) => ({
   },
 
   reportDataGroupData: {
-    padding: theme.spacing.unit,
     height: '100%',
   },
 
