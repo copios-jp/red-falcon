@@ -4,7 +4,6 @@ import Transmitter from './Transmitter'
 import Receiver from './Receiver'
 
 import { SCAN_INTERVAL, receivers } from './Scanner'
-import { MAX_INACTIVE_MS } from './Receiver'
 import { MAX_LISTENERS, transmitters } from './Receiver'
 
 const stick = mockApiMember(
@@ -406,37 +405,6 @@ describe('ant', () => {
 
       it('activates the transmitter', () => {
         expect(transmitter.activate).toBeCalled()
-      })
-    })
-
-    describe('clean', () => {
-      const receiver = new Receiver(stick)
-      const outdated = {
-        updated: new Date(new Date() - (MAX_INACTIVE_MS + 1)),
-        deactivate: jest.fn(),
-      }
-
-      beforeAll(() => {
-        transmitters.push({
-          updated: new Date(),
-          deactivate: jest.fn(),
-        })
-        transmitters.push(outdated)
-        jest.spyOn(receiver, 'remove')
-        receiver.clean()
-      })
-
-      afterAll(() => {
-        ;[...transmitters].forEach(() => {
-          transmitters.shift()
-        })
-        receiver.deactivate()
-      })
-      it('remove inactive transmitter', () => {
-        expect(transmitters.length).toEqual(1)
-      })
-      it('calls remove with expired transmitter', () => {
-        expect(receiver.remove.mock.calls[0][0]).toEqual(outdated)
       })
     })
 

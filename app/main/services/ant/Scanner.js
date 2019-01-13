@@ -8,6 +8,17 @@ export const SCAN_INTERVAL = 5000
 
 export const receivers = []
 
+/*
+ * This class is left here for future reference as I would prefer to be able
+ * to run multiple USB receivers in order to allow more than eight active transmitters
+ *
+ * https://github.com/copios-jp/red-falcon/issues/21
+ * I am not 100% sure, but it seems like sing the single usb receiver with changes
+ * to the receiver which detaches all sensors seems to have resolved it.
+ *
+ * Client does not need more than eight transmitters right now so
+ * I am going to defer working in this until there is funding.
+ * */
 class Scanner extends events.EventEmitter {
   activate = () => {
     this.emit('scanner-activated', this)

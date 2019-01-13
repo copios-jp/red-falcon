@@ -1,16 +1,13 @@
 import events from 'events'
 import Ant from './'
 import Transmitter from './Transmitter'
-import { inactiveFilter, MAX_INACTIVE_MS as MAX_MS } from './filters'
 
-export const MAX_INACTIVE_MS = MAX_MS
-export const SCAN_INTERVAL = MAX_MS + 1000
 export const MAX_CHANNELS = 8
 export const MAX_LISTENERS = MAX_CHANNELS * 2 // 8 channels with two reads each
 
 export const channels = []
 export const transmitters = []
-export const pending = []
+
 for (let i = 0; i < MAX_CHANNELS; i++) {
   channels.push(i)
 }
@@ -35,10 +32,6 @@ class Receiver extends events.EventEmitter {
     })
     this.emit('transmitter-added', transmitter, transmitters)
     transmitter.activate()
-  }
-
-  clean = () => {
-    ;[...transmitters].filter(inactiveFilter).forEach(this.remove)
   }
 
   deactivate = () => {

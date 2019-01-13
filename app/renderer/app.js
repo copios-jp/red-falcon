@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import tooling from './tooling/'
-
+// import '../../node_modules/react-vis/dist/style.css';
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import SensorsView from './components/SensorsView'

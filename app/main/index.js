@@ -1,13 +1,17 @@
 import path from 'path'
-import { app, crashReporter, BrowserWindow, Menu, ipcMain } from 'electron'
+import { app, crashReporter, BrowserWindow, Menu, ipcMain, shell } from 'electron'
 import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
 
 import tooling from './tooling/'
 import menuTemplate from './menu_template'
 import PowerSaveBlocker from './services/power_save_blocker/'
-import scanner from './services/ant/Scanner'
+// import scanner from './services/ant/Scanner'
+import scanner from './services/ant/SingleUSBReceiverScanner'
+
 import bridge from './services/bridge/'
+import fs from 'fs'
+import os from 'os'
 
 // TODO - move this kind of setup out of index.js
 autoUpdater.logger = log
@@ -54,6 +58,7 @@ app.on('ready', async () => {
   })
 
   mainWindow.webContents.on('will-navigate', () => {
+    console.log('will navigate')
     scanner.deactivate()
   })
 
@@ -70,6 +75,7 @@ app.on('ready', async () => {
 })
 
 app.on('before-quit', () => {
+  console.log('before quit')
   PowerSaveBlocker.deactivate()
 })
 
@@ -77,6 +83,34 @@ ipcMain.on('activate', () => {
   scanner.activate()
 })
 
+ipcMain.on('print', (event, fileName) => {
+  const pdfPath = path.join(os.tmpdir(), `${fileName}.pdf`)
+  const win = BrowserWindow.fromWebContents(event.sender)
+  win.webContents.printToPDF(
+    {
+      pageSize: 'A4',
+      marginsType: 2,
+      printBackground: true,
+    },
+    (err, data) => {
+      if (err) {
+        return console.log(err)
+      }
+
+      fs.writeFile(pdfPath, data, (err) => {
+        if (err) {
+          return console.log(err)
+        }
+
+        shell.openExternal('file://' + pdfPath)
+        event.sender.send('print-complete', pdfPath)
+      })
+    },
+  )
+  scanner.activate()
+})
+
 ipcMain.on('deactivate', () => {
+  console.log('deactivate')
   scanner.deactivate()
 })

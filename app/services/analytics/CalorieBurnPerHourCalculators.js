@@ -1,4 +1,3 @@
-import { getMaxHeartRate } from './'
 const MALE_INTERCEPT = -55.0969
 const MALE_RATE_COEF = 0.6309
 const MALE_WEIGHT_COEF = 0.1988
@@ -36,11 +35,8 @@ function calculator(LABEL, COEF) {
     label: LABEL,
     using(props) {
       const { rate, weight, age } = props
-      if (rate < getMaxHeartRate(props) * 0.64) {
-        return 0
-      }
       return Math.round(
-        ((COEF.INTERCEPT + COEF.RATE * rate - COEF.WEIGHT * weight + COEF.AGE * age) /
+        ((COEF.INTERCEPT + COEF.RATE * rate + COEF.WEIGHT * weight + COEF.AGE * age) /
           JEWEL_TO_KCAL) *
           HOUR,
       )
