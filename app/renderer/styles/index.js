@@ -21,29 +21,11 @@ export default (theme) => ({
     display: 'flex',
     overflow: 'hidden',
     backgroundColor: 'pink',
-
-    // backgroundColor: theme.palette.background.paper,
     flexGrow: 1,
   },
 
-  loaderWrapper: {
-    position: 'absolute',
-    display: 'flex',
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  loader: {},
-
   grid: {
-    backgroundImage: 'url("images/icon.png")',
-    backgroundSize: '55%',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor: 'black',
-    // backgroundColor: theme.palette.background.paper,
+    background: 'black url("images/icon.png") center 55% no-repeat',
     margin: 0,
     flexGrow: 1,
     display: 'flex',
@@ -163,14 +145,6 @@ export default (theme) => ({
     padding: theme.spacing.unit,
   },
 
-  inlineHistory: {
-    height: '30px',
-    alignSelf: 'center',
-    display: 'flex',
-    width: '60px',
-    alignItems: 'flex-end',
-  },
-
   editTextField: {
     marginTop: theme.spacing.unit * 2,
   },
@@ -244,18 +218,6 @@ export default (theme) => ({
     backgroundColor: '#fff',
   },
 
-  chartCard: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginTop: theme.spacing.unit * 2,
-    flexGrow: 1,
-  },
-
-  reportCharts: {
-    backgroundColor: 'white',
-    alignItems: 'center',
-  },
-
   reportGroup: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -277,10 +239,6 @@ export default (theme) => ({
     alignItems: 'center',
     maxHeight: '270px',
   },
-
-  timeInZoneChart: {},
-
-  heartRateChart: {},
 
   reportDataGroup: {
     border: '1px inset grey',
