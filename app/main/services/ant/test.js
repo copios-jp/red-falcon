@@ -4,7 +4,6 @@ import Transmitter from './Transmitter'
 import Receiver from './Receiver'
 
 import { SCAN_INTERVAL, receivers } from './Scanner'
-import { MAX_INACTIVE_MS } from './Receiver'
 import { MAX_LISTENERS, transmitters } from './Receiver'
 
 const stick = mockApiMember(
