@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { DataGroup } from '../../'
+import { DataGroup } from '../../shared'
 import { Edit } from '@material-ui/icons/'
 
 class MemoSection extends Component {

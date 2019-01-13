@@ -25,7 +25,7 @@ export class Header extends Component {
   render() {
     const { classes, sensor } = this.props
     return (
-      <div className={classes.cardHeader}>
+      <div className={classes.cardBar}>
         <ActivityIndicator fontSize="small" active={sensor.active} />
         <div className={classes.cardName}>{sensor.name}&nbsp;</div>
 

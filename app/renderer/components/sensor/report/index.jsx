@@ -1,14 +1,7 @@
 import { ipcRenderer } from 'electron'
 
 import React, { Component } from 'react'
-import {
-  Typography,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-} from '@material-ui/core'
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core'
 import { Print } from '@material-ui/icons'
 import styles from '../../../styles'
 import { formatDateTime } from '../../../helpers/time_formatter'
@@ -23,34 +16,8 @@ import TimeInZoneSection from './sections/time_in_zone/'
 import HeartRateSection from './sections/heart_rate/'
 import MemoSection from './sections/memo/'
 import ProgrammingSection from './sections/program/'
+import { TitledRow } from './shared/'
 
-export const TitledRow = withStyles(styles)(
-  ({ classes, title, text, inline = false, color = 'inherit' }) => (
-    <div
-      className={classes.reportRow}
-      style={{ textAlign: 'left', display: inline ? 'flex' : 'block' }}>
-      <Typography color={color} variant="body1" className={classes.titledRowTitle}>
-        {title}
-      </Typography>
-      <Typography color={color} variant="body1" className={classes.titledRowText}>
-        {' '}
-        {text}{' '}
-      </Typography>
-    </div>
-  ),
-)
-
-export const DataGroup = withStyles(styles)(({ classes, icon, header, data, width = '32%' }) => (
-  <div className={classes.reportDataGroup} style={{ width: width }}>
-    <div className={classes.reportDataGroupHeader}>
-      {icon}
-      <Typography color="inherit" variant="body1">
-        {header}
-      </Typography>
-    </div>
-    <div className={classes.reportDataGroupData}>{data}</div>
-  </div>
-))
 export class Report extends Component {
   constructor() {
     super()
@@ -87,12 +54,46 @@ export class Report extends Component {
     this.props.handleChange({ showReport: false })
   }
 
-  render() {
+  dialogTitle = () => {
+    return (
+      <DialogTitle variant="dense">
+        <TitledRow color="primary" title="トレーニング報告" text={formatDateTime()} inline={true} />
+      </DialogTitle>
+    )
+  }
+
+  dialogContent = () => {
     const {
-      sensor: { history, showReport },
+      sensor: { history },
       classes,
     } = this.props
     const summary = getReport(history)
+    return (
+      <DialogContent className={classes.reportDialogContent}>
+        <div className={classes.reportGroup}>
+          <UserSection {...this.props.sensor} max={history[0].max} />
+          <TrainingSection created={history[0].created} summary={summary} />
+          <MemoSection />
+        </div>
+        <div className={classes.reportGroup}>
+          <TrainingScoreSection {...summary} />
+          <TimeInZoneSection {...summary} />
+        </div>
+        <div className={classes.reportGroup}>
+          <HeartRateSection history={history} max={history[0].max} />
+        </div>
+        <div className={classes.reportGroup}>
+          <ProgrammingSection />
+        </div>
+      </DialogContent>
+    )
+  }
+
+  render() {
+    const {
+      sensor: { showReport },
+      classes,
+    } = this.props
 
     return (
       <Dialog
@@ -100,33 +101,8 @@ export class Report extends Component {
         fullScreen={true}
         open={showReport}
         onClick={this.onClick}>
-        <DialogTitle variant="dense">
-          <TitledRow
-            color="primary"
-            title="トレーニング報告"
-            text={formatDateTime()}
-            inline={true}
-          />
-        </DialogTitle>
-
-        <DialogContent className={classes.reportDialogContent}>
-          <div className={classes.reportGroup}>
-            <UserSection {...this.props.sensor} max={history[0].max} />
-            <TrainingSection created={history[0].created} summary={summary} />
-            <MemoSection />
-          </div>
-          <div className={classes.reportGroup}>
-            <TrainingScoreSection {...summary} />
-            <TimeInZoneSection {...summary} />
-          </div>
-          <div className={classes.reportGroup}>
-            <HeartRateSection history={history} max={history[0].max} />
-          </div>
-          <div className={classes.reportGroup}>
-            <ProgrammingSection />
-          </div>
-        </DialogContent>
-
+        {this.dialogTitle()}
+        {this.dialogContent()}
         <DialogActions className={classes['no-print']}>
           <Button onClick={this.onPrint}>
             <Print /> Print
