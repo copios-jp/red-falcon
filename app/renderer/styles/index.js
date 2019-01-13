@@ -55,7 +55,7 @@ export default (theme) => ({
     },
   },
 
-  cardHeader: {
+  cardBar: {
     minHeight: theme.spacing.unit * 4,
     fontSize: 'xx-large',
     color: theme.palette.text.main,
@@ -64,10 +64,10 @@ export default (theme) => ({
     paddingLeft: theme.spacing.unit * 2,
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
 
   timer: {
-    paddingRight: theme.spacing.unit * 2,
     paddingLeft: theme.spacing.unit * 2,
     minWidth: '100px',
   },
@@ -151,19 +151,12 @@ export default (theme) => ({
   },
 
   cardRate: {
-    marginLeft: theme.spacing.unit,
+    marginLeft: -1 * theme.spacing.unit,
     alignSelf: 'center',
   },
 
-  cardFooter: {
-    minHeight: theme.spacing.unit * 4,
-    fontSize: 'xx-large',
-    color: theme.palette.text.main,
-    position: 'relative',
-    padding: theme.spacing.unit / 2,
-    paddingLeft: theme.spacing.unit * 2,
-    display: 'flex',
-    justifyContent: 'space-between',
+  cardRateIcon: {
+    marginRight: theme.spacing.unit,
   },
 
   padded: {

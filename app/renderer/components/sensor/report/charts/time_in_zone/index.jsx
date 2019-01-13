@@ -8,7 +8,7 @@ import styles from '../../../../../styles/'
 export const colors = ['#000', '#0d47a1', '#1b5e20', '#f57f17', '#e65100', '#b71c1c']
 export const labels = ['休憩', '回復', '脂肪燃焼', '持久力向上', '筋肉向上', '瞬発力向上']
 
-export const seriesData = ({ zones = [] }) =>  {
+export const seriesData = ({ zones = [] }) => {
   return zones.map((zone, index) => {
     return {
       x: labels[index],
@@ -18,7 +18,7 @@ export const seriesData = ({ zones = [] }) =>  {
   })
 }
 
-export const labelData = ({ zones = []}) => {
+export const labelData = ({ zones = [] }) => {
   return zones.map((zone, index) => ({
     x: labels[index],
     y: zone,
@@ -42,7 +42,11 @@ class TimeInZoneChart extends Component {
           <YAxis tickFormat={(t) => formatSeconds(t, 14, 5)} />
           <XAxis tickLabelAngle={-45} />
           <VerticalBarSeries data={seriesData(this.props)} />
-          <LabelSeries labelAnchorX="middle" labelAnchorY="before-edge" data={labelData(this.props)} />
+          <LabelSeries
+            labelAnchorX="middle"
+            labelAnchorY="before-edge"
+            data={labelData(this.props)}
+          />
         </FlexibleXYPlot>
       </div>
     )

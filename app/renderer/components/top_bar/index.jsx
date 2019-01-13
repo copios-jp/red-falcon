@@ -42,9 +42,7 @@ class TopBar extends Component {
         <Toolbar variant="dense" disableGutters={true}>
           <Typography variant="h6" className={classes.appTitle} />
 
-          {sensor.showReport &&
-            <Report sensor={sensor} handleChange={this.toggleDemo} />
-          }
+          {sensor.showReport && <Report sensor={sensor} handleChange={this.toggleDemo} />}
           {this.buttons()}
         </Toolbar>
       </AppBar>

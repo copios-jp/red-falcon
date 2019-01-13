@@ -1,13 +1,7 @@
 import { ipcRenderer } from 'electron'
 
 import React, { Component } from 'react'
-import {
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-} from '@material-ui/core'
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core'
 import { Print } from '@material-ui/icons'
 import styles from '../../../styles'
 import { formatDateTime } from '../../../helpers/time_formatter'
@@ -74,7 +68,8 @@ export class Report extends Component {
       classes,
     } = this.props
     const summary = getReport(history)
-    return (<DialogContent className={classes.reportDialogContent}>
+    return (
+      <DialogContent className={classes.reportDialogContent}>
         <div className={classes.reportGroup}>
           <UserSection {...this.props.sensor} max={history[0].max} />
           <TrainingSection created={history[0].created} summary={summary} />
@@ -90,7 +85,8 @@ export class Report extends Component {
         <div className={classes.reportGroup}>
           <ProgrammingSection />
         </div>
-      </DialogContent>)
+      </DialogContent>
+    )
   }
 
   render() {
