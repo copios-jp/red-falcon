@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { DataGroup } from '../../'
+import { DataGroup } from '../../shared'
 import HeartRateChart from '../../charts/heart_rate/'
 import { Timeline } from '@material-ui/icons/'
 class HeartRateSection extends Component {

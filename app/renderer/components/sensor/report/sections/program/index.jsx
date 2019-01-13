@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { DataGroup } from '../../'
+import { DataGroup } from '../../shared'
 
 import { Menu } from '@material-ui/icons/'
 import Table from '@material-ui/core/Table'

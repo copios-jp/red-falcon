@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { DataGroup } from '../../'
+import { DataGroup } from '../../shared'
 import TimeInZoneChart from '../../charts/time_in_zone/'
 import { Assessment } from '@material-ui/icons/'
 
