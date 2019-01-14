@@ -4,17 +4,13 @@ import { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import styles from '../../../styles/'
 import { getZone, getPercentageOfMax } from '../../../../services/analytics/'
+import { constrainedUpdate } from '../shared/'
 
 export class Body extends Component {
   shouldComponentUpdate(nextProps) {
     const nextSensor = nextProps.sensor
     const { sensor } = this.props
-
-    return (
-      nextSensor.rate !== sensor.rate ||
-      nextSensor.method !== sensor.method ||
-      nextSensor.max !== sensor.max
-    )
+    return constrainedUpdate(sensor, nextSensor, ['max', 'method', 'rate'])
   }
 
   render() {
