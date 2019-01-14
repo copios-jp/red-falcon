@@ -1,19 +1,5 @@
 import { getZone, getCalories, getPercentageOfMax } from './'
 
-export const averageHeartRate = (history) => {
-  const reducer = (memo, item) => memo + parseInt(item.rate)
-  const total = history.reduce(reducer, 0)
-  return Math.round(total / history.length)
-}
-
-export const averagePercentageOfMax = (history) => {
-  const rate = averageHeartRate(history)
-  return getPercentageOfMax({
-    ...history[0],
-    rate,
-  })
-}
-
 export const trainingScore = (history) => {
   return (
     parseFloat(
@@ -26,23 +12,30 @@ export const trainingScore = (history) => {
   )
 }
 
-export const averageHeartRateZone = (history) => {
+export const averageHeartRate = (history) => {
+  const reducer = (memo, item) => memo + parseInt(item.rate)
+  const total = history.reduce(reducer, 0)
+  return Math.round(total / history.length)
+}
+
+const fromAverageHeartRate = (history, dataFacet) => {
   const rate = averageHeartRate(history)
-  return getZone({
+  return dataFacet({
     ...history[0],
     rate,
   })
 }
+
+export const averagePercentageOfMax = (history) => {
+  return fromAverageHeartRate(history, getPercentageOfMax)
+}
+
+export const averageHeartRateZone = (history) => {
+  return fromAverageHeartRate(history, getZone)
+}
+
 export const caloriesExpended = (history) => {
-  const rate = averageHeartRate(history)
-  return (
-    (getCalories({
-      ...history[0],
-      rate,
-    }) /
-      3600) *
-    duration(history)
-  )
+  return (fromAverageHeartRate(history, getCalories) / 3600) * duration(history)
 }
 
 export const timeInZones = (history) => {
