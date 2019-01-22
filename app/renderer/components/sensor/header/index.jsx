@@ -11,7 +11,6 @@ import { getZone } from '../../../../services/analytics/'
 import { constrainedUpdate } from '../shared/'
 
 export class Header extends Component {
-
   shouldComponentUpdate(nextProps) {
     const nextSensor = nextProps.sensor
     const { sensor } = this.props
