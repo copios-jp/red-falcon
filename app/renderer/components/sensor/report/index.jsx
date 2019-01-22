@@ -37,7 +37,7 @@ export class Report extends Component {
     // and print media queries will not wait.
     window.setTimeout(() => {
       ipcRenderer.send('print', fileName)
-    }, 1000)
+    }, 2000)
   }
 
   printComplete = () => {
