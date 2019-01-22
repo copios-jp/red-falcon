@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { getBMI } from '../../../../../../services/analytics/'
 import { AccountCircle } from '@material-ui/icons'
 import { withStyles } from '@material-ui/core/styles'
 
-import { TitledRow } from '../../'
-import { DataGroup } from '../../'
+import { getBMI } from '../../../../../../services/analytics/'
+import { TitledRow, DataGroup } from '../../shared'
 import styles from '../../../../../styles'
 
 class UserSection extends Component {

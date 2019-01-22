@@ -21,29 +21,11 @@ export default (theme) => ({
     display: 'flex',
     overflow: 'hidden',
     backgroundColor: 'pink',
-
-    // backgroundColor: theme.palette.background.paper,
     flexGrow: 1,
   },
 
-  loaderWrapper: {
-    position: 'absolute',
-    display: 'flex',
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  loader: {},
-
   grid: {
-    backgroundImage: 'url("images/icon.png")',
-    backgroundSize: '55%',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor: 'black',
-    // backgroundColor: theme.palette.background.paper,
+    background: 'black url("images/icon.png") center 55% no-repeat',
     margin: 0,
     flexGrow: 1,
     display: 'flex',
@@ -55,7 +37,7 @@ export default (theme) => ({
     },
   },
 
-  cardHeader: {
+  cardBar: {
     minHeight: theme.spacing.unit * 4,
     fontSize: 'xx-large',
     color: theme.palette.text.main,
@@ -64,10 +46,10 @@ export default (theme) => ({
     paddingLeft: theme.spacing.unit * 2,
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
 
   timer: {
-    paddingRight: theme.spacing.unit * 2,
     paddingLeft: theme.spacing.unit * 2,
     minWidth: '100px',
   },
@@ -151,31 +133,16 @@ export default (theme) => ({
   },
 
   cardRate: {
-    marginLeft: theme.spacing.unit,
+    marginLeft: -1 * theme.spacing.unit,
     alignSelf: 'center',
   },
 
-  cardFooter: {
-    minHeight: theme.spacing.unit * 4,
-    fontSize: 'xx-large',
-    color: theme.palette.text.main,
-    position: 'relative',
-    padding: theme.spacing.unit / 2,
-    paddingLeft: theme.spacing.unit * 2,
-    display: 'flex',
-    justifyContent: 'space-between',
+  cardRateIcon: {
+    marginRight: theme.spacing.unit,
   },
 
   padded: {
     padding: theme.spacing.unit,
-  },
-
-  inlineHistory: {
-    height: '30px',
-    alignSelf: 'center',
-    display: 'flex',
-    width: '60px',
-    alignItems: 'flex-end',
   },
 
   editTextField: {
@@ -251,18 +218,6 @@ export default (theme) => ({
     backgroundColor: '#fff',
   },
 
-  chartCard: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginTop: theme.spacing.unit * 2,
-    flexGrow: 1,
-  },
-
-  reportCharts: {
-    backgroundColor: 'white',
-    alignItems: 'center',
-  },
-
   reportGroup: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -284,10 +239,6 @@ export default (theme) => ({
     alignItems: 'center',
     maxHeight: '270px',
   },
-
-  timeInZoneChart: {},
-
-  heartRateChart: {},
 
   reportDataGroup: {
     border: '1px inset grey',

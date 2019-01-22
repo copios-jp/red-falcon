@@ -15,7 +15,7 @@ export class Footer extends Component {
   render() {
     const { classes, sensor } = this.props
     return (
-      <div className={classes.cardFooter}>
+      <div className={classes.cardBar}>
         <Rate rate={sensor.rate} />
       </div>
     )

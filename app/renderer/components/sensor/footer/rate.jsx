@@ -14,7 +14,7 @@ export class Rate extends Component {
     const { classes, rate } = this.props
     return (
       <span className={classes.cardRate}>
-        <Favorite fontSize="small" />
+        <Favorite fontSize="small" className={classes.cardRateIcon} />
         {rate}
       </span>
     )

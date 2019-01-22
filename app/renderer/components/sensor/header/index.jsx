@@ -8,24 +8,19 @@ import StopWatch from '../../stop_watch/'
 import RecordButton from './record_button'
 import HistoryButton from './history_button'
 import { getZone } from '../../../../services/analytics/'
+import { constrainedUpdate } from '../shared/'
 
 export class Header extends Component {
   shouldComponentUpdate(nextProps) {
     const nextSensor = nextProps.sensor
     const { sensor } = this.props
-
-    return (
-      nextSensor.name !== sensor.name ||
-      nextSensor.active !== sensor.active ||
-      nextSensor.recording !== sensor.recording ||
-      getZone(nextSensor) !== getZone(sensor)
-    )
+    return constrainedUpdate(sensor, nextSensor, ['name', 'active', 'recording', getZone])
   }
 
   render() {
     const { classes, sensor } = this.props
     return (
-      <div className={classes.cardHeader}>
+      <div className={classes.cardBar}>
         <ActivityIndicator fontSize="small" active={sensor.active} />
         <div className={classes.cardName}>{sensor.name}&nbsp;</div>
 

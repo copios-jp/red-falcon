@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import { DirectionsRun } from '@material-ui/icons'
 
-import { TitledRow } from '../../'
-import { DataGroup } from '../../'
+import { TitledRow, DataGroup } from '../../shared'
 import { formatSeconds, formatDateTime } from '../../../../../helpers/time_formatter'
 import styles from '../../../../../styles'
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Typography } from '@material-ui/core'
 
 import { Score } from '@material-ui/icons/'
-import { DataGroup } from '../../'
+import { DataGroup } from '../../shared'
 import TrainingScoreChart from '../../charts/training_score/'
 import { withStyles } from '@material-ui/core/styles'
 import styles from '../../../../../styles'
