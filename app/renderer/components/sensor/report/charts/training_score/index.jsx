@@ -51,7 +51,7 @@ class TrainingScoreChart extends Component {
       <XYPlot width={200} height={200} className={classes.trainingScoreChart} colorType="literal">
         {segments({ opacity: 0.1 })}
         {segments({ limit: score })}
-        {label({ color: colors[zone], label: score.toString() })}
+        {label({ color: colors[zone], label: score.toFixed(2) })}
       </XYPlot>
     )
   }
