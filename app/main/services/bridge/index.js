@@ -1,24 +1,34 @@
+const emit = (...args) => {
+  const webContents = args.shift()
+
+  if (webContents.isDestroyed()) {
+    return
+  }
+
+  webContents.send(...args)
+}
+
 export const onTransmitterData = (webContents) => {
   return (transmitter, transmitters) => {
-    webContents.send('transmitter-data', transmitter, transmitters)
+    emit(webContents, 'transmitter-data', transmitter, transmitters)
   }
 }
 
 export const onTransmitterAdded = (webContents) => {
   return (transmitter, transmitters) => {
-    webContents.send('transmitter-added', transmitter, transmitters)
+    emit(webContents, 'transmitter-added', transmitter, transmitters)
   }
 }
 
 export const onTransmitterRemoved = (webContents) => {
   return (transmitter, transmitters) => {
-    webContents.send('transmitter-removed', transmitter, transmitters)
+    emit(webContents, 'transmitter-removed', transmitter, transmitters)
   }
 }
 
 export const onReceiverAdded = (webContents) => {
   return (receiver, receivers) => {
-    webContents.send('receiver-added', receiver, receivers)
+    emit(webContents, 'receiver-added', receiver, receivers)
     receiver.on('transmitter-added', onTransmitterAdded(webContents))
     receiver.on('transmitter-removed', onTransmitterRemoved(webContents))
     receiver.on('transmitter-data', onTransmitterData(webContents))
@@ -27,7 +37,7 @@ export const onReceiverAdded = (webContents) => {
 
 export const onReceiverRemoved = (webContents) => {
   return (receiver, receivers) => {
-    webContents.send('receiver-removed', receiver, receivers)
+    emit(webContents, 'receiver-removed', receiver, receivers)
   }
 }
 

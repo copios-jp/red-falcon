@@ -59,6 +59,8 @@ export default (theme) => ({
   },
 
   cardName: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
     flexGrow: 1,
     marginLeft: theme.spacing.unit * 3,
   },

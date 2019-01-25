@@ -58,7 +58,6 @@ app.on('ready', async () => {
   })
 
   mainWindow.webContents.on('will-navigate', () => {
-    console.log('will navigate')
     scanner.deactivate()
   })
 
@@ -75,7 +74,6 @@ app.on('ready', async () => {
 })
 
 app.on('before-quit', () => {
-  console.log('before quit')
   PowerSaveBlocker.deactivate()
 })
 
@@ -111,6 +109,5 @@ ipcMain.on('print', (event, fileName) => {
 })
 
 ipcMain.on('deactivate', () => {
-  console.log('deactivate')
   scanner.deactivate()
 })
