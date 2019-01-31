@@ -10,7 +10,7 @@ import { withStyles } from '@material-ui/core/styles'
 import styles from '../../../styles/'
 
 class Form extends Component {
-  fields = ({ age, weight, name, method, sex, max }) => {
+  fields = ({ age, weight, height, name, method, sex, max }) => {
     return (
       <Grid item xs>
         {this.textField('name', '様', '名前', name)}
@@ -20,6 +20,7 @@ class Form extends Component {
         })}
         {this.textField('age', '才', '年齢', age)}
         {this.textField('weight', 'Kg', '体重', weight)}
+        {this.textField('height', 'cm', '身長', height)}
         {this.textField('method', '', '最大心拍数計算式', method, {
           select: true,
           children: this.optionsFor(methods),
