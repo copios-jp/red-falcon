@@ -37,6 +37,7 @@ const helpers = {
   apiMember(bus, extended) {
     let thisBus = {...bus}
     return Object.assign({
+      send: jest.fn(),
       activate: jest.fn(),
       deactivate: jest.fn(),
       remove: jest.fn(),

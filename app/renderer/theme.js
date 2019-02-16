@@ -11,6 +11,10 @@ const theme = createMuiTheme({
     action: {
       main: 'green',
     },
+    power: {
+      off: 'green',
+      on: 'lime',
+    },
     rest: '#000000',
     recovery: '#0d47a1',
     lightAerobic: '#1b5e20',

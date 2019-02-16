@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron'
 
-export default function(action) {
+const bind = function(action) {
   Object.keys(this.mainEvents).forEach((handler) => {
     this.mainEvents[handler].forEach((event) => {
       let method
@@ -16,6 +16,7 @@ export default function(action) {
     })
   })
 }
+
 const handler = (name) =>
   function(event, item, items) {
     this.setState((state) => {
@@ -27,3 +28,19 @@ const handlers = {
   onReceiver: handler('receiver'),
   onTransmitter: handler('transmitter'),
 }
+
+export const bindTo = (receiver) => {
+  const { componentDidMount, componentWillUnmount } = receiver
+
+  receiver.componentDidMount = function() {
+    bind.call(receiver, 'on')
+    return componentDidMount && componentDidMount.call(this)
+  }
+
+  receiver.componentWillUnmount = function() {
+    bind.call(receiver, 'off')
+    return componentWillUnmount && componentWillUnmount.call(this)
+  }
+}
+
+export default bind

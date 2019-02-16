@@ -60,7 +60,7 @@
   "scripts": {
     "postinstall": "cd node_modules/usb && HOME=~/.electron-gyp node-pre-gyp rebuild --target=3.0.10 --dist-url=https://atom.io/download/atom-shell && cd ../../ && electron-builder install-app-deps && npm run private:clean",
     "develop": "npm run private:compile -- --source-maps true && run-p -r private:watch private:serve",
-    "test": "ELECTRON_RUN_AS_NODE=true ./node_modules/.bin/electron ./node_modules/.bin/jest",
+    "test": "ELECTRON_RUN_AS_NODE=true ./node_modules/.bin/electron ./node_modules/.bin/jest --watch",
     "test-ci": "ELECTRON_RUN_AS_NODE=true ./node_modules/.bin/electron ./node_modules/.bin/jest --coverage",
     "test-old": "electron-mocha --renderer -R spec --require @babel/register test/**/*.spec.js",
     "lint": "eslint --no-ignore scripts app module_mocks **/*.jsx||**/*.js",
@@ -73,5 +73,10 @@
     "private:compile": "rimraf dist && babel app/ --copy-files --out-dir build",
     "private:clean": "rimraf build",
     "private:format": "prettier \"scripts/**/*.js*\" \"app/**/*.js*\" \"module_mocks/**/*.js\""
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "electron": "<rootDir>/module_mocks/electron.js"
+    }
   }
 }
